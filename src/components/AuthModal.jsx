@@ -7,6 +7,7 @@ import {
   AlertCircle,
   ArrowRight,
   CalendarDays,
+  Loader2,
   Lock,
   Mail,
   MapPin,
@@ -28,8 +29,13 @@ export default function AuthModal() {
     register,
     loading,
     error,
-    googleLogin,
+    googleLogin,forgotPassword
   } = useAuthStore();
+
+
+  const [forgotMode, setForgotMode] = useState(false);
+const [forgotEmail, setForgotEmail] = useState("");
+const [forgotSuccess, setForgotSuccess] = useState(false);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -367,7 +373,96 @@ export default function AuthModal() {
               scrollbar-track-transparent
             "
             >
-              <AnimatePresence mode="wait">
+
+
+              {forgotMode ? (
+  <form
+    onSubmit={async (e) => {
+      e.preventDefault();
+
+      try {
+        await forgotPassword(forgotEmail);
+        setForgotSuccess(true);
+      } catch (err) {}
+    }}
+    className="space-y-5"
+  >
+    <div>
+      <p className="text-[10px] uppercase tracking-[0.2em] text-rose-400 font-bold">
+        ACCOUNT RECOVERY
+      </p>
+
+      <h2 className="text-2xl font-black text-white mt-2">
+        Reset your password
+      </h2>
+
+      <p className="text-xs text-zinc-500 mt-2 leading-5">
+        Enter your registered email and we'll send you a secure
+        password reset link.
+      </p>
+    </div>
+
+    {forgotSuccess ? (
+      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4">
+        <p className="text-sm font-bold text-emerald-400">
+          Reset link sent
+        </p>
+
+        <p className="text-xs text-zinc-500 mt-1 leading-5">
+          Check your email for the password reset link. The link
+          will expire after 15 minutes.
+        </p>
+      </div>
+    ) : (
+      <>
+        <div>
+          <label className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">
+            Email Address
+          </label>
+
+          <input
+            type="email"
+            required
+            value={forgotEmail}
+            onChange={(e) => setForgotEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="mt-2 w-full h-12 rounded-2xl bg-white/[0.03] border border-white/10 px-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-rose-500/40 focus:ring-4 focus:ring-rose-500/[0.06]"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full h-13 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Sending reset link...
+            </>
+          ) : (
+            <>
+              Send Reset Link
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
+      </>
+    )}
+
+    <button
+      type="button"
+      onClick={() => {
+        setForgotMode(false);
+        setForgotSuccess(false);
+      }}
+      className="w-full text-xs text-zinc-500 hover:text-white transition-colors"
+    >
+      ← Back to login
+    </button>
+  </form>
+) : (
+  <AnimatePresence mode="wait">
                 {/* LOGIN */}
                {authMode === "login" && (
   <motion.form
@@ -421,6 +516,20 @@ export default function AuthModal() {
         })
       }
     />
+
+    <div className="flex justify-end mt-2">
+  <button
+    type="button"
+    onClick={() => {
+      setForgotMode(true);
+      setForgotSuccess(false);
+      setForgotEmail("");
+    }}
+    className="text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors"
+  >
+    Forgot password?
+  </button>
+</div>
 
     <button
       type="submit"
@@ -859,6 +968,8 @@ export default function AuthModal() {
                   </motion.form>
                 )}
               </AnimatePresence>
+)}
+              
             </div>
 
             {/* Footer */}

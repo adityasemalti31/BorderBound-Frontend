@@ -88,8 +88,7 @@ export const useAuthStore = create((set) => ({
         return res.data;
       }
     } catch (err) {
-      const msg =
-        err.response?.data?.message || "Registration failed";
+      const msg = err.response?.data?.message || "Registration failed";
 
       set({
         error: msg,
@@ -129,8 +128,7 @@ export const useAuthStore = create((set) => ({
         return res.data;
       }
     } catch (err) {
-      const msg =
-        err.response?.data?.message || "Login failed";
+      const msg = err.response?.data?.message || "Login failed";
 
       set({
         error: msg,
@@ -148,10 +146,7 @@ export const useAuthStore = create((set) => ({
         error: null,
       });
 
-      const result = await signInWithPopup(
-        auth,
-        googleProvider
-      );
+      const result = await signInWithPopup(auth, googleProvider);
 
       const idToken = await result.user.getIdToken();
 
@@ -218,5 +213,76 @@ export const useAuthStore = create((set) => ({
       loading: false,
       error: null,
     });
+  },
+
+  forgotPassword: async (email) => {
+    try {
+      set({
+        loading: true,
+        error: null,
+      });
+
+      const res = await api.post("/auth/forgot-password", {
+        email,
+      });
+
+      if (!res.data?.success) {
+        throw new Error(res.data?.message || "Unable to send reset link");
+      }
+
+      set({
+        loading: false,
+      });
+
+      return res.data;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        err.message ||
+        "Unable to send reset link";
+
+      set({
+        loading: false,
+        error: msg,
+      });
+
+      throw new Error(msg);
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    try {
+      set({
+        loading: true,
+        error: null,
+      });
+
+      const res = await api.post("/auth/reset-password", {
+        token,
+        password,
+      });
+
+      if (!res.data?.success) {
+        throw new Error(res.data?.message || "Unable to reset password");
+      }
+
+      set({
+        loading: false,
+      });
+
+      return res.data;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message ||
+        err.message ||
+        "Unable to reset password";
+
+      set({
+        loading: false,
+        error: msg,
+      });
+
+      throw new Error(msg);
+    }
   },
 }));
