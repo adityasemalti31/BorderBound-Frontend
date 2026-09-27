@@ -367,7 +367,7 @@ const Navbar = forwardRef(function Navbar(
               {/* HOME */}
               <motion.div variants={itemVariants}>
                 <Link
-                  href="/home"
+                  href="/"
                   onClick={() =>
                     setMobileOpen(false)
                   }
