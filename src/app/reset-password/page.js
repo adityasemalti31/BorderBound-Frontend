@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
@@ -14,7 +14,7 @@ import {
   EyeOff,
 } from "lucide-react";
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -216,5 +216,19 @@ function PasswordField({
         </button>
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-[#050505] flex items-center justify-center text-white">
+          <Loader2 className="w-6 h-6 animate-spin text-rose-400" />
+        </main>
+      }
+    >
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
