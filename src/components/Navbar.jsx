@@ -13,19 +13,121 @@ import {
   Menu,
   X,
   ArrowUpRight,
+  AlertTriangle,
 } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { useConfigStore } from "@/store/configStore";
+import Image from "next/image";
 
-const Navbar = forwardRef(function Navbar(
-  { onVisibilityChange },
-  ref
-) {
+import logo from '../../public/logo2.png'
+
+const LogoutModal = ({ open, onClose, onConfirm }) => {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 backdrop-blur-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 24,
+              scale: 0.94,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              y: 18,
+              scale: 0.96,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-sm overflow-hidden border border-white/[0.09] bg-[#0a0a0c] shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
+          >
+            {/* TOP RED GLOW */}
+            <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-red-600/15 blur-3xl" />
+
+            {/* TOP LINE */}
+            <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-red-600 to-transparent" />
+
+            <div className="relative p-6 sm:p-7">
+              {/* ICON */}
+              <div className="mb-5 flex h-12 w-12 items-center justify-center border border-red-500/20 bg-red-500/[0.07]">
+                <AlertTriangle className="h-5 w-5 text-red-500" />
+              </div>
+
+              {/* TEXT */}
+              <div className="mb-7">
+                <p className="mb-2 text-[8px] font-black uppercase tracking-[0.3em] text-red-500">
+                  End Session
+                </p>
+
+                <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
+                  Logout from BorderBound?
+                </h2>
+
+                <p className="mt-2 text-xs leading-5 text-zinc-500">
+                  Are you sure you want to logout from your account? You can
+                  sign in again anytime.
+                </p>
+              </div>
+
+              {/* BUTTONS */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={onConfirm}
+                  className="border border-white/[0.08] bg-white/[0.025] px-4 py-3.5 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.05] hover:text-white"
+                >
+                  Sign Out
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="group flex items-center justify-center gap-2 border border-red-500/30 bg-red-600 px-4 py-3.5 text-[9px] font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.2)]"
+                >
+                  <LogOut className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  Continue
+                </button>
+              </div>
+
+              {/* FOOTER */}
+              <div className="mt-5 flex items-center justify-center gap-2">
+                <span className="h-px w-8 bg-zinc-800" />
+
+                <span className="text-[7px] font-bold uppercase tracking-[0.25em] text-zinc-700">
+                  The BorderBound
+                </span>
+
+                <span className="h-px w-8 bg-zinc-800" />
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
   const { user, checkAuth, openAuthModal, logout } = useAuthStore();
   const { configData, fetchPublicConfig } = useConfigStore();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navbarHidden, setNavbarHidden] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -35,52 +137,69 @@ const Navbar = forwardRef(function Navbar(
   /* =========================================================
      NAVBAR SCROLL BEHAVIOUR
   ========================================================= */
- useEffect(() => {
-  let lastScrollY = window.scrollY;
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
 
-  const updateNavbar = (hidden) => {
-    setNavbarHidden(hidden);
+    const updateNavbar = (hidden) => {
+      setNavbarHidden(hidden);
 
-    window.dispatchEvent(
-      new CustomEvent("navbar-visibility", {
-        detail: { hidden },
-      })
-    );
-  };
+      window.dispatchEvent(
+        new CustomEvent("navbar-visibility", {
+          detail: { hidden },
+        })
+      );
 
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
+      if (onVisibilityChange) {
+        onVisibilityChange(hidden);
+      }
+    };
 
-    if (currentScrollY <= 10) {
-      updateNavbar(false);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 10) {
+        updateNavbar(false);
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        updateNavbar(true);
+        setMobileOpen(false);
+      } else if (currentScrollY < lastScrollY) {
+        updateNavbar(false);
+      }
+
       lastScrollY = currentScrollY;
-      return;
-    }
+    };
 
-    if (currentScrollY > lastScrollY && currentScrollY > 80) {
-      updateNavbar(true);
-      setMobileOpen(false);
-    } else if (currentScrollY < lastScrollY) {
-      updateNavbar(false);
-    }
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
-    lastScrollY = currentScrollY;
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [onVisibilityChange]);
+
+  const regAmount = configData?.registration?.amount || 499;
+
+  const isRegClosed = configData?.registration?.isClosed;
+
+  const handleLogoutClick = () => {
+    setMobileOpen(false);
+    setLogoutOpen(true);
   };
 
-  window.addEventListener("scroll", handleScroll, {
-    passive: true,
-  });
+  const handleLogoutConfirm = async () => {
+    setLogoutOpen(false);
 
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-}, []);
-
-  const regAmount =
-    configData?.registration?.amount || 499;
-
-  const isRegClosed =
-    configData?.registration?.isClosed;
 
   const mobileMenuVariants = {
     closed: {
@@ -123,401 +242,411 @@ const Navbar = forwardRef(function Navbar(
   };
 
   return (
-    <header
-      ref={ref}
-      className={`sticky top-0 z-40 w-full border-b border-white/[0.07] bg-[#050506]/90 backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        navbarHidden
-          ? "-translate-y-full"
-          : "translate-y-0"
-      }`}
-    >
-      {/* =====================================================
-          MAIN NAVBAR
-      ===================================================== */}
-      <div className="mx-auto flex h-[68px] w-full max-w-[1500px] items-center justify-between px-4 sm:px-8 lg:px-12">
-        {/* LOGO */}
-        <Link
-          href="/"
-          onClick={() => setMobileOpen(false)}
-          className="group flex items-center gap-3"
-        >
-          <div className="relative flex h-9 w-9 items-center justify-center border border-red-500/30 bg-red-500/[0.06]">
-            <div className="absolute inset-0 bg-red-500/10 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
-
-            <Flame className="relative h-4 w-4 text-red-500 transition-colors duration-300 group-hover:text-amber-400" />
-          </div>
-
-          <div className="hidden flex-col sm:flex">
-            <span className="text-[17px] font-black tracking-[-0.03em] text-white">
-              BORDER
-              <span className="text-red-500">
-                BOUND
-              </span>
-            </span>
-
-            <span className="text-[7px] font-bold uppercase tracking-[0.25em] text-zinc-600">
-              Official Reality Competition
-            </span>
-          </div>
-
-          <span className="text-[15px] font-black tracking-[-0.03em] text-white sm:hidden">
-            BORDER
-            <span className="text-red-500">
-              BOUND
-            </span>
-          </span>
-        </Link>
-
+    <>
+      <header
+        ref={ref}
+        className={`sticky top-0 z-40 w-full border-b border-white/[0.07] bg-[#050506]/90 backdrop-blur-2xl transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          navbarHidden ? "-translate-y-full" : "translate-y-0"
+        }`}
+      >
         {/* =====================================================
-            DESKTOP NAV
+            MAIN NAVBAR
         ===================================================== */}
-        <nav className="hidden items-center gap-7 md:flex">
+        <div className="mx-auto flex h-[68px] w-full max-w-[1500px] items-center justify-between px-4 sm:px-8 lg:px-12">
+          {/* LOGO */}
           <Link
-            href="/leaderboard"
-            className="group flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+            href="/"
+            onClick={() => setMobileOpen(false)}
+            className="group flex items-center gap-3"
           >
-            <Vote className="h-3.5 w-3.5 text-red-500 transition-transform group-hover:scale-110" />
 
-            Live Leaderboard
+
+            <Image
+            src={logo}
+            alt="logo"
+            width={140}
+            height={100}
+            />
+            {/* <div className="relative flex h-9 w-9 items-center justify-center border border-red-500/30 bg-red-500/[0.06]">
+              <div className="absolute inset-0 bg-red-500/10 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+
+              <Flame className="relative h-4 w-4 text-red-500 transition-colors duration-300 group-hover:text-amber-400" />
+            </div> */}
+
+            <div className="hidden flex-col sm:flex">
+              {/* <span className="text-[17px] font-black tracking-[-0.03em] text-white">
+                BORDER
+                <span className="text-red-500">BOUND</span>
+              </span> */}
+
+              {/* <span className="text-[7px] font-bold uppercase tracking-[0.25em] text-zinc-600">
+                Official Reality Competition
+              </span> */}
+            </div>
+
+            {/* <span className="text-[15px] font-black tracking-[-0.03em] text-white sm:hidden">
+              BORDER
+              <span className="text-red-500">BOUND</span>
+            </span> */}
           </Link>
 
-          {user ? (
+          {/* =====================================================
+              DESKTOP NAV
+          ===================================================== */}
+          <nav className="hidden items-center gap-7 md:flex">
+            <Link
+              href="/leaderboard"
+              className="group flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+            >
+              <Vote className="h-3.5 w-3.5 text-red-500 transition-transform group-hover:scale-110" />
+              Live Leaderboard
+            </Link>
+
             <Link
               href="/register"
               className="group flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
             >
               <Sparkles className="h-3.5 w-3.5 text-amber-400 transition-transform group-hover:rotate-12" />
-
-              Register as Contestant
+              {user ? "Register as Contestant" : "Register"}
             </Link>
-          ) : (
-            <Link
-              href="/register"
-              className="group flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+
+            {user?.role === "admin" && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-cyan-400 transition-colors hover:text-cyan-300"
+              >
+                <Shield className="h-3.5 w-3.5" />
+                Admin
+              </Link>
+            )}
+          </nav>
+
+          {/* =====================================================
+              RIGHT SIDE
+          ===================================================== */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* REGISTRATION FEE */}
+            {!isRegClosed && (
+              <div className="hidden items-center gap-2 border border-red-500/15 bg-red-500/[0.05] px-3 py-2 lg:flex">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
+                </span>
+
+                <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                  Reg Fee
+                </span>
+
+                <span className="text-xs font-black text-amber-400">
+                  ₹{regAmount}
+                </span>
+              </div>
+            )}
+
+            {/* LOGGED IN */}
+            {user ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/dashboard"
+                  className="group flex items-center gap-2 border border-white/[0.08] bg-white/[0.025] px-3 py-2 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]"
+                >
+                  <div className="flex h-6 w-6 items-center justify-center bg-zinc-800">
+                    <User className="h-3 w-3 text-zinc-400 group-hover:text-amber-400" />
+                  </div>
+
+                  <span className="hidden text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-300 sm:block">
+                    {user.fullName?.split(" ")[0]}
+                  </span>
+
+                  <ArrowUpRight className="hidden h-3 w-3 text-zinc-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block" />
+                </Link>
+
+                {/* LOGOUT */}
+                <button
+                  onClick={handleLogoutClick}
+                  title="Logout"
+                  className="flex h-9 w-9 items-center justify-center border border-white/[0.07] bg-white/[0.02] text-zinc-600 transition-all hover:border-red-500/20 hover:bg-red-500/[0.06] hover:text-red-400"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              /* LOGGED OUT */
+              <div className="hidden items-center gap-3 sm:flex">
+                <button
+                  onClick={() => openAuthModal("login")}
+                  className="px-2 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-white"
+                >
+                  Sign In
+                </button>
+
+                <button
+                  onClick={() => openAuthModal("register")}
+                  className="group flex items-center gap-2 bg-red-600 px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.2)]"
+                >
+                  Create Account
+
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </button>
+              </div>
+            )}
+
+            {/* MOBILE MENU BUTTON */}
+            <motion.button
+              whileTap={{ scale: 0.88 }}
+              onClick={() => setMobileOpen((prev) => !prev)}
+              className="relative flex h-9 w-9 items-center justify-center border border-white/[0.08] bg-white/[0.02] text-zinc-400 transition-colors hover:border-red-500/30 hover:bg-red-500/[0.05] hover:text-white md:hidden"
             >
-              <Sparkles className="h-3.5 w-3.5 text-amber-400 transition-transform group-hover:rotate-12" />
-
-              Register
-            </Link>
-          )}
-
-          {user?.role === "admin" && (
-            <Link
-              href="/admin"
-              className="flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-cyan-400 transition-colors hover:text-cyan-300"
-            >
-              <Shield className="h-3.5 w-3.5" />
-
-              Admin
-            </Link>
-          )}
-        </nav>
+              <AnimatePresence mode="wait" initial={false}>
+                {mobileOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{
+                      opacity: 0,
+                      rotate: -90,
+                      scale: 0.5,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      rotate: 0,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      rotate: 90,
+                      scale: 0.5,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute"
+                  >
+                    <X className="h-4 w-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{
+                      opacity: 0,
+                      rotate: 90,
+                      scale: 0.5,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      rotate: 0,
+                      scale: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      rotate: -90,
+                      scale: 0.5,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute"
+                  >
+                    <Menu className="h-4 w-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </div>
+        </div>
 
         {/* =====================================================
-            RIGHT SIDE
+            MOBILE MENU
         ===================================================== */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* REGISTRATION FEE */}
-          {!isRegClosed && (
-            <div className="hidden items-center gap-2 border border-red-500/15 bg-red-500/[0.05] px-3 py-2 lg:flex">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
-
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-500" />
-              </span>
-
-              <span className="text-[8px] font-bold uppercase tracking-[0.18em] text-zinc-500">
-                Reg Fee
-              </span>
-
-              <span className="text-xs font-black text-amber-400">
-                ₹{regAmount}
-              </span>
-            </div>
-          )}
-
-          {/* LOGGED IN */}
-          {user ? (
-            <div className="flex items-center gap-2">
-              <Link
-                href="/dashboard"
-                className="group flex items-center gap-2 border border-white/[0.08] bg-white/[0.025] px-3 py-2 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06]"
-              >
-                <div className="flex h-6 w-6 items-center justify-center bg-zinc-800">
-                  <User className="h-3 w-3 text-zinc-400 group-hover:text-amber-400" />
-                </div>
-
-                <span className="hidden text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-300 sm:block">
-                  {user.fullName?.split(" ")[0]}
-                </span>
-
-                <ArrowUpRight className="hidden h-3 w-3 text-zinc-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block" />
-              </Link>
-
-              <button
-                onClick={logout}
-                title="Logout"
-                className="flex h-9 w-9 items-center justify-center border border-white/[0.07] bg-white/[0.02] text-zinc-600 transition-all hover:border-red-500/20 hover:bg-red-500/[0.06] hover:text-red-400"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          ) : (
-            /* LOGGED OUT */
-            <div className="hidden items-center gap-3 sm:flex">
-              <button
-                onClick={() =>
-                  openAuthModal("login")
-                }
-                className="px-2 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-white"
-              >
-                Sign In
-              </button>
-
-              <button
-                onClick={() =>
-                  openAuthModal("register")
-                }
-                className="group flex items-center gap-2 bg-red-600 px-4 py-2.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.2)]"
-              >
-                Create Account
-
-                <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </button>
-            </div>
-          )}
-
-          {/* MOBILE MENU BUTTON */}
-          <motion.button
-            whileTap={{ scale: 0.88 }}
-            onClick={() =>
-              setMobileOpen((prev) => !prev)
-            }
-            className="relative flex h-9 w-9 items-center justify-center border border-white/[0.08] bg-white/[0.02] text-zinc-400 transition-colors hover:border-red-500/30 hover:bg-red-500/[0.05] hover:text-white md:hidden"
-          >
-            <AnimatePresence
-              mode="wait"
-              initial={false}
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              variants={mobileMenuVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="overflow-hidden border-t border-white/[0.07] bg-[#050506]/98 backdrop-blur-2xl md:hidden"
             >
-              {mobileOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{
-                    opacity: 0,
-                    rotate: -90,
-                    scale: 0.5,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                    scale: 1,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: 90,
-                    scale: 0.5,
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute"
-                >
-                  <X className="h-4 w-4" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{
-                    opacity: 0,
-                    rotate: 90,
-                    scale: 0.5,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    rotate: 0,
-                    scale: 1,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    rotate: -90,
-                    scale: 0.5,
-                  }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute"
-                >
-                  <Menu className="h-4 w-4" />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.button>
-        </div>
-      </div>
-
-      {/* =====================================================
-          MOBILE MENU
-      ===================================================== */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            variants={mobileMenuVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            className="overflow-hidden border-t border-white/[0.07] bg-[#050506]/98 backdrop-blur-2xl md:hidden"
-          >
-            <motion.div className="space-y-2 px-4 py-4">
-              {/* HOME */}
-              <motion.div variants={itemVariants}>
-                <Link
-                  href="/"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.015] px-4 py-4 transition-all duration-300 hover:border-red-500/20 hover:bg-white/[0.04]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center border border-white/[0.07] bg-white/[0.025] transition-colors group-hover:border-red-500/20 group-hover:bg-red-500/[0.05]">
-                      <Flame className="h-3.5 w-3.5 text-zinc-500 group-hover:text-red-500" />
-                    </div>
-
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
-                      Home
-                    </span>
-                  </div>
-
-                  <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-500" />
-                </Link>
-              </motion.div>
-
-              {/* LEADERBOARD */}
-              <motion.div variants={itemVariants}>
-                <Link
-                  href="/leaderboard"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.015] px-4 py-4 transition-all duration-300 hover:border-red-500/20 hover:bg-white/[0.04]"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center border border-red-500/15 bg-red-500/[0.05]">
-                      <Vote className="h-3.5 w-3.5 text-red-500" />
-                    </div>
-
-                    <div>
-                      <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
-                        Live Leaderboard
-                      </span>
-
-                      <span className="mt-1 block text-[7px] uppercase tracking-[0.15em] text-zinc-700">
-                        Track The Battle
-                      </span>
-                    </div>
-                  </div>
-
-                  <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-500" />
-                </Link>
-              </motion.div>
-
-              {/* REGISTER */}
-              <motion.div variants={itemVariants}>
-                <Link
-                  href="/register"
-                  onClick={() =>
-                    setMobileOpen(false)
-                  }
-                  className="group relative flex items-center justify-between overflow-hidden border border-red-500/25 bg-red-600 px-4 py-4 transition-all duration-300 hover:bg-red-500"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                  <div className="relative flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center border border-white/20 bg-white/10">
-                      <Sparkles className="h-3.5 w-3.5 text-amber-300" />
-                    </div>
-
-                    <div>
-                      <span className="block text-[9px] font-black uppercase tracking-[0.2em] text-white">
-                        Register Contestant
-                      </span>
-
-                      <span className="mt-1 block text-[7px] uppercase tracking-[0.15em] text-white/50">
-                        Enter The Border
-                      </span>
-                    </div>
-                  </div>
-
-                  <ArrowUpRight className="relative h-4 w-4 text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </Link>
-              </motion.div>
-
-              {/* ADMIN */}
-              {user?.role === "admin" && (
+              <motion.div className="space-y-2 px-4 py-4">
+                {/* HOME */}
                 <motion.div variants={itemVariants}>
                   <Link
-                    href="/admin"
-                    onClick={() =>
-                      setMobileOpen(false)
-                    }
-                    className="group flex items-center justify-between border border-cyan-500/10 bg-cyan-500/[0.02] px-4 py-4 transition-all duration-300 hover:bg-cyan-500/[0.05]"
+                    href="/"
+                    onClick={() => setMobileOpen(false)}
+                    className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.015] px-4 py-4 transition-all duration-300 hover:border-red-500/20 hover:bg-white/[0.04]"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center border border-cyan-500/15 bg-cyan-500/[0.05]">
-                        <Shield className="h-3.5 w-3.5 text-cyan-400" />
+                      <div className="flex h-8 w-8 items-center justify-center border border-white/[0.07] bg-white/[0.025] transition-colors group-hover:border-red-500/20 group-hover:bg-red-500/[0.05]">
+                        <Flame className="h-3.5 w-3.5 text-zinc-500 group-hover:text-red-500" />
                       </div>
 
-                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-cyan-400">
-                        Admin Portal
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
+                        Home
                       </span>
                     </div>
 
-                    <ArrowUpRight className="h-3.5 w-3.5 text-cyan-500/50 group-hover:text-cyan-400" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-500" />
                   </Link>
                 </motion.div>
-              )}
 
-              {/* AUTH BUTTONS */}
-              {!user && (
+                {/* LEADERBOARD */}
+                <motion.div variants={itemVariants}>
+                  <Link
+                    href="/leaderboard"
+                    onClick={() => setMobileOpen(false)}
+                    className="group flex items-center justify-between border border-white/[0.06] bg-white/[0.015] px-4 py-4 transition-all duration-300 hover:border-red-500/20 hover:bg-white/[0.04]"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center border border-red-500/15 bg-red-500/[0.05]">
+                        <Vote className="h-3.5 w-3.5 text-red-500" />
+                      </div>
+
+                      <div>
+                        <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
+                          Live Leaderboard
+                        </span>
+
+                        <span className="mt-1 block text-[7px] uppercase tracking-[0.15em] text-zinc-700">
+                          Track The Battle
+                        </span>
+                      </div>
+                    </div>
+
+                    <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-500" />
+                  </Link>
+                </motion.div>
+
+                {/* REGISTER */}
+                <motion.div variants={itemVariants}>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileOpen(false)}
+                    className="group relative flex items-center justify-between overflow-hidden border border-red-500/25 bg-red-600 px-4 py-4 transition-all duration-300 hover:bg-red-500"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                    <div className="relative flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center border border-white/20 bg-white/10">
+                        <Sparkles className="h-3.5 w-3.5 text-amber-300" />
+                      </div>
+
+                      <div>
+                        <span className="block text-[9px] font-black uppercase tracking-[0.2em] text-white">
+                          Register Contestant
+                        </span>
+
+                        <span className="mt-1 block text-[7px] uppercase tracking-[0.15em] text-white/50">
+                          Enter The Border
+                        </span>
+                      </div>
+                    </div>
+
+                    <ArrowUpRight className="relative h-4 w-4 text-white transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </Link>
+                </motion.div>
+
+                {/* ADMIN */}
+                {user?.role === "admin" && (
+                  <motion.div variants={itemVariants}>
+                    <Link
+                      href="/admin"
+                      onClick={() => setMobileOpen(false)}
+                      className="group flex items-center justify-between border border-cyan-500/10 bg-cyan-500/[0.02] px-4 py-4 transition-all duration-300 hover:bg-cyan-500/[0.05]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center border border-cyan-500/15 bg-cyan-500/[0.05]">
+                          <Shield className="h-3.5 w-3.5 text-cyan-400" />
+                        </div>
+
+                        <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-cyan-400">
+                          Admin Portal
+                        </span>
+                      </div>
+
+                      <ArrowUpRight className="h-3.5 w-3.5 text-cyan-500/50 group-hover:text-cyan-400" />
+                    </Link>
+                  </motion.div>
+                )}
+
+                {/* MOBILE LOGOUT */}
+                {user && (
+                  <motion.div variants={itemVariants}>
+                    <button
+                      onClick={handleLogoutClick}
+                      className="group flex w-full items-center justify-between border border-red-500/10 bg-red-500/[0.025] px-4 py-4 transition-all duration-300 hover:border-red-500/20 hover:bg-red-500/[0.06]"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center border border-red-500/15 bg-red-500/[0.05]">
+                          <LogOut className="h-3.5 w-3.5 text-red-400" />
+                        </div>
+
+                        <div className="text-left">
+                          <span className="block text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
+                            Logout
+                          </span>
+
+                          <span className="mt-1 block text-[7px] uppercase tracking-[0.15em] text-zinc-700">
+                            End Current Session
+                          </span>
+                        </div>
+                      </div>
+
+                      <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-500" />
+                    </button>
+                  </motion.div>
+                )}
+
+                {/* AUTH BUTTONS */}
+                {!user && (
+                  <motion.div
+                    variants={itemVariants}
+                    className="grid grid-cols-2 gap-2 pt-1"
+                  >
+                    <button
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openAuthModal("login");
+                      }}
+                      className="border border-white/[0.08] bg-white/[0.02] px-4 py-3.5 text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white"
+                    >
+                      Sign In
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setMobileOpen(false);
+                        openAuthModal("register");
+                      }}
+                      className="bg-red-600 px-4 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-colors hover:bg-red-500"
+                    >
+                      Create Account
+                    </button>
+                  </motion.div>
+                )}
+
+                {/* FOOTER */}
                 <motion.div
                   variants={itemVariants}
-                  className="grid grid-cols-2 gap-2 pt-1"
+                  className="flex items-center justify-center gap-2 pt-2"
                 >
-                  <button
-                    onClick={() => {
-                      setMobileOpen(false);
-                      openAuthModal("login");
-                    }}
-                    className="border border-white/[0.08] bg-white/[0.02] px-4 py-3.5 text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-white"
-                  >
-                    Sign In
-                  </button>
+                  <span className="h-px w-8 bg-zinc-800" />
 
-                  <button
-                    onClick={() => {
-                      setMobileOpen(false);
-                      openAuthModal("register");
-                    }}
-                    className="bg-red-600 px-4 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-colors hover:bg-red-500"
-                  >
-                    Create Account
-                  </button>
+                  <span className="text-[7px] font-bold uppercase tracking-[0.3em] text-zinc-700">
+                    The Borderbound
+                  </span>
+
+                  <span className="h-px w-8 bg-zinc-800" />
                 </motion.div>
-              )}
-
-              {/* FOOTER */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center justify-center gap-2 pt-2"
-              >
-                <span className="h-px w-8 bg-zinc-800" />
-
-                <span className="text-[7px] font-bold uppercase tracking-[0.3em] text-zinc-700">
-                  The Borderbound
-                </span>
-
-                <span className="h-px w-8 bg-zinc-800" />
               </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* =====================================================
+          LOGOUT CONFIRMATION MODAL
+      ===================================================== */}
+      <LogoutModal
+        open={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+        onConfirm={handleLogoutConfirm}
+      />
+    </>
   );
 });
 

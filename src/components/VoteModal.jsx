@@ -2,7 +2,17 @@
 
 import { useVotingStore } from "@/store/votingStore";
 import { useLeaderboardStore } from "@/store/leaderboardStore";
-import { X, Vote, Sparkles, AlertCircle, CheckCircle } from "lucide-react";
+import {
+  X,
+  Vote,
+  Sparkles,
+  AlertCircle,
+  CheckCircle,
+  ShieldCheck,
+  Users,
+  IndianRupee,
+  ArrowRight,
+} from "lucide-react";
 
 export default function VoteModal() {
   const {
@@ -32,149 +42,351 @@ export default function VoteModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-3xl bg-slate-900/90 border border-white/10 p-6 sm:p-8 shadow-2xl shadow-rose-500/10">
-        {/* Close Button */}
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center overflow-y-auto bg-black/85 p-3 backdrop-blur-xl sm:p-5"
+      onClick={closeVoteModal}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative my-auto w-full max-w-xl overflow-hidden rounded-[28px] border border-white/[0.09] bg-[#09090b] shadow-[0_30px_100px_rgba(0,0,0,0.75)]"
+      >
+        {/* =====================================================
+            AMBIENT GLOW
+        ===================================================== */}
+        <div className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-red-600/[0.08] blur-3xl" />
+
+        <div className="pointer-events-none absolute -bottom-32 -left-32 h-72 w-72 rounded-full bg-amber-500/[0.05] blur-3xl" />
+
+        {/* TOP ACCENT */}
+        <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-red-500 to-amber-400" />
+
+        {/* =====================================================
+            CLOSE
+        ===================================================== */}
         <button
+          type="button"
           onClick={closeVoteModal}
-          className="absolute top-5 right-5 p-2 rounded-full bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+          className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.035] text-zinc-500 transition-all duration-300 hover:border-red-500/30 hover:bg-red-500/[0.08] hover:text-white sm:right-5 sm:top-5"
         >
-          <X className="w-5 h-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
-            <Vote className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-white">Cast Public Votes</h3>
-            <p className="text-xs text-slate-400 font-mono">₹5 = 1 Vote | Voting</p>
-          </div>
-        </div>
+        <div className="relative p-5 sm:p-7">
+          {/* =====================================================
+              HEADER
+          ===================================================== */}
+          <div className="mb-6 flex items-start gap-3 pr-10">
+            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/[0.07]">
+              <div className="absolute inset-0 rounded-2xl bg-red-500/10 blur-xl" />
 
-        {/* Target Contestant Badge */}
-        <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60 mb-6">
-          <div className="w-12 h-12 rounded-xl bg-slate-700 overflow-hidden relative flex-shrink-0">
-            {targetContestant.profilePhotoUrl ? (
-              <img
-                src={targetContestant.profilePhotoUrl}
-                alt={targetContestant.fullName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-amber-400 font-bold">
-                {targetContestant.fullName?.[0]}
+              <Vote className="relative h-5 w-5 text-red-500" />
+            </div>
+
+            <div>
+              <div className="mb-1 flex items-center gap-2">
+                <span className="text-[8px] font-black uppercase tracking-[0.25em] text-red-500">
+                  Public Voting
+                </span>
+
+                <span className="h-1 w-1 rounded-full bg-zinc-700" />
+
+                <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-zinc-600">
+                  Live
+                </span>
               </div>
-            )}
-          </div>
-          <div className="flex-1">
-            <span className="text-xs text-amber-400 font-mono block font-semibold">
-              RANK #{targetContestant.rank || "-"}
-            </span>
-            <h4 className="font-bold text-white text-base leading-tight">
-              {targetContestant.fullName}
-            </h4>
-            <span className="text-xs text-slate-400">
-              {targetContestant.applicationId || targetContestant.city}
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-xs text-slate-400 block">Current Votes</span>
-            <span className="text-sm font-extrabold text-amber-400">
-              {targetContestant.totalValidVotes || 0}
-            </span>
-          </div>
-        </div>
 
-        {/* Presets */}
-        <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">
-          Select Package
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          {packages.map((pkg) => (
-            <button
-              key={pkg.votes}
-              type="button"
-              onClick={() => setVotesCount(pkg.votes)}
-              className={`p-3 rounded-xl border text-center transition-all ${
-                votesCount === pkg.votes
-                  ? "bg-rose-500/20 border-rose-500 text-white font-bold shadow-lg shadow-rose-500/20"
-                  : "bg-slate-800/40 border-slate-700/60 text-slate-300 hover:border-slate-500"
-              }`}
+              <h2 className="text-xl font-black tracking-tight text-white sm:text-2xl">
+                Cast Your Vote
+              </h2>
+
+              <p className="mt-1 text-[11px] text-zinc-500">
+                ₹5 per vote • Support your favourite contestant
+              </p>
+            </div>
+          </div>
+
+          {/* =====================================================
+              CONTESTANT
+          ===================================================== */}
+          <div className="relative mb-6 overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.025]">
+            <div className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-red-500 via-red-500 to-amber-400" />
+
+            <div className="flex items-center gap-3 p-4 sm:gap-4 sm:p-5">
+              {/* IMAGE */}
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-zinc-900 sm:h-[70px] sm:w-[70px]">
+                {targetContestant.profilePhotoUrl ? (
+                  <img
+                    src={targetContestant.profilePhotoUrl}
+                    alt={targetContestant.fullName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-950 text-xl font-black text-red-500">
+                    {targetContestant.fullName?.[0]?.toUpperCase()}
+                  </div>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+
+              {/* INFO */}
+              <div className="min-w-0 flex-1">
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="rounded-md border border-amber-500/20 bg-amber-500/[0.07] px-1.5 py-0.5 text-[7px] font-black uppercase tracking-[0.15em] text-amber-400">
+                    Rank #{targetContestant.rank || "-"}
+                  </span>
+                </div>
+
+                <h3 className="truncate text-sm font-black text-white sm:text-base">
+                  {targetContestant.fullName}
+                </h3>
+
+                <p className="mt-0.5 truncate text-[10px] text-zinc-500">
+                  {targetContestant.applicationId ||
+                    targetContestant.city ||
+                    "Contestant"}
+                </p>
+              </div>
+
+              {/* CURRENT VOTES */}
+              <div className="hidden shrink-0 text-right sm:block">
+                <span className="mb-1 block text-[7px] font-bold uppercase tracking-[0.18em] text-zinc-600">
+                  Current Votes
+                </span>
+
+                <div className="flex items-center justify-end gap-1.5">
+                  <Users className="h-3 w-3 text-red-500" />
+
+                  <span className="text-lg font-black text-white">
+                    {targetContestant.totalValidVotes || 0}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* MOBILE CURRENT VOTES */}
+            <div className="flex items-center justify-between border-t border-white/[0.05] px-4 py-2.5 sm:hidden">
+              <span className="text-[7px] font-bold uppercase tracking-[0.18em] text-zinc-600">
+                Current Votes
+              </span>
+
+              <div className="flex items-center gap-1.5">
+                <Users className="h-3 w-3 text-red-500" />
+
+                <span className="text-xs font-black text-white">
+                  {targetContestant.totalValidVotes || 0}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* =====================================================
+              PACKAGE
+          ===================================================== */}
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-300">
+                Choose Votes
+              </p>
+
+              <p className="mt-0.5 text-[9px] text-zinc-600">
+                Select a package or enter custom amount
+              </p>
+            </div>
+
+            <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-400">
+              <CheckCircle className="h-3 w-3" />
+              ₹5 / Vote
+            </div>
+          </div>
+
+          <div className="mb-5 grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-2.5">
+            {packages?.map((pkg) => {
+              const selected = votesCount === pkg.votes;
+
+              return (
+                <button
+                  key={pkg.votes}
+                  type="button"
+                  onClick={() => setVotesCount(pkg.votes)}
+                  className={`group relative overflow-hidden rounded-xl border p-3 text-center transition-all duration-300 ${
+                    selected
+                      ? "border-red-500/60 bg-red-500/[0.10] shadow-[0_8px_30px_rgba(239,68,68,0.12)]"
+                      : "border-white/[0.07] bg-white/[0.025] hover:border-white/[0.14] hover:bg-white/[0.045]"
+                  }`}
+                >
+                  {selected && (
+                    <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-red-500 to-amber-400" />
+                  )}
+
+                  <div
+                    className={`mb-1 text-sm font-black ${
+                      selected ? "text-white" : "text-zinc-300"
+                    }`}
+                  >
+                    {pkg.votes}
+                  </div>
+
+                  <div className="text-[7px] font-bold uppercase tracking-[0.15em] text-zinc-600">
+                    Votes
+                  </div>
+
+                  <div
+                    className={`mt-2 text-[10px] font-black ${
+                      selected ? "text-amber-400" : "text-zinc-500"
+                    }`}
+                  >
+                    ₹{pkg.amount}
+                  </div>
+
+                  {selected && (
+                    <div className="absolute right-2 top-2">
+                      <CheckCircle className="h-3 w-3 text-red-400" />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* =====================================================
+              CUSTOM VOTES
+          ===================================================== */}
+          <div className="mb-5">
+            <label
+              htmlFor="customVotes"
+              className="mb-2 block text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400"
             >
-              <div className="text-sm font-bold">{pkg.votes} Votes</div>
-              <div className="text-xs text-amber-400 font-mono mt-0.5">₹{pkg.amount}</div>
-            </button>
-          ))}
-        </div>
+              Custom Votes
+            </label>
 
-        {/* Custom Input */}
-        <div className="mb-6">
-          <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-            Or Enter Custom Votes
-          </label>
-          <div className="relative">
-            <input
-              type="number"
-              min="1"
-              value={votesCount}
-              onChange={(e) => setVotesCount(Number(e.target.value))}
-              className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white font-mono focus:outline-none focus:border-rose-500 text-lg font-bold"
-            />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-amber-400">
-              = ₹{totalAmount} INR
-            </span>
-          </div>
-        </div>
+            <div className="relative">
+              <Vote className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
 
-        {/* Error Notification */}
-        {error && (
-          <div className="flex items-center gap-2 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs mb-6">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
+              <input
+                id="customVotes"
+                type="number"
+                min="1"
+                value={votesCount}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
 
-        {/* Summary Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-800 mb-6">
-          <div>
-            <span className="text-xs text-slate-400 block">Total Payable</span>
-            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
-              ₹{totalAmount} <span className="text-xs font-normal text-slate-400">INR</span>
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-xs text-emerald-400 flex items-center gap-1">
-              <CheckCircle className="w-3.5 h-3.5" />  Voting
-            </span>
-          </div>
-        </div>
+                  setVotesCount(value < 1 ? 1 : value);
+                }}
+                className="h-12 w-full rounded-xl border border-white/[0.08] bg-white/[0.025] pl-11 pr-28 text-sm font-black text-white outline-none transition-all placeholder:text-zinc-700 focus:border-red-500/50 focus:bg-white/[0.04] focus:ring-4 focus:ring-red-500/[0.06]"
+                placeholder="Enter votes"
+              />
 
-        {/* Action Buttons */}
-        <div className="space-y-3">
+              <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+                <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-600">
+                  Total
+                </span>
+
+                <span className="ml-1 text-xs font-black text-amber-400">
+                  ₹{totalAmount}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* =====================================================
+              ERROR
+          ===================================================== */}
+          {error && (
+            <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/[0.06] p-3.5">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+
+              <span className="text-[10px] font-semibold leading-4 text-red-300">
+                {error}
+              </span>
+            </div>
+          )}
+
+          {/* =====================================================
+              PAYMENT SUMMARY
+          ===================================================== */}
+          <div className="mb-5 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="block text-[8px] font-bold uppercase tracking-[0.18em] text-zinc-600">
+                  Your Selection
+                </span>
+
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="text-sm font-black text-white">
+                    {votesCount}
+                  </span>
+
+                  <span className="text-[9px] text-zinc-600">
+                    Votes
+                  </span>
+
+                  <span className="text-zinc-700">×</span>
+
+                  <span className="text-[9px] font-bold text-zinc-500">
+                    ₹{unitPrice}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="block text-[8px] font-bold uppercase tracking-[0.18em] text-zinc-600">
+                  Total Payable
+                </span>
+
+                <div className="mt-0.5 flex items-center justify-end gap-0.5">
+                  <IndianRupee className="h-4 w-4 text-amber-400" />
+
+                  <span className="text-xl font-black text-amber-400">
+                    {totalAmount}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* =====================================================
+              PAY BUTTON
+          ===================================================== */}
           <button
+            type="button"
             onClick={() => handlePay(false)}
             disabled={loading || votesCount < 1}
-            className="w-full py-4 rounded-xl bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 text-white font-extrabold text-base shadow-xl shadow-rose-500/25 transition-all duration-300 transform active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+            className="group relative flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-gradient-to-r from-red-600 via-red-600 to-amber-500 py-4 text-sm font-black uppercase tracking-[0.08em] text-white shadow-[0_12px_35px_rgba(220,38,38,0.2)] transition-all duration-300 hover:from-red-500 hover:via-red-500 hover:to-amber-400 hover:shadow-[0_15px_45px_rgba(220,38,38,0.3)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
+            <span className="absolute inset-y-0 -left-20 w-10 rotate-[20deg] bg-white/20 blur-sm transition-all duration-700 group-hover:left-[120%]" />
+
             {loading ? (
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <>
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+
+                <span className="relative">
+                  Processing Payment...
+                </span>
+              </>
             ) : (
               <>
-                <Sparkles className="w-5 h-5" />
-                <span>PAY ₹{totalAmount} WITH PAYU</span>
+                <Sparkles className="relative h-4 w-4" />
+
+                <span className="relative">
+                  Pay ₹{totalAmount} with PayU
+                </span>
+
+                <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </>
             )}
           </button>
 
-          <button
-            onClick={() => handlePay(true)}
-            disabled={loading || votesCount < 1}
-            className="w-full py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-amber-400 font-bold text-xs border border-amber-500/30 transition-all flex items-center justify-center gap-1.5"
-          >
-            <span>Simulate Instant PayU Success (Test Mode)</span>
-          </button>
+          {/* =====================================================
+              SECURITY FOOTER
+          ===================================================== */}
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <ShieldCheck className="h-3 w-3 text-emerald-500/70" />
+
+            <span className="text-[7px] font-bold uppercase tracking-[0.18em] text-zinc-700">
+              Secure payment • Powered by PayU
+            </span>
+          </div>
         </div>
       </div>
     </div>

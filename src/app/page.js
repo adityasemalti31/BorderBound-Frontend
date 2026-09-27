@@ -89,10 +89,29 @@ export default function Page() {
             duration: 0.35,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className={`fixed right-3 top-3 z-[100] sm:right-6 sm:top-5 ${
+          className={`fixed right-3 top-3 z-[100] flex gap-2 sm:right-6 sm:top-5 ${
             navbarHidden ? "pointer-events-auto" : "pointer-events-none"
           }`}
         >
+          {/* CAST VOTE */}
+          <Link
+            href="/contestant"
+            className="group relative flex items-center gap-2 overflow-hidden border border-amber-400/50 bg-amber-500 px-4 py-3 shadow-[0_8px_35px_rgba(245,158,11,0.2)] transition-all duration-300 hover:border-amber-300 hover:bg-amber-400 hover:shadow-[0_8px_45px_rgba(245,158,11,0.35)] sm:gap-3 sm:px-6 sm:py-3.5"
+          >
+            <span className="absolute inset-y-0 -left-10 w-8 rotate-[20deg] bg-white/20 blur-sm transition-all duration-700 group-hover:left-[120%]" />
+
+            <span className="absolute inset-0 animate-pulse bg-white/10" />
+
+            <span className="relative z-10 flex h-2 w-2 shrink-0 animate-pulse rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]" />
+
+            <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.16em] text-black sm:text-[10px] sm:tracking-[0.2em]">
+              Cast Vote
+            </span>
+
+            <ArrowRight className="relative z-10 h-4 w-4 text-black transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+
+          {/* REGISTER NOW */}
           <Link
             href="/register"
             className="group relative flex items-center gap-2 overflow-hidden border border-red-400/60 bg-red-600 px-4 py-3 shadow-[0_8px_35px_rgba(220,38,38,0.25)] transition-all duration-300 hover:border-red-300 hover:bg-red-500 hover:shadow-[0_8px_45px_rgba(220,38,38,0.4)] sm:gap-3 sm:px-6 sm:py-3.5"

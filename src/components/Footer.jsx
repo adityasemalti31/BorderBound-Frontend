@@ -8,6 +8,11 @@ import {
   Vote,
 } from "lucide-react";
 
+
+import logo from '../../public/logo2.png'
+import Image from "next/image";
+
+
 export default function Footer() {
   const timeline = [
     {
@@ -44,7 +49,6 @@ export default function Footer() {
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-red-600/[0.035] blur-[120px]" />
 
       <div className="relative mx-auto w-full max-w-[1500px] px-5 sm:px-8 lg:px-12">
-
         {/* Timeline */}
         <div className="border-b border-white/[0.07] py-14 sm:py-16">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -62,8 +66,8 @@ export default function Footer() {
               </h2>
 
               <p className="mt-2 max-w-xl text-xs leading-5 text-zinc-400 sm:text-sm">
-                India chooses who gets the opportunity. The BorderBound
-                decides who survives it.
+                India chooses who gets the opportunity. The BorderBound decides
+                who survives it.
               </p>
             </div>
 
@@ -114,22 +118,11 @@ export default function Footer() {
 
         {/* Main Footer */}
         <div className="grid gap-12 py-14 sm:py-16 lg:grid-cols-[1.5fr_0.7fr_0.9fr] lg:gap-20">
-
           {/* Brand */}
           <div>
-            <Link
-              href="/home"
-              className="group inline-flex items-center gap-3"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/[0.06] transition-colors group-hover:border-red-500/40 group-hover:bg-red-500/[0.1]">
-                <Flame className="h-5 w-5 text-red-500" />
-              </div>
-
+            <Link href="/" className="group inline-flex items-center justify-center gap-3">
               <div>
-                <div className="text-lg font-black tracking-[0.12em] text-white">
-                  BORDERBOUND
-                </div>
-
+                <Image src={logo} alt="logo" width={140} height={100} />
                 <div className="mt-0.5 text-[7px] font-bold uppercase tracking-[0.35em] text-zinc-500">
                   15-Day Reality Competition
                 </div>
@@ -137,9 +130,9 @@ export default function Footer() {
             </Link>
 
             <p className="mt-6 max-w-md text-xs leading-6 text-zinc-400 sm:text-sm">
-              A real-time outdoor reality competition where registration,
-              public voting, strategy and performance decide who gets to
-              cross the border.
+              A real-time outdoor reality competition where registration, public
+              voting, strategy and performance decide who gets to cross the
+              border.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
