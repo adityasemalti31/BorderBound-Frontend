@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useContestantStore } from "@/store/contestantStore";
 import { useConfigStore } from "@/store/configStore";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
   CheckCircle2,
@@ -48,6 +49,9 @@ export default function RegistrationWizard() {
   } = useContestantStore();
 
   const [step, setStep] = useState(1);
+
+  // Sirf pehli baar profile load hone par step set karne ke liye
+  const initialStepSet = useRef(false);
 
   const [profileForm, setProfileForm] = useState({
     dob: "",
@@ -110,9 +114,17 @@ export default function RegistrationWizard() {
   useEffect(() => {
     if (!myProfile) return;
 
+    // Payment ho chuka hai to hamesha dashboard bhejo
     if (myProfile.registrationFeePaid) {
       router.push("/dashboard");
-    } else if (myProfile.termsAccepted) {
+      return;
+    }
+
+    // Step sirf pehli baar set hoga, taaki Back dabane par reset na ho
+    if (initialStepSet.current) return;
+    initialStepSet.current = true;
+
+    if (myProfile.termsAccepted) {
       setStep(4);
     } else if (myProfile.documents?.length > 0) {
       setStep(3);
@@ -158,6 +170,11 @@ export default function RegistrationWizard() {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const handleBack = () => {
+    setStep((prev) => Math.max(1, prev - 1));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleProfileSubmit = async (e) => {
@@ -841,6 +858,8 @@ export default function RegistrationWizard() {
                   text="Save Documents & Continue"
                   icon={ArrowRight}
                 />
+
+                <BackButton onClick={handleBack} disabled={loading} />
               </div>
             </motion.form>
           )}
@@ -940,6 +959,8 @@ export default function RegistrationWizard() {
                     </>
                   )}
                 </button>
+
+                <BackButton onClick={handleBack} disabled={loading} />
               </div>
             </motion.div>
           )}
@@ -1067,6 +1088,8 @@ export default function RegistrationWizard() {
                     disabled={loading}
                     className="w-full py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-amber-400 font-bold text-xs border border-amber-500/20 transition-all flex items-center justify-center gap-1.5"
                   ></button>
+
+                  <BackButton onClick={handleBack} disabled={loading} />
                 </div>
 
                 <div className="flex items-center justify-center gap-2 mt-5">
@@ -1301,6 +1324,20 @@ function ActionButton({ loading, loadingText, text, icon: Icon }) {
           <Icon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </>
       )}
+    </button>
+  );
+}
+
+function BackButton({ onClick, disabled }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group mt-3 w-full h-12 rounded-2xl border border-white/10 bg-white/[0.03] text-zinc-300 font-bold text-sm flex items-center justify-center gap-2 hover:bg-white/[0.07] hover:text-white transition-all active:scale-[0.985] disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+      Back
     </button>
   );
 }
