@@ -105,16 +105,7 @@ function LeaderboardContent() {
           />
         </div>
 
-        <div className="relative w-full sm:w-64">
-          <Filter className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Filter by city (e.g. Delhi)..."
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white text-sm focus:outline-none focus:border-rose-500"
-          />
-        </div>
+        
       </div>
 
       {/* Loading state */}
