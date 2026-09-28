@@ -1,17 +1,17 @@
 import Link from "next/link";
 import {
   ArrowUpRight,
-  Flame,
   ShieldCheck,
   Trophy,
   Users,
   Vote,
+  FileText,
+  Scale,
+  CreditCard,
 } from "lucide-react";
 
-
-import logo from '../../public/logo2.png'
+import logo from "../../public/logo2.png";
 import Image from "next/image";
-
 
 export default function Footer() {
   const timeline = [
@@ -40,6 +40,36 @@ export default function Footer() {
       date: "15 NOV",
       title: "Voting Closes",
       active: false,
+    },
+  ];
+
+  const quickLinks = [
+    ["Home", "/"],
+    ["Leaderboard", "/leaderboard"],
+    ["Register", "/register"],
+    ["Support a Contestant", "/register/supporting"],
+  ];
+
+  const legalLinks = [
+    {
+      label: "Terms & Conditions",
+      href: "/terms",
+      icon: FileText,
+    },
+    {
+      label: "Voting Rules",
+      href: "/voting-rules",
+      icon: Vote,
+    },
+    {
+      label: "Privacy Policy",
+      href: "/privacy",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Refund & Cancellation",
+      href: "/refund-cancellation-policy",
+      icon: CreditCard,
     },
   ];
 
@@ -80,14 +110,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Timeline */}
           <div className="mt-10 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-5">
             {timeline.map((item, index) => (
               <div
                 key={item.date}
                 className="group relative flex gap-4 border-b border-white/[0.07] py-5 last:border-b-0 sm:border-b-0 sm:px-5 sm:first:pl-0 sm:last:pr-0 lg:border-r lg:border-white/[0.07] lg:py-2 lg:first:pl-0 lg:last:border-r-0"
               >
-                {/* Connector */}
                 {index < timeline.length - 1 && (
                   <div className="absolute bottom-0 left-[7px] top-[42px] hidden w-px bg-white/[0.07] sm:block lg:bottom-auto lg:left-auto lg:right-0 lg:top-1/2 lg:h-px lg:w-8" />
                 )}
@@ -117,27 +145,33 @@ export default function Footer() {
         </div>
 
         {/* Main Footer */}
-        <div className="grid gap-12 py-14 sm:py-16 lg:grid-cols-[1.5fr_0.7fr_0.9fr] lg:gap-20">
+        <div className="grid gap-12 py-14 sm:py-16 lg:grid-cols-[1.4fr_0.7fr_0.9fr_1fr] lg:gap-16">
           {/* Brand */}
           <div>
-            <Link href="/" className="group inline-flex items-center justify-center gap-3">
+            <Link
+              href="/"
+              className="group inline-flex items-center justify-center gap-3"
+            >
               <div>
-                <Image src={logo} alt="logo" width={140} height={100} />
-                <div className="mt-0.5 text-[7px] font-bold uppercase tracking-[0.35em] text-zinc-500">
-                  15-Day Reality Competition
-                </div>
+                <Image
+                  src={logo}
+                  alt="The BorderBound"
+                  width={140}
+                  height={100}
+                />
               </div>
             </Link>
 
             <p className="mt-6 max-w-md text-xs leading-6 text-zinc-400 sm:text-sm">
-              A real-time outdoor reality competition where registration, public
-              voting, strategy and performance decide who gets to cross the
-              border.
+              A real-time outdoor reality competition where registration,
+              public voting, strategy and performance decide who gets to cross
+              the border.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
               <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-2">
                 <Users className="h-3.5 w-3.5 text-red-400" />
+
                 <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-400">
                   32 Contestants
                 </span>
@@ -145,6 +179,7 @@ export default function Footer() {
 
               <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-2">
                 <Vote className="h-3.5 w-3.5 text-amber-400" />
+
                 <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-400">
                   ₹5 / Vote
                 </span>
@@ -159,12 +194,7 @@ export default function Footer() {
             </div>
 
             <div className="space-y-3">
-              {[
-                ["Home", "/home"],
-                ["Leaderboard", "/leaderboard"],
-                ["Register", "/register"],
-                ["Support a Contestant", "/register/supporting"],
-              ].map(([label, href]) => (
+              {quickLinks.map(([label, href]) => (
                 <Link
                   key={href}
                   href={href}
@@ -173,6 +203,31 @@ export default function Footer() {
                   <span>{label}</span>
 
                   <ArrowUpRight className="h-3.5 w-3.5 text-zinc-600 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-400" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <div className="mb-5 flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+              <Scale className="h-3.5 w-3.5 text-red-400" />
+              Legal & Policies
+            </div>
+
+            <div className="space-y-3">
+              {legalLinks.map(({ label, href, icon: Icon }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="group flex items-center justify-between gap-3 text-xs font-medium text-zinc-300 transition-colors hover:text-white"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Icon className="h-3.5 w-3.5 text-zinc-600 transition-colors group-hover:text-red-400" />
+                    {label}
+                  </span>
+
+                  <ArrowUpRight className="h-3.5 w-3.5 shrink-0 text-zinc-700 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-red-400" />
                 </Link>
               ))}
             </div>
@@ -192,6 +247,7 @@ export default function Footer() {
                   <div className="text-xs font-bold text-zinc-200">
                     Secure Payments
                   </div>
+
                   <div className="mt-1 text-[10px] leading-4 text-zinc-500">
                     Payments processed through a secure gateway.
                   </div>
@@ -205,6 +261,7 @@ export default function Footer() {
                   <div className="text-xs font-bold text-zinc-200">
                     Verified Voting
                   </div>
+
                   <div className="mt-1 text-[10px] leading-4 text-zinc-500">
                     Only valid successfully processed votes count.
                   </div>
@@ -218,6 +275,7 @@ export default function Footer() {
                   <div className="text-xs font-bold text-zinc-200">
                     Public Leaderboard
                   </div>
+
                   <div className="mt-1 text-[10px] leading-4 text-zinc-500">
                     Voting positions remain publicly visible.
                   </div>
@@ -228,9 +286,45 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="flex flex-col gap-4 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-5 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-[9px] uppercase tracking-[0.15em] text-zinc-600">
             © {new Date().getFullYear()} The BorderBound. All rights reserved.
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Link
+              href="/terms"
+              className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-600 transition-colors hover:text-zinc-300"
+            >
+              Terms
+            </Link>
+
+            <span className="h-3 w-px bg-white/10" />
+
+            <Link
+              href="/voting-rules"
+              className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-600 transition-colors hover:text-zinc-300"
+            >
+              Voting Rules
+            </Link>
+
+            <span className="h-3 w-px bg-white/10" />
+
+            <Link
+              href="/privacy"
+              className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-600 transition-colors hover:text-zinc-300"
+            >
+              Privacy
+            </Link>
+
+            <span className="h-3 w-px bg-white/10" />
+
+            <Link
+              href="/refund-cancellation-policy"
+              className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-600 transition-colors hover:text-zinc-300"
+            >
+              Refunds
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">

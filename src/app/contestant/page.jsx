@@ -13,10 +13,11 @@ import {
   Loader2,
   UserRound,
   X,
+  Vote,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
-import { SiLudwig } from "react-icons/si";
+import { useVotingStore } from "@/store/votingStore";
 
 const LIMIT = 12;
 
@@ -82,7 +83,6 @@ export default function ContestantsPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-
     setPage(1);
     setActiveSearch(search.trim());
   };
@@ -108,7 +108,6 @@ export default function ContestantsPage() {
 
   return (
     <main className="min-h-screen overflow-hidden bg-[#050505] text-white">
-      {/* Background */}
       <div className="pointer-events-none fixed inset-0">
         <div className="absolute left-1/2 top-[-250px] h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-red-600/10 blur-[150px]" />
 
@@ -125,7 +124,6 @@ export default function ContestantsPage() {
       </div>
 
       <section className="relative mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 sm:pt-12 lg:px-8">
-        {/* Header */}
         <div className="mb-8 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -133,7 +131,7 @@ export default function ContestantsPage() {
             transition={{ duration: 0.5 }}
           >
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-[1px] w-8 bg-red-600" />
+              <span className="h-px w-8 bg-red-600" />
 
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-red-500 sm:text-xs">
                 Border-Bound
@@ -170,7 +168,6 @@ export default function ContestantsPage() {
           </motion.div>
         </div>
 
-        {/* Search */}
         <motion.form
           onSubmit={handleSearch}
           initial={{ opacity: 0, y: 15 }}
@@ -219,7 +216,9 @@ export default function ContestantsPage() {
             <div className="mt-3 flex items-center gap-2 text-xs text-zinc-500">
               <span>Showing results for</span>
 
-              <span className="font-bold text-red-500">"{activeSearch}"</span>
+              <span className="font-bold text-red-500">
+                "{activeSearch}"
+              </span>
 
               <button
                 type="button"
@@ -232,7 +231,6 @@ export default function ContestantsPage() {
           )}
         </motion.form>
 
-        {/* Content */}
         {loading ? (
           <ContestantSkeleton />
         ) : error ? (
@@ -266,7 +264,11 @@ export default function ContestantsPage() {
             </div>
 
             {pages > 1 && (
-              <Pagination page={page} pages={pages} onPageChange={goToPage} />
+              <Pagination
+                page={page}
+                pages={pages}
+                onPageChange={goToPage}
+              />
             )}
           </>
         )}
@@ -278,7 +280,6 @@ export default function ContestantsPage() {
 function ContestantCard({ contestant, index }) {
   const {
     _id,
-    applicationId,
     fullName,
     age,
     city,
@@ -288,14 +289,25 @@ function ContestantCard({ contestant, index }) {
     totalValidVotes,
     rank,
     selectionStatus,
-    slug
+    slug,
   } = contestant;
 
+  const { openVoteModal } = useVotingStore();
+
   const isSelected =
-    selectionStatus === "top_32" || selectionStatus === "wildcard";
+    selectionStatus === "top_32" ||
+    selectionStatus === "wildcard";
+
+  const profileUrl = `/contestant/${slug || _id}`;
+
+  const handleVote = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    openVoteModal(contestant);
+  };
 
   return (
-    <motion.div
+    <motion.article
       layout
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
@@ -304,98 +316,117 @@ function ContestantCard({ contestant, index }) {
         duration: 0.35,
         delay: Math.min(index * 0.04, 0.25),
       }}
-      className="group"
+      className="group relative overflow-hidden border border-zinc-900 bg-[#0b0b0b] transition-all duration-300 hover:border-red-600/50 hover:bg-[#0e0e0e]"
     >
-      <Link href={`/contestant/${ slug|| _id}`}>
-        <article className="relative overflow-hidden border border-zinc-900 bg-[#0b0b0b] transition-all duration-300 hover:border-red-600/50 hover:bg-[#0e0e0e]">
-          <div className="relative aspect-[4/4.5] overflow-hidden bg-zinc-950">
-            {profilePhotoUrl ? (
-              <div className="flex h-full w-full items-center justify-center">
-                <div className="relative h-48 w-48 overflow-hidden rounded-full border-2 border-red-600/60 bg-zinc-900 shadow-[0_0_40px_rgba(220,38,38,0.15)] sm:h-56 sm:w-56">
-                  <img
-                    src={profilePhotoUrl}
-                    alt={fullName}
-                    className="h-full w-full object-cover grayscale-[20%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="flex h-full w-full items-center justify-center">
-                <div className="flex h-48 w-48 items-center justify-center rounded-full border-2 border-zinc-800 bg-zinc-900 sm:h-56 sm:w-56">
-                  <UserRound
-                    size={60}
-                    strokeWidth={1}
-                    className="text-zinc-700"
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
-
-            {rank > 0 && (
-              <div className="absolute left-3 top-3 flex items-center gap-2 border border-white/10 bg-black/70 px-3 py-2 backdrop-blur-md">
-                <Trophy size={13} className="text-red-500" />
-
-                <span className="text-[10px] font-black uppercase tracking-wider">
-                  Rank #{rank}
-                </span>
-              </div>
-            )}
-
-            {isSelected && (
-              <div className="absolute right-3 top-3 bg-red-600 px-3 py-2 text-[9px] font-black uppercase tracking-widest">
-                {selectionStatus === "wildcard" ? "Wildcard" : "Top 32"}
-              </div>
-            )}
-
-            <div className="absolute  -bottom-3 left-0 right-0 p-4 ">
-             
-
-              <h2 className="truncate text-xl font-black uppercase tracking-tight text-white ">
-                {fullName}
-              </h2>
-
-              <div className="mt-2 flex items-center gap-2 text-xs text-zinc-400">
-                <MapPin size={13} className="text-red-500" />
-
-                <span className="truncate">
-                  {city}, {state}
-                </span>
-
-                <span className="text-zinc-700">•</span>
-
-                <span>{age}</span>
+      <Link href={profileUrl} className="block">
+        <div className="relative aspect-[4/4.5] overflow-hidden bg-zinc-950">
+          {profilePhotoUrl ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="relative h-48 w-48 overflow-hidden rounded-full border-2 border-red-600/60 bg-zinc-900 shadow-[0_0_40px_rgba(220,38,38,0.15)] sm:h-56 sm:w-56">
+                <img
+                  src={profilePhotoUrl}
+                  alt={fullName}
+                  className="h-full w-full object-cover grayscale-[20%] transition duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                />
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="flex h-48 w-48 items-center justify-center rounded-full border-2 border-zinc-800 bg-zinc-900 sm:h-56 sm:w-56">
+                <UserRound
+                  size={60}
+                  strokeWidth={1}
+                  className="text-zinc-700"
+                />
+              </div>
+            </div>
+          )}
 
-          <div className="border-t border-zinc-900 p-4">
-            <p className="line-clamp-2 min-h-[40px] text-xs leading-5 text-zinc-500">
-              {bio || "Contestant profile available."}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20" />
+
+          {rank > 0 && (
+            <div className="absolute left-3 top-3 flex items-center gap-2 border border-white/10 bg-black/70 px-3 py-2 backdrop-blur-md">
+              <Trophy size={13} className="text-red-500" />
+
+              <span className="text-[10px] font-black uppercase tracking-wider">
+                Rank #{rank}
+              </span>
+            </div>
+          )}
+
+          {isSelected && (
+            <div className="absolute right-3 top-3 bg-red-600 px-3 py-2 text-[9px] font-black uppercase tracking-widest">
+              {selectionStatus === "wildcard" ? "Wildcard" : "Top 32"}
+            </div>
+          )}
+
+          <div className="absolute bottom-0 left-0 right-0 p-4">
+            <h2 className="truncate text-xl font-black uppercase tracking-tight text-white">
+              {fullName}
+            </h2>
+
+            <div className="mt-2 flex items-center gap-2 text-xs text-zinc-400">
+              <MapPin size={13} className="text-red-500" />
+
+              <span className="truncate">
+                {city}, {state}
+              </span>
+
+              <span className="text-zinc-700">•</span>
+
+              <span>{age}</span>
+            </div>
+          </div>
+        </div>
+      </Link>
+
+      <div className="border-t border-zinc-900 p-4">
+        <p className="line-clamp-2 min-h-[40px] text-xs leading-5 text-zinc-500">
+          {bio || "Contestant profile available."}
+        </p>
+
+        <div className="mt-4 grid grid-cols-[1fr_auto] gap-2 border-t border-zinc-900 pt-3">
+          <div>
+            <p className="text-[8px] font-bold uppercase tracking-widest text-zinc-700">
+              Valid Votes
             </p>
 
-            <div className="mt-4 flex items-center justify-between border-t border-zinc-900 pt-3">
-              <div>
-                <p className="text-[8px] font-bold uppercase tracking-widest text-zinc-700">
-                  Valid Votes
-                </p>
-
-                <p className="mt-0.5 text-sm font-black text-white">
-                  {Number(totalValidVotes || 0).toLocaleString("en-IN")}
-                </p>
-              </div>
-
-              <div className="flex h-9 w-9 items-center justify-center border border-zinc-800 text-zinc-600 transition-all group-hover:border-red-600 group-hover:bg-red-600 group-hover:text-white">
-                <ArrowUpRight size={16} />
-              </div>
-            </div>
+            <p className="mt-0.5 text-sm font-black text-white">
+              {Number(totalValidVotes || 0).toLocaleString("en-IN")}
+            </p>
           </div>
 
-          <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-red-600 transition-all duration-500 group-hover:w-full" />
-        </article>
-      </Link>
-    </motion.div>
+          <Link
+            href={profileUrl}
+            className="flex h-9 w-9 items-center justify-center border border-zinc-800 text-zinc-600 transition-all hover:border-red-600 hover:bg-red-600 hover:text-white"
+            aria-label={`View ${fullName} profile`}
+          >
+            <ArrowUpRight size={16} />
+          </Link>
+        </div>
+
+        <motion.button
+          type="button"
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.985 }}
+          onClick={handleVote}
+          className="group/vote relative mt-3 flex h-11 w-full items-center justify-center gap-2 overflow-hidden bg-red-600 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(220,38,38,0.12)] transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.28)]"
+        >
+          <span className="absolute inset-0 -translate-x-full bg-white/10 transition-transform duration-500 group-hover/vote:translate-x-full" />
+
+          <Vote
+            size={15}
+            className="relative transition-transform duration-300 group-hover/vote:-rotate-6"
+          />
+
+          <span className="relative">
+            Vote For {fullName?.split(" ")[0]?.toUpperCase()}
+          </span>
+        </motion.button>
+      </div>
+
+      <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-red-600 to-red-400 transition-all duration-500 group-hover:w-full" />
+    </motion.article>
   );
 }
 
@@ -492,7 +523,9 @@ function EmptyState({ search, onClear }) {
         <Search size={25} />
       </div>
 
-      <h2 className="text-xl font-black uppercase">No Contestants Found</h2>
+      <h2 className="text-xl font-black uppercase">
+        No Contestants Found
+      </h2>
 
       <p className="mt-2 max-w-sm text-sm leading-6 text-zinc-600">
         {search
@@ -517,9 +550,13 @@ function ErrorState({ message, onRetry }) {
     <div className="flex min-h-[350px] flex-col items-center justify-center border border-red-900/30 bg-red-950/5 px-6 text-center">
       <div className="mb-5 h-2 w-2 bg-red-600 shadow-[0_0_20px_rgba(220,38,38,0.8)]" />
 
-      <h2 className="text-xl font-black uppercase">Something Went Wrong</h2>
+      <h2 className="text-xl font-black uppercase">
+        Something Went Wrong
+      </h2>
 
-      <p className="mt-2 max-w-md text-sm text-zinc-600">{message}</p>
+      <p className="mt-2 max-w-md text-sm text-zinc-600">
+        {message}
+      </p>
 
       <button
         onClick={onRetry}

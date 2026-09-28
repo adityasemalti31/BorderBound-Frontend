@@ -15,7 +15,7 @@ import {
   Trophy,
   Users,
   Vote,
-  Zap,
+  Zap,ScrollText
 } from "lucide-react";
 import HeroCarousel from "./(public)/home/home-comp/Carousel";
 import RegistrationCountdown from "@/components/RegistrationCountdown";
@@ -364,103 +364,179 @@ export default function Page() {
           STATS
       ========================================================= */}
         <motion.section
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={reveal}
-          className="border-b border-white/[0.07]"
-        >
-          <div className="mx-auto w-full max-w-[1500px] px-5 py-14 sm:px-8 sm:py-20 lg:px-12">
-            {/* Center Heading */}
-            <div className="mx-auto max-w-2xl text-center">
-              <div className="mb-4 flex items-center justify-center gap-3">
-                <span className="h-px w-8 bg-red-500/70" />
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: "-100px" }}
+  variants={reveal}
+  className="border-b border-white/[0.07]"
+>
+  <div className="mx-auto w-full max-w-[1500px] px-5 py-14 sm:px-8 sm:py-20 lg:px-12">
+    <div className="mx-auto max-w-2xl text-center">
+      <div className="mb-4 flex items-center justify-center gap-3">
+        <span className="h-px w-8 bg-red-500/70" />
 
-                <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-red-400">
-                  The BorderBound Standard
-                </span>
+        <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-red-400">
+          The BorderBound Standard
+        </span>
 
-                <span className="h-px w-8 bg-red-500/70" />
-              </div>
+        <span className="h-px w-8 bg-red-500/70" />
+      </div>
 
-              <h2 className="text-3xl font-black uppercase tracking-[-0.04em] text-white sm:text-5xl">
-                Built on <span className="text-red-500">Transparency.</span>
-              </h2>
+      <h2 className="text-3xl font-black uppercase tracking-[-0.04em] text-white sm:text-5xl">
+        Built on <span className="text-red-500">Transparency.</span>
+      </h2>
 
-              <p className="mt-4 text-sm text-zinc-300 sm:text-base">
-                Your registration. Your votes. Your chance.
+      <p className="mt-4 text-sm text-zinc-300 sm:text-base">
+        Your registration. Your votes. Your chance.
+      </p>
+    </div>
+
+    <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
+      {[
+        {
+          number: "01",
+          title: "Secure Payments",
+          description:
+            "Registration and voting payments are processed through our designated secure payment gateway. Payment confirmations are generated for successfully completed transactions.",
+          accent: "SAFE. TRACEABLE. CONFIRMED.",
+          icon: Shield,
+        },
+        {
+          number: "02",
+          title: "Verified Contestants",
+          description:
+            "Contestant details and eligibility are reviewed before an approved profile becomes eligible for public voting.",
+          accent: "EVERY PROFILE GOES THROUGH VERIFICATION.",
+          icon: Users,
+        },
+        {
+          number: "03",
+          title: "Verified Votes",
+          description:
+            "Only successfully processed and valid votes are counted toward the official leaderboard. Votes identified as invalid or fraudulent may be rejected in accordance with the Voting Rules.",
+          accent: "VALID VOTES. OFFICIAL COUNT.",
+          icon: Vote,
+        },
+        {
+          number: "04",
+          title: "Public Leaderboard",
+          description:
+            "Voting positions are displayed through the official leaderboard, allowing participants and supporters to track the competition throughout the voting period.",
+          accent: "THE RANKING IS VISIBLE.",
+          icon: Trophy,
+        },
+        {
+          number: "05",
+          title: "Final Validation",
+          description:
+            "When voting closes, results undergo final validation before the selected contestants are confirmed. The final selection is subject to the official eligibility and Voting Rules.",
+          accent: "THE FINAL LINE IS VERIFIED.",
+          icon: Shield,
+        },
+        {
+          number: "06",
+          title: "Official Rules",
+          description:
+            "Registration, eligibility, voting, selection, payments and other aspects of THE BORDERBOUND are governed by the official rules published on this website.",
+          accent: "KNOW THE RULES. KNOW THE GAME.",
+          icon: ScrollText,
+        },
+      ].map(
+        ({ number, title, description, accent, icon: Icon }) => (
+          <motion.div
+            key={number}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="group relative min-h-[280px] overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 transition-colors duration-300 hover:border-red-500/25 hover:bg-white/[0.04] sm:p-7"
+          >
+            <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-600/[0.07] blur-3xl transition-all duration-500 group-hover:bg-red-600/[0.14]" />
+
+            <span className="absolute right-5 top-5 font-mono text-[9px] tracking-[0.2em] text-zinc-500">
+              {number}
+            </span>
+
+            <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/[0.06] text-red-400 transition-all duration-300 group-hover:border-red-500/40 group-hover:bg-red-500/[0.1] group-hover:text-red-300">
+              <Icon size={19} strokeWidth={1.7} />
+            </div>
+
+            <div className="relative mt-7">
+              <h3 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-[15px]">
+                {title}
+              </h3>
+
+              <p className="mt-3 text-[11px] leading-5 text-zinc-300 sm:text-xs sm:leading-6">
+                {description}
               </p>
+
+              <div className="mt-5 border-t border-white/[0.07] pt-4">
+                <span className="text-[8px] font-black uppercase tracking-[0.18em] text-red-400">
+                  {accent}
+                </span>
+              </div>
             </div>
 
-            {/* 4 Cards Grid */}
-            <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-4">
-              {[
-                {
-                  number: "01",
-                  title: "Secure Payments",
-                  description:
-                    "Payments processed through a secure payment gateway.",
-                  icon: Shield,
-                },
-                {
-                  number: "02",
-                  title: "Verified Contestants",
-                  description:
-                    "Identity and eligibility verification before profiles become eligible for voting.",
-                  icon: Users,
-                },
-                {
-                  number: "03",
-                  title: "Verified Votes",
-                  description:
-                    "Only valid, successfully processed votes count toward the leaderboard.",
-                  icon: Vote,
-                },
-                {
-                  number: "04",
-                  title: "Public Leaderboard",
-                  description:
-                    "Voting positions are displayed through the official leaderboard.",
-                  icon: Trophy,
-                },
-              ].map(({ number, title, description, icon: Icon }) => (
-                <motion.div
-                  key={number}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25 }}
-                  className="group relative min-h-[220px] overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.025] p-6 transition-colors duration-300 hover:border-red-500/25 hover:bg-white/[0.04] sm:p-7"
-                >
-                  {/* Red ambient glow */}
-                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-red-600/[0.07] blur-3xl transition-all duration-500 group-hover:bg-red-600/[0.14]" />
+            <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-red-500 to-amber-400 transition-all duration-500 group-hover:w-full" />
+          </motion.div>
+        )
+      )}
+    </div>
 
-                  {/* Number */}
-                  <span className="absolute right-5 top-5 font-mono text-[9px] tracking-[0.2em] text-zinc-500">
-                    {number}
-                  </span>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, delay: 0.15 }}
+      className="relative mx-auto mt-5 max-w-5xl overflow-hidden rounded-2xl border border-red-500/15 bg-red-500/[0.035] p-7 sm:p-9"
+    >
+      <div className="pointer-events-none absolute left-1/2 top-0 h-32 w-96 -translate-x-1/2 rounded-full bg-red-600/[0.07] blur-[70px]" />
 
-                  {/* Icon */}
-                  <div className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/[0.06] text-red-400 transition-all duration-300 group-hover:border-red-500/40 group-hover:bg-red-500/[0.1] group-hover:text-red-300">
-                    <Icon size={19} strokeWidth={1.7} />
-                  </div>
+      <div className="relative text-center">
+        <div className="flex items-center justify-center gap-3">
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-red-500/60" />
 
-                  {/* Content */}
-                  <div className="relative mt-7">
-                    <h3 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-[15px]">
-                      {title}
-                    </h3>
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-red-400">
+            The BorderBound Standard
+          </span>
 
-                    <p className="mt-3 text-[11px] leading-5 text-zinc-300 sm:text-xs sm:leading-6">
-                      {description}
-                    </p>
-                  </div>
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-red-500/60" />
+        </div>
 
-                  {/* Bottom red accent */}
-                  <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-red-500 to-amber-400 transition-all duration-500 group-hover:w-full" />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
+        <h3 className="mt-4 text-2xl font-black uppercase tracking-[-0.04em] text-white sm:text-4xl">
+          No Hidden <span className="text-red-500">Rules.</span>
+        </h3>
+
+        <p className="mx-auto mt-4 max-w-2xl text-xs leading-6 text-zinc-400 sm:text-sm">
+          The way you enter, vote and move through the selection process is
+          defined by the official rules. Read them before you register or cast
+          a vote.
+        </p>
+
+        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link
+            href="/voting-rules"
+            className="inline-flex min-w-[170px] items-center justify-center border border-red-500/30 bg-red-600 px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.25)]"
+          >
+            Voting Rules
+          </Link>
+
+          {/* <Link
+            href="/terms"
+            className="inline-flex min-w-[170px] items-center justify-center border border-white/[0.1] bg-white/[0.03] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-zinc-300 transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white"
+          >
+            Terms & Conditions
+          </Link>
+
+          <Link
+            href="/privacy"
+            className="inline-flex min-w-[170px] items-center justify-center border border-white/[0.1] bg-white/[0.03] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-zinc-300 transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white"
+          >
+            Privacy Policy
+          </Link> */}
+        </div>
+      </div>
+    </motion.div>
+  </div>
+</motion.section>
 
         {/* =========================================================
           LEADERBOARD

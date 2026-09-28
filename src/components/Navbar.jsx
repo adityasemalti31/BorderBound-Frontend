@@ -4,7 +4,6 @@ import { useEffect, useState, forwardRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Flame,
   Vote,
   User,
   LogOut,
@@ -19,7 +18,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useConfigStore } from "@/store/configStore";
 import Image from "next/image";
 
-import logo from '../../public/logo2.png'
+import logo from "../../public/logo2.png";
 
 const LogoutModal = ({ open, onClose, onConfirm }) => {
   return (
@@ -55,19 +54,15 @@ const LogoutModal = ({ open, onClose, onConfirm }) => {
             onClick={(e) => e.stopPropagation()}
             className="relative w-full max-w-sm overflow-hidden border border-white/[0.09] bg-[#0a0a0c] shadow-[0_30px_100px_rgba(0,0,0,0.7)]"
           >
-            {/* TOP RED GLOW */}
             <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-red-600/15 blur-3xl" />
 
-            {/* TOP LINE */}
             <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-red-600 to-transparent" />
 
             <div className="relative p-6 sm:p-7">
-              {/* ICON */}
               <div className="mb-5 flex h-12 w-12 items-center justify-center border border-red-500/20 bg-red-500/[0.07]">
                 <AlertTriangle className="h-5 w-5 text-red-500" />
               </div>
 
-              {/* TEXT */}
               <div className="mb-7">
                 <p className="mb-2 text-[8px] font-black uppercase tracking-[0.3em] text-red-500">
                   End Session
@@ -83,7 +78,6 @@ const LogoutModal = ({ open, onClose, onConfirm }) => {
                 </p>
               </div>
 
-              {/* BUTTONS */}
               <div className="grid grid-cols-2 gap-2.5">
                 <button
                   type="button"
@@ -103,7 +97,6 @@ const LogoutModal = ({ open, onClose, onConfirm }) => {
                 </button>
               </div>
 
-              {/* FOOTER */}
               <div className="mt-5 flex items-center justify-center gap-2">
                 <span className="h-px w-8 bg-zinc-800" />
 
@@ -134,9 +127,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
     fetchPublicConfig();
   }, [checkAuth, fetchPublicConfig]);
 
-  /* =========================================================
-     NAVBAR SCROLL BEHAVIOUR
-  ========================================================= */
   useEffect(() => {
     let lastScrollY = window.scrollY;
 
@@ -183,7 +173,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
   }, [onVisibilityChange]);
 
   const regAmount = configData?.registration?.amount || 499;
-
   const isRegClosed = configData?.registration?.isClosed;
 
   const handleLogoutClick = () => {
@@ -249,51 +238,35 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
           navbarHidden ? "-translate-y-full" : "translate-y-0"
         }`}
       >
-        {/* =====================================================
-            MAIN NAVBAR
-        ===================================================== */}
-        <div className="mx-auto flex h-[68px] w-full max-w-[1500px] items-center justify-between px-4 sm:px-8 lg:px-12">
-          {/* LOGO */}
+        <div
+          className={`relative mx-auto flex h-[68px] w-full max-w-[1500px] items-center px-4 sm:px-8 lg:px-12 ${
+            user ? "justify-between" : "justify-between"
+          }`}
+        >
           <Link
             href="/"
             onClick={() => setMobileOpen(false)}
-            className="group flex items-center gap-3"
+            className={`group flex items-center ${
+              user
+                ? ""
+                : "absolute left-1/2 -translate-x-1/2"
+            }`}
           >
-
-
             <Image
-            src={logo}
-            alt="logo"
-            width={140}
-            height={100}
+              src={logo}
+              alt="The BorderBound"
+              width={140}
+              height={100}
+              priority
+              className="h-auto w-[120px] sm:w-[140px]"
             />
-            {/* <div className="relative flex h-9 w-9 items-center justify-center border border-red-500/30 bg-red-500/[0.06]">
-              <div className="absolute inset-0 bg-red-500/10 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
-
-              <Flame className="relative h-4 w-4 text-red-500 transition-colors duration-300 group-hover:text-amber-400" />
-            </div> */}
-
-            <div className="hidden flex-col sm:flex">
-              {/* <span className="text-[17px] font-black tracking-[-0.03em] text-white">
-                BORDER
-                <span className="text-red-500">BOUND</span>
-              </span> */}
-
-              {/* <span className="text-[7px] font-bold uppercase tracking-[0.25em] text-zinc-600">
-                Official Reality Competition
-              </span> */}
-            </div>
-
-            {/* <span className="text-[15px] font-black tracking-[-0.03em] text-white sm:hidden">
-              BORDER
-              <span className="text-red-500">BOUND</span>
-            </span> */}
           </Link>
 
-          {/* =====================================================
-              DESKTOP NAV
-          ===================================================== */}
-          <nav className="hidden items-center gap-7 md:flex">
+          <nav
+            className={`hidden items-center gap-7 md:flex ${
+              user ? "ml-auto mr-8" : "mx-auto"
+            }`}
+          >
             <Link
               href="/leaderboard"
               className="group flex items-center gap-2 py-6 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
@@ -321,11 +294,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
             )}
           </nav>
 
-          {/* =====================================================
-              RIGHT SIDE
-          ===================================================== */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* REGISTRATION FEE */}
             {!isRegClosed && (
               <div className="hidden items-center gap-2 border border-red-500/15 bg-red-500/[0.05] px-3 py-2 lg:flex">
                 <span className="relative flex h-1.5 w-1.5">
@@ -343,7 +312,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
               </div>
             )}
 
-            {/* LOGGED IN */}
             {user ? (
               <div className="flex items-center gap-2">
                 <Link
@@ -361,7 +329,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   <ArrowUpRight className="hidden h-3 w-3 text-zinc-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:block" />
                 </Link>
 
-                {/* LOGOUT */}
                 <button
                   onClick={handleLogoutClick}
                   title="Logout"
@@ -371,7 +338,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                 </button>
               </div>
             ) : (
-              /* LOGGED OUT */
               <div className="hidden items-center gap-3 sm:flex">
                 <button
                   onClick={() => openAuthModal("login")}
@@ -391,7 +357,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
               </div>
             )}
 
-            {/* MOBILE MENU BUTTON */}
             <motion.button
               whileTap={{ scale: 0.88 }}
               onClick={() => setMobileOpen((prev) => !prev)}
@@ -450,9 +415,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
           </div>
         </div>
 
-        {/* =====================================================
-            MOBILE MENU
-        ===================================================== */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
@@ -463,7 +425,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
               className="overflow-hidden border-t border-white/[0.07] bg-[#050506]/98 backdrop-blur-2xl md:hidden"
             >
               <motion.div className="space-y-2 px-4 py-4">
-                {/* HOME */}
                 <motion.div variants={itemVariants}>
                   <Link
                     href="/"
@@ -472,7 +433,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center border border-white/[0.07] bg-white/[0.025] transition-colors group-hover:border-red-500/20 group-hover:bg-red-500/[0.05]">
-                        <Flame className="h-3.5 w-3.5 text-zinc-500 group-hover:text-red-500" />
+                        <Vote className="h-3.5 w-3.5 text-zinc-500 group-hover:text-red-500" />
                       </div>
 
                       <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-400 group-hover:text-white">
@@ -484,7 +445,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </Link>
                 </motion.div>
 
-                {/* LEADERBOARD */}
                 <motion.div variants={itemVariants}>
                   <Link
                     href="/leaderboard"
@@ -511,7 +471,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </Link>
                 </motion.div>
 
-                {/* REGISTER */}
                 <motion.div variants={itemVariants}>
                   <Link
                     href="/register"
@@ -540,7 +499,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </Link>
                 </motion.div>
 
-                {/* ADMIN */}
                 {user?.role === "admin" && (
                   <motion.div variants={itemVariants}>
                     <Link
@@ -563,7 +521,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </motion.div>
                 )}
 
-                {/* MOBILE LOGOUT */}
                 {user && (
                   <motion.div variants={itemVariants}>
                     <button
@@ -591,7 +548,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </motion.div>
                 )}
 
-                {/* AUTH BUTTONS */}
                 {!user && (
                   <motion.div
                     variants={itemVariants}
@@ -619,7 +575,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </motion.div>
                 )}
 
-                {/* FOOTER */}
                 <motion.div
                   variants={itemVariants}
                   className="flex items-center justify-center gap-2 pt-2"
@@ -638,9 +593,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
         </AnimatePresence>
       </header>
 
-      {/* =====================================================
-          LOGOUT CONFIRMATION MODAL
-      ===================================================== */}
       <LogoutModal
         open={logoutOpen}
         onClose={() => setLogoutOpen(false)}

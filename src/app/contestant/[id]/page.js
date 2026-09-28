@@ -227,7 +227,7 @@ export default function ContestantProfilePage() {
 
             {/* Image Top Info */}
             <div className="absolute left-4 right-4 top-5 flex items-start justify-between sm:left-7 sm:right-7">
-              <div className="border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-xl">
+              {/* <div className="border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-xl">
                 <p className="text-[8px] font-bold uppercase tracking-[0.25em] text-zinc-500">
                   Application
                 </p>
@@ -235,7 +235,7 @@ export default function ContestantProfilePage() {
                 <p className="mt-1 text-[10px] font-black tracking-wider text-white">
                   {profile.applicationId}
                 </p>
-              </div>
+              </div> */}
 
               {isSelected && (
                 <motion.div
@@ -455,9 +455,7 @@ export default function ContestantProfilePage() {
             THE BORDERBOUND
           </p>
 
-          <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-zinc-800">
-            15 DAYS • ONE BORDER • ONE WINNER
-          </p>
+        
         </motion.div>
       </div>
     </main>

@@ -29,23 +29,23 @@ export default function WhyToRegister() {
   const reasons = [
     {
       number: "02",
-      title: "Be Seen",
+      title: "Make Them Notice.",
       description:
-        "Put your personality, skills and story in front of an audience.",
+        "Your personality. Your mindset. Your skills. Your story. Put everything on the line and give people a reason to remember your name.",
       icon: Users,
     },
     {
       number: "03",
-      title: "Prove Yourself",
+      title: "Earn Your Place.",
       description:
-        "Strategy, leadership, pressure and performance will define your journey.",
+        "Public support can move you forward, but the game begins only when you cross the Border. Earn your place and prepare to face days of pressure, strategy and competition.",
       icon: Trophy,
     },
     {
       number: "04",
-      title: "Build Your Story",
+      title: "Cross The Line.",
       description:
-        "Every decision becomes part of a journey people can follow.",
+        "The Border is where potential meets pressure. Step beyond what is familiar, face the competition and prove what you are capable of when there is nowhere left to hide.",
       icon: ArrowRight,
     },
   ];
@@ -88,14 +88,14 @@ export default function WhyToRegister() {
           <h2 className="text-4xl font-black uppercase leading-[0.92] tracking-[-0.055em] text-white sm:text-6xl lg:text-7xl">
             Why Should
             <br />
-            <span className="text-red-500">I Register?</span>
+            <span className="text-red-500">You Register?</span>
           </h2>
 
           <p className="mx-auto mt-6 max-w-xl text-sm leading-6 text-zinc-400 sm:text-base sm:leading-7">
-            Because BorderBound is not just another competition.
+            Because the Border doesn&apos;t care who you think you are.
             <span className="text-zinc-200">
               {" "}
-              It is your chance to be seen, tested, and remembered.
+              It only cares what you can prove.
             </span>
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function WhyToRegister() {
         {/* Main Content */}
         <div className="mx-auto mt-12 max-w-6xl sm:mt-16">
           <div className="grid gap-3 lg:grid-cols-[1.15fr_0.85fr]">
-            {/* BIG FEATURE CARD */}
+            {/* BIG FEATURE CARD — 01 */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -134,16 +134,15 @@ export default function WhyToRegister() {
                   </div>
 
                   <h3 className="mt-10 max-w-lg text-3xl font-black uppercase leading-[0.95] tracking-[-0.04em] text-white sm:text-5xl">
-                    Get Your
+                    Step Into
                     <br />
-                    <span className="text-red-500">Shot.</span>
+                    <span className="text-red-500">The Game.</span>
                   </h3>
 
                   <p className="mt-5 max-w-md text-xs leading-6 text-zinc-400 sm:text-sm sm:leading-7">
-                    You cannot make it through the border if you never step
-                    forward. Registration puts your name into the selection
-                    process and gives you a real shot at entering the
-                    competition.
+                    You don&apos;t get remembered by watching from the
+                    outside. Register, enter the selection process and put
+                    yourself in the race for THE BORDERBOUND.
                   </p>
                 </div>
 
@@ -151,7 +150,7 @@ export default function WhyToRegister() {
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.8)]" />
 
                   <span className="text-[8px] font-black uppercase tracking-[0.24em] text-zinc-500">
-                    Opportunity does not wait
+                    The First Move Is Yours.
                   </span>
                 </div>
               </div>
@@ -199,6 +198,19 @@ export default function WhyToRegister() {
                         <p className="mt-2 text-[11px] leading-5 text-zinc-400 sm:text-xs sm:leading-6">
                           {description}
                         </p>
+
+                        {/* Individual Statement */}
+                        <div className="mt-4 flex items-center gap-2">
+                          <span className="h-1 w-1 shrink-0 rounded-full bg-red-500" />
+
+                          <span className="text-[7px] font-black uppercase tracking-[0.2em] text-red-400">
+                            {number === "02"
+                              ? "Don&apos;t Blend In."
+                              : number === "03"
+                              ? "You Earn Your Place."
+                              : "The Border Is Waiting."}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -223,14 +235,14 @@ export default function WhyToRegister() {
             <div className="relative flex flex-col items-center justify-between gap-5 text-center sm:flex-row sm:text-left">
               <div>
                 <div className="text-[8px] font-black uppercase tracking-[0.28em] text-red-400">
-                  One Decision
+                  Your Decision
                 </div>
 
                 <div className="mt-2 text-lg font-black uppercase tracking-[-0.02em] text-white sm:text-xl">
-                  You either enter the story —
+                  CROSS THE BORDER
                   <span className="text-red-500">
                     {" "}
-                    or watch it happen.
+                    — OR WATCH OTHERS DO IT.
                   </span>
                 </div>
               </div>
