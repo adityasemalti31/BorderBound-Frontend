@@ -441,7 +441,7 @@ export default function GangLeaders() {
 
                       {activeLeader.revealed
                         ? "Gang Leader"
-                        : "Identity Classified"}
+                        : "Identity Not Revealed"}
 
                     </motion.div>
 
