@@ -22,6 +22,8 @@ import HeroCarousel from "./(public)/home/home-comp/Carousel";
 import RegistrationCountdown from "@/components/RegistrationCountdown";
 import WhyToRegister from "@/components/WhyToRegister";
 import PriceHike from "@/components/PriceHike";
+import GangLeaders from "@/components/GangLeaders";
+
 
 const reveal = {
   hidden: { opacity: 0, y: 25 },
@@ -136,6 +138,11 @@ export default function Page() {
       ========================================================= */}
         <HeroCarousel />
 
+
+         <div className="hidden sm:block">
+              <GangLeaders/>
+          </div>
+
         {/* =========================================================
           HERO / REGISTRATION
       ========================================================= */}
@@ -242,6 +249,11 @@ export default function Page() {
                   </div>
                 </div>
               </motion.div>
+
+
+              <div className="sm:hidden block">
+              <GangLeaders/>
+              </div>
 
               {/* RIGHT - CURRENT STATUS */}
               <motion.div
@@ -518,19 +530,6 @@ export default function Page() {
                     Voting Rules
                   </Link>
 
-                  {/* <Link
-            href="/terms"
-            className="inline-flex min-w-[170px] items-center justify-center border border-white/[0.1] bg-white/[0.03] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-zinc-300 transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white"
-          >
-            Terms & Conditions
-          </Link>
-
-          <Link
-            href="/privacy"
-            className="inline-flex min-w-[170px] items-center justify-center border border-white/[0.1] bg-white/[0.03] px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-zinc-300 transition-all duration-300 hover:border-white/[0.2] hover:bg-white/[0.06] hover:text-white"
-          >
-            Privacy Policy
-          </Link> */}
                 </div>
               </div>
             </motion.div>
