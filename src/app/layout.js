@@ -81,9 +81,7 @@ export const metadata = {
   //   images: ["/og-image.jpg"],
   // },
 
-icons:{
-  icons:"public/img.png"
-}
+
 };
 
 export default function RootLayout({ children }) {
