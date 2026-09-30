@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useLeaderboardStore } from "@/store/leaderboardStore";
@@ -19,10 +20,34 @@ import {
   ScrollText,
 } from "lucide-react";
 import HeroCarousel from "./(public)/home/home-comp/Carousel";
-import RegistrationCountdown from "@/components/RegistrationCountdown";
-import WhyToRegister from "@/components/WhyToRegister";
-import PriceHike from "@/components/PriceHike";
-import GangLeaders from "@/components/GangLeaders";
+
+const RegistrationCountdown = dynamic(
+  () => import("@/components/RegistrationCountdown"),
+  {
+    loading: () => null,
+  }
+);
+
+const WhyToRegister = dynamic(
+  () => import("@/components/WhyToRegister"),
+  {
+    loading: () => null,
+  }
+);
+
+const PriceHike = dynamic(
+  () => import("@/components/PriceHike"),
+  {
+    loading: () => null,
+  }
+);
+
+const GangLeaders = dynamic(
+  () => import("@/components/GangLeaders"),
+  {
+    loading: () => null,
+  }
+);
 
 
 const reveal = {
