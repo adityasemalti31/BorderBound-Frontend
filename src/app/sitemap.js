@@ -14,12 +14,7 @@ export default function sitemap() {
       changeFrequency: "daily",
       priority: 0.9,
     },
-    {
-      url: `${baseUrl}/voting`,
-      lastModified: new Date(),
-      changeFrequency: "daily",
-      priority: 0.9,
-    },
+    
     {
       url: `${baseUrl}/register`,
       lastModified: new Date(),
