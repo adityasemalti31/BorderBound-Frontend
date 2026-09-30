@@ -9,7 +9,7 @@ export default function sitemap() {
       priority: 1,
     },
     {
-      url: `${baseUrl}/contestants`,
+      url: `${baseUrl}/contestant`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
@@ -21,7 +21,7 @@ export default function sitemap() {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/registration`,
+      url: `${baseUrl}/register`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
@@ -33,13 +33,13 @@ export default function sitemap() {
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/rules`,
+      url: `${baseUrl}/voting-rules`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/faq`,
+      url: `${baseUrl}/leaderboard`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.6,
