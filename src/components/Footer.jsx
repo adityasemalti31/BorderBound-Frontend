@@ -321,32 +321,32 @@ export default function Footer() {
                 </div>
               </div>
               {/* Address */}
-        <div className="mt-5 border-t border-white/[0.07] pt-5">
-          <div className="mb-4 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
-            Registered Location
-          </div>
+              <div className="mt-5 border-t border-white/[0.07] pt-5">
+                <div className="mb-4 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+                  Registered Location
+                </div>
 
-          <div className="flex items-start gap-3">
-            <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/[0.07] bg-white/[0.02]">
-              <span className="text-[11px] text-red-400"><MapPin/></span>
-            </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/[0.07] bg-white/[0.02]">
+                    <span className="text-[11px] text-red-400">
+                      <MapPin />
+                    </span>
+                  </div>
 
-            <div>
-              <div className="text-xs font-bold text-zinc-200">
-                Hyderabad, India
-              </div>
+                  <div>
+                    <div className="text-xs font-bold text-zinc-200">
+                      Hyderabad, India
+                    </div>
 
-              <div className="mt-1 text-[10px] leading-4 text-zinc-500">
-                Official BorderBound correspondence location.
+                    <div className="mt-1 text-[10px] leading-4 text-zinc-500">
+                      Official BorderBound correspondence location.
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-            </div>
-          </div>
-        </div>
-
-        
 
         {/* Bottom */}
         <div className="flex flex-col gap-5 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">

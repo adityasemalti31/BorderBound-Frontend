@@ -25,30 +25,20 @@ const RegistrationCountdown = dynamic(
   () => import("@/components/RegistrationCountdown"),
   {
     loading: () => null,
-  }
+  },
 );
 
-const WhyToRegister = dynamic(
-  () => import("@/components/WhyToRegister"),
-  {
-    loading: () => null,
-  }
-);
+const WhyToRegister = dynamic(() => import("@/components/WhyToRegister"), {
+  loading: () => null,
+});
 
-const PriceHike = dynamic(
-  () => import("@/components/PriceHike"),
-  {
-    loading: () => null,
-  }
-);
+const PriceHike = dynamic(() => import("@/components/PriceHike"), {
+  loading: () => null,
+});
 
-const GangLeaders = dynamic(
-  () => import("@/components/GangLeaders"),
-  {
-    loading: () => null,
-  }
-);
-
+const GangLeaders = dynamic(() => import("@/components/GangLeaders"), {
+  loading: () => null,
+});
 
 const reveal = {
   hidden: { opacity: 0, y: 25 },
@@ -91,17 +81,55 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "THE BORDERBOUND",
-            url: "https://theborderbound.in",
-            description:
-              "THE BORDERBOUND is a 15-day reality competition featuring contestants competing through survival, strategy, leadership and performance.",
-            inLanguage: "en-IN",
-          }),
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "@id": "https://theborderbound.in/#organization",
+              name: "BorderBound",
+              alternateName: [
+                "THE BORDERBOUND",
+                "The BorderBound",
+                "Border Bound",
+                "The Border Bound",
+              ],
+              url: "https://theborderbound.in",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://theborderbound.in/icon.png",
+              },
+              description:
+                "BorderBound, also known as Border Bound, is a 15-day outdoor reality competition in India featuring contestants competing through survival, strategy, leadership, performance and public voting.",
+              email: ["coachailaan@gmail.com", "admin@theborderbound.in"],
+              telephone: "+91 91832 04329",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Hyderabad",
+                addressCountry: "IN",
+              },
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "@id": "https://theborderbound.in/#website",
+              name: "BorderBound",
+              alternateName: [
+                "Border Bound",
+                "The BorderBound",
+                "The Border Bound",
+              ],
+              url: "https://theborderbound.in",
+              description:
+                "BorderBound (Border Bound) is a 15-day outdoor reality competition in India featuring contestants, survival, strategy, leadership, performance and public voting.",
+              inLanguage: "en-IN",
+              publisher: {
+                "@id": "https://theborderbound.in/#organization",
+              },
+            },
+          ]),
         }}
       />
+
       <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-[#050506] text-white">
         {/* =========================================================
           STICKY REGISTER CTA
@@ -163,10 +191,9 @@ export default function Page() {
       ========================================================= */}
         <HeroCarousel />
 
-
-         <div className="hidden sm:block">
-              <GangLeaders/>
-          </div>
+        <div className="hidden sm:block">
+          <GangLeaders />
+        </div>
 
         {/* =========================================================
           HERO / REGISTRATION
@@ -275,9 +302,8 @@ export default function Page() {
                 </div>
               </motion.div>
 
-
               <div className="sm:hidden block">
-              <GangLeaders/>
+                <GangLeaders />
               </div>
 
               {/* RIGHT - CURRENT STATUS */}
@@ -554,7 +580,6 @@ export default function Page() {
                   >
                     Voting Rules
                   </Link>
-
                 </div>
               </div>
             </motion.div>
