@@ -27,6 +27,9 @@ export const metadata = {
     "reality competition India",
     "reality show India",
     "survival reality show",
+    "border bound",
+    "reality shows 2026",
+    "reality show",
   ],
 
   authors: [
@@ -48,6 +51,12 @@ export const metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
+  },
+
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    shortcut: "/icon.png",
+    apple: "/icon.png",
   },
 
   alternates: {
@@ -80,8 +89,6 @@ export const metadata = {
   //     "Register as a contestant and vote live for your top favorites in THE BORDERBOUND.",
   //   images: ["/og-image.jpg"],
   // },
-
-
 };
 
 export default function RootLayout({ children }) {
@@ -92,9 +99,7 @@ export default function RootLayout({ children }) {
 
         <Navbar />
 
-        <main className="flex-1">
-          {children}
-        </main>
+        <main className="flex-1">{children}</main>
 
         <Footer />
 
