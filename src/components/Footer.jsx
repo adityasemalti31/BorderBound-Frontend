@@ -8,6 +8,9 @@ import {
   FileText,
   Scale,
   CreditCard,
+  Mail,
+  Phone,
+  MapPin,
 } from "lucide-react";
 
 import logo from "../../public/logo2.png";
@@ -163,9 +166,9 @@ export default function Footer() {
             </Link>
 
             <p className="mt-6 max-w-md text-xs leading-6 text-zinc-400 sm:text-sm">
-              A real-time outdoor reality competition where registration,
-              public voting, strategy and performance decide who gets to cross
-              the border.
+              A real-time outdoor reality competition where registration, public
+              voting, strategy and performance decide who gets to cross the
+              border.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2">
@@ -233,7 +236,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Trust */}
+          {/* Trust + Contact */}
           <div>
             <div className="mb-5 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
               Trust & Verification
@@ -281,9 +284,69 @@ export default function Footer() {
                   </div>
                 </div>
               </div>
+
+              {/* Contact */}
+              <div className="mt-6 border-t border-white/[0.07] pt-5">
+                <div className="mb-4 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+                  Contact
+                </div>
+
+                <div className="space-y-3">
+                  <a
+                    href="mailto:coachailaan@gmail.com"
+                    className="group flex items-center gap-3 text-xs text-zinc-300 transition-colors hover:text-white"
+                  >
+                    <Mail className="h-3.5 w-3.5 shrink-0 text-zinc-600 transition-colors group-hover:text-red-400" />
+
+                    <span className="break-all">coachailaan@gmail.com</span>
+                  </a>
+
+                  <a
+                    href="mailto:admin@theborderbound.in"
+                    className="group flex items-center gap-3 text-xs text-zinc-300 transition-colors hover:text-white"
+                  >
+                    <Mail className="h-3.5 w-3.5 shrink-0 text-zinc-600 transition-colors group-hover:text-red-400" />
+
+                    <span className="break-all">admin@theborderbound.in</span>
+                  </a>
+
+                  <a
+                    href="tel:+919183204329"
+                    className="group flex items-center gap-3 text-xs text-zinc-300 transition-colors hover:text-white"
+                  >
+                    <Phone className="h-3.5 w-3.5 shrink-0 text-zinc-600 transition-colors group-hover:text-red-400" />
+
+                    <span>+91 91832 04329</span>
+                  </a>
+                </div>
+              </div>
+              {/* Address */}
+        <div className="mt-5 border-t border-white/[0.07] pt-5">
+          <div className="mb-4 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+            Registered Location
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/[0.07] bg-white/[0.02]">
+              <span className="text-[11px] text-red-400"><MapPin/></span>
+            </div>
+
+            <div>
+              <div className="text-xs font-bold text-zinc-200">
+                Hyderabad, India
+              </div>
+
+              <div className="mt-1 text-[10px] leading-4 text-zinc-500">
+                Official BorderBound correspondence location.
+              </div>
             </div>
           </div>
         </div>
+            </div>
+          </div>
+        </div>
+
+        
 
         {/* Bottom */}
         <div className="flex flex-col gap-5 border-t border-white/[0.07] py-7 sm:flex-row sm:items-center sm:justify-between">
