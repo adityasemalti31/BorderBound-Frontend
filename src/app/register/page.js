@@ -17,7 +17,6 @@ import {
   FileText,
   Fingerprint,
   Image as ImageIcon,
-  Instagram,
   Loader2,
   LockKeyhole,
   Phone,
@@ -111,6 +110,77 @@ export default function RegistrationWizard() {
     }
   }, [user, fetchPublicConfig, fetchMyProfile]);
 
+  /*
+   * NEW USER PREFILL
+   *
+   * Agar user normal registration ke through bana hai
+   * aur abhi contestant profile nahi hai, toh User account
+   * ki existing details contestant form mein automatically
+   * populate hongi.
+   *
+   * myProfile hone par ye effect kuch overwrite nahi karega.
+   */
+  useEffect(() => {
+    if (!user || myProfile) return;
+
+    setProfileForm((prev) => ({
+      ...prev,
+
+      dob: user.dob
+        ? new Date(user.dob).toISOString().split("T")[0]
+        : prev.dob,
+
+      gender: user.gender || prev.gender,
+
+      mobile: user.mobile || prev.mobile,
+
+      city: user.city || prev.city,
+
+      state: user.state || prev.state,
+    }));
+  }, [user, myProfile]);
+
+  /*
+   * EXISTING CONTESTANT PROFILE
+   *
+   * Agar contestant ne pehle registration start kiya hua hai,
+   * toh saved ContestantProfile ki details form mein load hongi.
+   *
+   * Ye user data se priority leti hain.
+   */
+  useEffect(() => {
+    if (!myProfile) return;
+
+    setProfileForm({
+      dob: myProfile.dob
+        ? new Date(myProfile.dob).toISOString().split("T")[0]
+        : user?.dob
+          ? new Date(user.dob).toISOString().split("T")[0]
+          : "",
+
+      gender: myProfile.gender || user?.gender || "",
+
+      mobile: myProfile.mobile || user?.mobile || "",
+
+      city: myProfile.city || user?.city || "",
+
+      state: myProfile.state || user?.state || "",
+
+      permanentAddress: myProfile.permanentAddress || "",
+      occupation: myProfile.occupation || "",
+      education: myProfile.education || "",
+      bio: myProfile.bio || "",
+
+      socialInstagram: myProfile.socialMedia?.instagram || "",
+      socialFacebook: myProfile.socialMedia?.facebook || "",
+
+      emergencyName: myProfile.emergencyContact?.name || "",
+      emergencyRelation:
+        myProfile.emergencyContact?.relation || "Parent",
+      emergencyPhone: myProfile.emergencyContact?.phone || "",
+    });
+  }, [myProfile, user]);
+
   useEffect(() => {
     if (!myProfile) return;
 
@@ -132,32 +202,6 @@ export default function RegistrationWizard() {
       setStep(1);
     }
   }, [myProfile, router]);
-
-  useEffect(() => {
-    if (!myProfile) return;
-
-    setProfileForm({
-      dob: myProfile.dob
-        ? new Date(myProfile.dob).toISOString().split("T")[0]
-        : "",
-      gender: myProfile.gender || "",
-      mobile: myProfile.mobile || "",
-      city: myProfile.city || "",
-      state: myProfile.state || "",
-
-      permanentAddress: myProfile.permanentAddress || "",
-      occupation: myProfile.occupation || "",
-      education: myProfile.education || "",
-      bio: myProfile.bio || "",
-
-      socialInstagram: myProfile.socialMedia?.instagram || "",
-      socialFacebook: myProfile.socialMedia?.facebook || "",
-
-      emergencyName: myProfile.emergencyContact?.name || "",
-      emergencyRelation: myProfile.emergencyContact?.relation || "Parent",
-      emergencyPhone: myProfile.emergencyContact?.phone || "",
-    });
-  }, [myProfile]);
 
   const regAmount = configData?.registration?.amount || 1;
 
@@ -239,6 +283,7 @@ export default function RegistrationWizard() {
   const handleFeePayment = async (simulate = false) => {
     try {
       await payRegistrationFee(simulate);
+
       if (simulate) {
         router.push("/dashboard");
       }
@@ -289,6 +334,7 @@ export default function RegistrationWizard() {
               <p className="text-[10px] uppercase tracking-[0.28em] text-zinc-500 font-semibold">
                 THE BORDERBOUND
               </p>
+
               <p className="text-xs text-zinc-600 mt-1">
                 Official contestant portal
               </p>
@@ -337,6 +383,7 @@ export default function RegistrationWizard() {
                     <p className="text-[10px] text-zinc-600 font-mono">
                       {number}
                     </p>
+
                     <p className="text-xs text-zinc-300 font-semibold mt-1">
                       {label}
                     </p>
@@ -349,6 +396,7 @@ export default function RegistrationWizard() {
                 className="group mt-7 w-full h-14 rounded-2xl bg-white text-black font-bold text-sm flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-[0.98]"
               >
                 Create Contestant Account
+
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
@@ -395,6 +443,7 @@ export default function RegistrationWizard() {
 
           <div className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-full border border-white/8 bg-white/[0.025]">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+
             <span className="text-[10px] text-zinc-400">
               Registration portal active
             </span>
@@ -417,7 +466,9 @@ export default function RegistrationWizard() {
 
                 <p className="text-sm font-bold text-white mt-1">
                   Step {step}{" "}
-                  <span className="text-zinc-600 font-normal">of 4</span>
+                  <span className="text-zinc-600 font-normal">
+                    of 4
+                  </span>
                 </p>
               </div>
 
@@ -425,6 +476,7 @@ export default function RegistrationWizard() {
                 <p className="text-lg font-black text-white">
                   {Math.round((step / 4) * 100)}%
                 </p>
+
                 <p className="text-[9px] uppercase tracking-wider text-zinc-600">
                   Complete
                 </p>
@@ -452,7 +504,9 @@ export default function RegistrationWizard() {
                   <div
                     key={item.number}
                     className={`relative flex flex-col items-center gap-2 py-1 ${
-                      active || completed ? "text-white" : "text-zinc-700"
+                      active || completed
+                        ? "text-white"
+                        : "text-zinc-700"
                     }`}
                   >
                     <div
@@ -465,7 +519,10 @@ export default function RegistrationWizard() {
                       }`}
                     >
                       {completed ? (
-                        <Check className="w-4 h-4" strokeWidth={3} />
+                        <Check
+                          className="w-4 h-4"
+                          strokeWidth={3}
+                        />
                       ) : (
                         <Icon className="w-4 h-4" />
                       )}
@@ -502,7 +559,10 @@ export default function RegistrationWizard() {
                 </div>
 
                 <div>
-                  <p className="text-xs font-bold">Something went wrong</p>
+                  <p className="text-xs font-bold">
+                    Something went wrong
+                  </p>
+
                   <p className="text-[11px] text-rose-300/70 mt-1 leading-5">
                     {error}
                   </p>
@@ -542,7 +602,9 @@ export default function RegistrationWizard() {
                         type="date"
                         required
                         value={profileForm.dob}
-                        onChange={(e) => updateField("dob", e.target.value)}
+                        onChange={(e) =>
+                          updateField("dob", e.target.value)
+                        }
                         className={`${inputClass()} mt-1`}
                       />
                     </Field>
@@ -551,12 +613,15 @@ export default function RegistrationWizard() {
                       <select
                         required
                         value={profileForm.gender}
-                        onChange={(e) => updateField("gender", e.target.value)}
+                        onChange={(e) =>
+                          updateField("gender", e.target.value)
+                        }
                         className={`${inputClass()} mt-1 appearance-none cursor-pointer bg-black [&>option]:bg-black [&>option]:text-white`}
                       >
                         <option value="" disabled>
                           Select gender
                         </option>
+
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
@@ -592,7 +657,9 @@ export default function RegistrationWizard() {
                         required
                         placeholder="e.g. Dehradun"
                         value={profileForm.city}
-                        onChange={(e) => updateField("city", e.target.value)}
+                        onChange={(e) =>
+                          updateField("city", e.target.value)
+                        }
                         className={`${inputClass()} mt-1`}
                       />
                     </Field>
@@ -604,7 +671,9 @@ export default function RegistrationWizard() {
                       required
                       placeholder="e.g. Uttarakhand"
                       value={profileForm.state}
-                      onChange={(e) => updateField("state", e.target.value)}
+                      onChange={(e) =>
+                        updateField("state", e.target.value)
+                      }
                       className={`${inputClass()} mt-1`}
                     />
                   </Field>
@@ -622,7 +691,10 @@ export default function RegistrationWizard() {
                       placeholder="Enter your full permanent address..."
                       value={profileForm.permanentAddress}
                       onChange={(e) =>
-                        updateField("permanentAddress", e.target.value)
+                        updateField(
+                          "permanentAddress",
+                          e.target.value
+                        )
                       }
                       className={inputClass("textarea")}
                     />
@@ -635,7 +707,10 @@ export default function RegistrationWizard() {
                         placeholder="e.g. Entrepreneur (Optional)"
                         value={profileForm.occupation}
                         onChange={(e) =>
-                          updateField("occupation", e.target.value)
+                          updateField(
+                            "occupation",
+                            e.target.value
+                          )
                         }
                         className={inputClass()}
                       />
@@ -647,7 +722,10 @@ export default function RegistrationWizard() {
                         placeholder="e.g. Bachelor's Degree (Optional)"
                         value={profileForm.education}
                         onChange={(e) =>
-                          updateField("education", e.target.value)
+                          updateField(
+                            "education",
+                            e.target.value
+                          )
                         }
                         className={inputClass()}
                       />
@@ -663,7 +741,9 @@ export default function RegistrationWizard() {
                       required
                       placeholder="What makes you different from everyone else?"
                       value={profileForm.bio}
-                      onChange={(e) => updateField("bio", e.target.value)}
+                      onChange={(e) =>
+                        updateField("bio", e.target.value)
+                      }
                       className={inputClass("textarea")}
                     />
 
@@ -688,9 +768,6 @@ export default function RegistrationWizard() {
                         <p className="text-xs font-bold text-white">
                           Social presence
                         </p>
-                        {/* <p className="text-[10px] text-zinc-600 mt-0.5">
-                          Optional — help us discover your story
-                        </p> */}
                       </div>
                     </div>
 
@@ -701,7 +778,10 @@ export default function RegistrationWizard() {
                           placeholder="@your profile Url"
                           value={profileForm.socialInstagram}
                           onChange={(e) =>
-                            updateField("socialInstagram", e.target.value)
+                            updateField(
+                              "socialInstagram",
+                              e.target.value
+                            )
                           }
                           className={inputClass()}
                         />
@@ -713,7 +793,10 @@ export default function RegistrationWizard() {
                           placeholder="Profile URL"
                           value={profileForm.socialFacebook}
                           onChange={(e) =>
-                            updateField("socialFacebook", e.target.value)
+                            updateField(
+                              "socialFacebook",
+                              e.target.value
+                            )
                           }
                           className={inputClass()}
                         />
@@ -747,7 +830,10 @@ export default function RegistrationWizard() {
                           placeholder="Full name"
                           value={profileForm.emergencyName}
                           onChange={(e) =>
-                            updateField("emergencyName", e.target.value)
+                            updateField(
+                              "emergencyName",
+                              e.target.value
+                            )
                           }
                           className={inputClass()}
                         />
@@ -761,7 +847,10 @@ export default function RegistrationWizard() {
                             placeholder="e.g. Father"
                             value={profileForm.emergencyRelation}
                             onChange={(e) =>
-                              updateField("emergencyRelation", e.target.value)
+                              updateField(
+                                "emergencyRelation",
+                                e.target.value
+                              )
                             }
                             className={inputClass()}
                           />
@@ -780,7 +869,11 @@ export default function RegistrationWizard() {
                               const value = e.target.value
                                 .replace(/\D/g, "")
                                 .slice(0, 15);
-                              updateField("emergencyPhone", value);
+
+                              updateField(
+                                "emergencyPhone",
+                                value
+                              );
                             }}
                             className={inputClass()}
                           />
@@ -859,7 +952,10 @@ export default function RegistrationWizard() {
                   icon={ArrowRight}
                 />
 
-                <BackButton onClick={handleBack} disabled={loading} />
+                <BackButton
+                  onClick={handleBack}
+                  disabled={loading}
+                />
               </div>
             </motion.form>
           )}
@@ -960,7 +1056,10 @@ export default function RegistrationWizard() {
                   )}
                 </button>
 
-                <BackButton onClick={handleBack} disabled={loading} />
+                <BackButton
+                  onClick={handleBack}
+                  disabled={loading}
+                />
               </div>
             </motion.div>
           )}
@@ -990,6 +1089,7 @@ export default function RegistrationWizard() {
                     className="relative w-20 h-20 rounded-[26px] bg-gradient-to-br from-rose-500/15 to-orange-500/10 border border-rose-500/20 flex items-center justify-center"
                   >
                     <div className="absolute inset-2 rounded-[20px] border border-white/[0.06]" />
+
                     <WalletCards className="w-8 h-8 text-rose-400" />
                   </motion.div>
 
@@ -1047,7 +1147,10 @@ export default function RegistrationWizard() {
                         "Contestant verification",
                         "Eligibility review",
                       ].map((item) => (
-                        <div key={item} className="flex items-center gap-2.5">
+                        <div
+                          key={item}
+                          className="flex items-center gap-2.5"
+                        >
                           <div className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center">
                             <Check className="w-3 h-3 text-emerald-400" />
                           </div>
@@ -1067,7 +1170,6 @@ export default function RegistrationWizard() {
                     disabled={loading}
                     className="group relative w-full h-14 sm:h-16 rounded-2xl overflow-hidden bg-gradient-to-r from-rose-600 via-rose-500 to-orange-500 text-white font-black text-sm shadow-2xl shadow-rose-500/20 flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-[0.985] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
-
                     <span className="relative flex items-center gap-3">
                       {loading ? (
                         <>
@@ -1087,16 +1189,20 @@ export default function RegistrationWizard() {
                     onClick={() => handleFeePayment(true)}
                     disabled={loading}
                     className="w-full py-3 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] text-amber-400 font-bold text-xs border border-amber-500/20 transition-all flex items-center justify-center gap-1.5"
-                  ></button>
+                  />
 
-                  <BackButton onClick={handleBack} disabled={loading} />
+                  <BackButton
+                    onClick={handleBack}
+                    disabled={loading}
+                  />
                 </div>
 
                 <div className="flex items-center justify-center gap-2 mt-5">
                   <LockKeyhole className="w-3 h-3 text-zinc-700" />
+
                   <span className="text-[9px] text-zinc-700">
-                    Secure 256-bit encrypted PayU payment • Official BorderBound
-                    portal
+                    Secure 256-bit encrypted PayU payment • Official
+                    BorderBound portal
                   </span>
                 </div>
               </div>
@@ -1112,6 +1218,7 @@ export default function RegistrationWizard() {
           className="flex items-center justify-center gap-2 mt-6 pb-4"
         >
           <ShieldCheck className="w-3.5 h-3.5 text-zinc-700" />
+
           <p className="text-[9px] text-zinc-700">
             Your information is handled through the official registration
             system.
@@ -1126,7 +1233,12 @@ export default function RegistrationWizard() {
    COMPONENTS
 ========================= */
 
-function StepHeading({ eyebrow, title, description, icon: Icon }) {
+function StepHeading({
+  eyebrow,
+  title,
+  description,
+  icon: Icon,
+}) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
@@ -1162,7 +1274,10 @@ function Field({ label, required, hint, children }) {
       <div className="flex items-center justify-between mb-2">
         <label className="text-[10px] uppercase tracking-[0.14em] font-bold text-zinc-400">
           {label}
-          {required && <span className="text-rose-400 ml-1">*</span>}
+
+          {required && (
+            <span className="text-rose-400 ml-1">*</span>
+          )}
         </label>
 
         {hint && (
@@ -1270,7 +1385,9 @@ function UploadCard({
               {file ? file.name : description}
             </p>
 
-            <p className="text-[9px] text-zinc-700 mt-1">{formats}</p>
+            <p className="text-[9px] text-zinc-700 mt-1">
+              {formats}
+            </p>
           </div>
 
           {!file && (
@@ -1306,7 +1423,12 @@ function UploadCard({
   );
 }
 
-function ActionButton({ loading, loadingText, text, icon: Icon }) {
+function ActionButton({
+  loading,
+  loadingText,
+  text,
+  icon: Icon,
+}) {
   return (
     <button
       type="submit"
