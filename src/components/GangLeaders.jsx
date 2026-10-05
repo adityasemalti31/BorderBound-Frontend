@@ -24,9 +24,9 @@ const leaders = [
   },
   {
     id: 3,
-    name: "SHUBHANGI JAISWAL",
+    name: "Joel Mathew",
     gang: "GANG 03",
-    image: null,
+    image: "/joel.jpg",
     revealed: true,
     description: "A new contender enters the battlefield.",
   },
