@@ -20,6 +20,7 @@ import { useConfigStore } from "@/store/configStore";
 import Image from "next/image";
 
 import logo from "../../public/logo2.png";
+import { useRouter } from "next/navigation";
 
 const LogoutModal = ({ open, onClose, onConfirm }) => {
   return (
@@ -122,6 +123,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navbarHidden, setNavbarHidden] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+  const appRouter = useRouter()
 
   useEffect(() => {
     checkAuth();
@@ -186,6 +188,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
     try {
       await logout();
+      appRouter.push("/")
     } catch (error) {
       console.error("Logout failed:", error);
     }

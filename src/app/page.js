@@ -20,6 +20,7 @@ import {
   ScrollText,
 } from "lucide-react";
 import HeroCarousel from "./(public)/home/home-comp/Carousel";
+import { useAuthStore } from "@/store/authStore";
 
 const RegistrationCountdown = dynamic(
   () => import("@/components/RegistrationCountdown"),
@@ -55,6 +56,8 @@ const reveal = {
 export default function Page() {
   const { leaderboard, fetchLeaderboard } = useLeaderboardStore();
   const [calcVotes, setCalcVotes] = useState(100);
+
+  const { user } = useAuthStore();
 
   useEffect(() => {
     fetchLeaderboard();
@@ -168,22 +171,24 @@ export default function Page() {
           </Link>
 
           {/* REGISTER NOW */}
-          <Link
-            href="/register"
-            className="group relative flex items-center gap-2 overflow-hidden border border-red-400/60 bg-red-600 px-4 py-3 shadow-[0_8px_35px_rgba(220,38,38,0.25)] transition-all duration-300 hover:border-red-300 hover:bg-red-500 hover:shadow-[0_8px_45px_rgba(220,38,38,0.4)] sm:gap-3 sm:px-6 sm:py-3.5"
-          >
-            <span className="absolute inset-y-0 -left-10 w-8 rotate-[20deg] bg-white/20 blur-sm transition-all duration-700 group-hover:left-[120%]" />
+          {!user && (
+            <Link
+              href="/register"
+              className="group relative flex items-center gap-2 overflow-hidden border border-red-400/60 bg-red-600 px-4 py-3 shadow-[0_8px_35px_rgba(220,38,38,0.25)] transition-all duration-300 hover:border-red-300 hover:bg-red-500 hover:shadow-[0_8px_45px_rgba(220,38,38,0.4)] sm:gap-3 sm:px-6 sm:py-3.5"
+            >
+              <span className="absolute inset-y-0 -left-10 w-8 rotate-[20deg] bg-white/20 blur-sm transition-all duration-700 group-hover:left-[120%]" />
 
-            <span className="absolute inset-0 animate-pulse bg-red-400/10" />
+              <span className="absolute inset-0 animate-pulse bg-red-400/10" />
 
-            <span className="relative z-10 flex h-2 w-2 shrink-0 animate-pulse rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]" />
+              <span className="relative z-10 flex h-2 w-2 shrink-0 animate-pulse rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]" />
 
-            <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.16em] text-white sm:text-[10px] sm:tracking-[0.2em]">
-              Register Now
-            </span>
+              <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.16em] text-white sm:text-[10px] sm:tracking-[0.2em]">
+                Register Now
+              </span>
 
-            <ArrowRight className="relative z-10 h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+              <ArrowRight className="relative z-10 h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          )}
         </motion.div>
 
         {/* =========================================================

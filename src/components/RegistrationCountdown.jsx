@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, X, Flame, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useAuthStore } from "@/store/authStore";
 
 export default function RegistrationCountdown() {
+
+
+  const {user}  = useAuthStore()
   const getTimeLeft = () => {
     const target = new Date("2026-10-05T00:00:00+05:30").getTime();
     const now = Date.now();
@@ -194,7 +198,7 @@ export default function RegistrationCountdown() {
               {/* CTA */}
               {timeLeft.expired && (
                 <Link
-                  href="/register"
+                  href={user ? "/" : "/register"}
                   onClick={() => setIsOpen(false)}
                   className="group mx-auto mt-7 flex w-full max-w-sm items-center justify-between bg-red-600 px-5 py-4 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(220,38,38,0.25)]"
                 >
