@@ -396,7 +396,7 @@ export default function Page() {
 
                   {/* FOOTER */}
                   <Link
-                    href="/leaderboard"
+                    href="/contestant"
                     className="m-4 flex items-center justify-between border border-white/[0.08] bg-white/[0.025] px-4 py-3"
                   >
                     <div>
@@ -594,7 +594,7 @@ export default function Page() {
         {/* =========================================================
           LEADERBOARD
       ========================================================= */}
-        {top3.length > 0 && (
+        {/* {top3.length > 0 && (
           <section className="relative py-16 sm:py-24 lg:py-32">
             <div className="absolute left-1/2 top-1/2 h-[280px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-700/[0.045] blur-[100px] sm:h-[400px] sm:w-[600px] sm:blur-[140px]" />
 
@@ -647,7 +647,7 @@ export default function Page() {
               </div>
             </div>
           </section>
-        )}
+        )} */}
 
         {/* =========================================================
           VOTING

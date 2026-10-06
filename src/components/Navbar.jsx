@@ -247,13 +247,13 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
           {/* LEFT */}
           <nav className="flex items-center gap-2 justify-self-start">
-            <Link
+            {/* <Link
               href="/leaderboard"
               className="group flex h-11 items-center gap-2.5 border border-transparent px-4 text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500 transition-all duration-300 hover:border-white/[0.06] hover:bg-white/[0.025] hover:text-white"
             >
               <Vote className="h-3.5 w-3.5 text-red-500 transition-transform group-hover:scale-110" />
               Live Leaderboard
-            </Link>
+            </Link> */}
 
             {user?.role === "admin" && (
               <Link
@@ -464,7 +464,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                   </Link>
                 </motion.div>
 
-                <motion.div variants={itemVariants}>
+                {/* <motion.div variants={itemVariants}>
                   <Link
                     href="/leaderboard"
                     onClick={() => setMobileOpen(false)}
@@ -488,7 +488,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
                     <ArrowUpRight className="h-3.5 w-3.5 text-zinc-700 group-hover:text-red-500" />
                   </Link>
-                </motion.div>
+                </motion.div> */}
 
                 <motion.div variants={itemVariants}>
                   <Link
