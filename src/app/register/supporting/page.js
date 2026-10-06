@@ -85,14 +85,14 @@ export default function SupportingContestantPage() {
             <p className="text-xs text-zinc-400 max-w-md mx-auto leading-relaxed">
               Thank you for registering as a Supporting Contestant. You will receive real-time updates and exclusive access to voting packages.
             </p>
-            {/* <div className="pt-4">
+            <div className="pt-4">
               <Link
                 href="/leaderboard"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-bold text-xs shadow-lg shadow-rose-500/20"
               >
                 Go to Live Leaderboard <ArrowRight className="w-4 h-4" />
               </Link>
-            </div> */}
+            </div>
           </motion.div>
         ) : (
           <motion.form

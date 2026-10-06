@@ -48,7 +48,7 @@ export default function Footer() {
 
   const quickLinks = [
     ["Home", "/"],
-    // ["Leaderboard", "/leaderboard"],
+    ["Leaderboard", "/leaderboard"],
     ["Register", "/register"],
     ["Support a Contestant", "/register/supporting"],
   ];
