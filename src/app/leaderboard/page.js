@@ -144,7 +144,7 @@ function LeaderboardContent() {
               </div>
 
               {/* TOTAL VOTES */}
-              <div className="shrink-0 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-5 lg:min-w-[220px]">
+              {/* <div className="shrink-0 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-5 lg:min-w-[220px]">
                 <div className="flex items-center gap-2">
                   <Vote className="h-4 w-4 text-amber-400" />
                   <span className="text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
@@ -159,7 +159,7 @@ function LeaderboardContent() {
                 <div className="mt-1 text-[10px] uppercase tracking-wider text-zinc-600">
                   Updated with verified votes
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

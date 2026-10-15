@@ -383,7 +383,7 @@ export default function Page() {
                       </div>
                     </div>
 
-                    <div className="px-5 py-5 text-center">
+                    {/* <div className="px-5 py-5 text-center">
                       <div className="text-2xl font-black tracking-tight text-white">
                         ₹5
                       </div>
@@ -391,7 +391,7 @@ export default function Page() {
                       <div className="mt-1 text-[8px] font-bold uppercase tracking-[0.2em] text-zinc-300">
                         Per Vote
                       </div>
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* FOOTER */}

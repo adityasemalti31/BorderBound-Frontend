@@ -16,11 +16,11 @@ export default function LiveTicker() {
       icon: Radio,
       accent: "text-red-500",
     },
-    {
-      text: "₹5 = 1 Vote | Voting Options",
-      icon: IndianRupee,
-      accent: "text-amber-400",
-    },
+    // {
+    //   text: "₹5 = 1 Vote | Voting Options",
+    //   icon: IndianRupee,
+    //   accent: "text-amber-400",
+    // },
     {
       text: "Top 32 Qualified Directly For The Outdoor Competition",
       icon: Trophy,

@@ -58,7 +58,7 @@ export default function ContestantCard({ contestant }) {
 
           <div className="flex items-center gap-2">
 
-            {/* <div
+            <div
               className={`flex h-8 min-w-8 items-center justify-center rounded-lg border px-2 font-mono text-[10px] font-black ${
                 isTop3
                   ? "border-amber-400/30 bg-amber-400/10 text-amber-300"
@@ -73,7 +73,7 @@ export default function ContestantCard({ contestant }) {
                 <Crown className="mr-1 h-3 w-3" />
               )}
               #{rank}
-            </div> */}
+            </div>
 
             {contestant.selectionStatus === "wildcard" && (
               <span className="inline-flex items-center gap-1 rounded-md border border-cyan-500/20 bg-cyan-500/[0.06] px-2 py-1 text-[8px] font-black uppercase tracking-wider text-cyan-400">
