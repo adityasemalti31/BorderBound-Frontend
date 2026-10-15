@@ -29,18 +29,18 @@ export default function Footer() {
       active: false,
     },
     {
-      date: "20 OCT",
+      date: "31 OCT",
       title: "Fee Changes",
       active: false,
       detail: "₹499 → ₹1,499",
     },
     {
-      date: "05 NOV",
+      date: "15 NOV",
       title: "Registration Closes",
       active: false,
     },
     {
-      date: "15 NOV",
+      date: "20 NOV",
       title: "Voting Closes",
       active: false,
     },

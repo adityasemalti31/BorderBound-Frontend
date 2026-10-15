@@ -37,7 +37,7 @@ export default function LiveTicker() {
       accent: "text-emerald-400",
     },
     {
-      text: "Voting Closes 15 November",
+      text: "Voting Closes 20 November",
       icon: Clock3,
       accent: "text-zinc-300",
     },

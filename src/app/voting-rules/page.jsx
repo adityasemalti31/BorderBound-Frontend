@@ -388,7 +388,7 @@ export default function VotingRulesPage() {
               <div className="flex items-center gap-2 border border-white/[0.08] bg-white/[0.025] px-4 py-3">
                 <CalendarDays className="h-4 w-4 text-red-400" />
                 <span className="text-[9px] font-black uppercase tracking-[0.15em] text-zinc-300">
-                  15 Oct — 15 Nov 2026
+                  15 Oct — 20 Nov 2026
                 </span>
               </div>
 
@@ -478,7 +478,7 @@ export default function VotingRulesPage() {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.18em] text-zinc-400 sm:flex-row sm:gap-7">
               <span>Voting Opens — 15 October 2026</span>
               <span className="hidden h-1 w-1 rounded-full bg-red-500 sm:block" />
-              <span>Voting Closes — 15 November 2026</span>
+              <span>Voting Closes — 20 November 2026</span>
               <span className="hidden h-1 w-1 rounded-full bg-red-500 sm:block" />
               <span className="text-red-400">₹5 = 1 Vote</span>
             </div>
