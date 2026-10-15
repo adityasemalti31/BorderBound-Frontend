@@ -253,7 +253,7 @@ export default function PriceHike() {
 
                   <div className="mt-5 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
                     <CalendarDays className="h-4 w-4 text-red-400" />
-                    05 OCT — 19 OCT
+                    05 OCT — 30 OCT
                   </div>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function PriceHike() {
 
                   <div className="mt-5 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-500">
                     <CalendarDays className="h-4 w-4 text-red-400" />
-                    20 OCT — 05 NOV
+                    31 OCT — 15 NOV
                   </div>
                 </div>
               </div>
