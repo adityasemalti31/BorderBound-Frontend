@@ -163,7 +163,7 @@ export default function ContestantCard({ contestant }) {
         </div>
 
         {/* VOTES */}
-        <div className="mt-5 flex items-end justify-between border-t border-white/[0.06] pt-4">
+        {/* <div className="mt-5 flex items-end justify-between border-t border-white/[0.06] pt-4">
 
           <div>
             <p className="text-[8px] font-black uppercase tracking-[0.18em] text-zinc-600">
@@ -188,7 +188,7 @@ export default function ContestantCard({ contestant }) {
           <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-700">
             Votes
           </span>
-        </div>
+        </div> */}
 
         {/* ACTIONS */}
         <div className="mt-4 grid grid-cols-2 gap-2">
