@@ -121,9 +121,9 @@ export default function ContestantProfilePage() {
             Profile Unavailable
           </h1>
 
-          <p className="mt-3 text-sm leading-6 text-zinc-500">
+          {/* <p className="mt-3 text-sm leading-6 text-zinc-500">
             {error || "Contestant profile does not exist."}
-          </p>
+          </p> */}
 
           <button
             onClick={() => router.back()}
