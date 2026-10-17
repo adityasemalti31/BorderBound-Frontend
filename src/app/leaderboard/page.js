@@ -42,11 +42,23 @@ function LeaderboardContent() {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
 
-  const top32 = leaderboard.filter((c) => c.rank <= 32);
-  const wildcardPool = leaderboard.filter(
-    (c) => c.rank > 32 && c.rank <= 50
-  );
-  const remaining = leaderboard.filter((c) => c.rank > 50);
+  
+const sortedLeaderboard = [...leaderboard].sort(
+  (a, b) => Number(a.rank) - Number(b.rank)
+);
+
+const top32 = sortedLeaderboard.filter(
+  (c) => Number(c.rank) >= 1 && Number(c.rank) <= 32
+);
+
+const wildcardPool = sortedLeaderboard.filter(
+  (c) => Number(c.rank) > 32 && Number(c.rank) <= 50
+);
+
+const remaining = sortedLeaderboard.filter(
+  (c) => Number(c.rank) > 50
+);
+;
 
   return (
     <main className="min-h-screen bg-[#07090d] text-white">
