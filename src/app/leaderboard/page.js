@@ -292,7 +292,7 @@ const remaining = sortedLeaderboard.filter(
                 <div className="mb-2 flex items-center gap-2">
                   <div className="h-1 w-8 bg-cyan-400" />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400">
-                    Wild Card Route
+                    Wild Card Route - (Only 4 Will Be Selected from this) 
                   </span>
                 </div>
 
@@ -300,7 +300,7 @@ const remaining = sortedLeaderboard.filter(
                   <Sparkles className="h-6 w-6 text-cyan-400" />
 
                   <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
-                    WILD CARD
+                    WILD CARD 
                   </h2>
                 </div>
 
