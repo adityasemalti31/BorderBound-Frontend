@@ -108,7 +108,7 @@ export const useContestantStore = create((set, get) => ({
       if (typeof window !== "undefined") {
         const form = document.createElement("form");
         form.method = "POST";
-        form.action = payData.action || "https://test.payu.in/_payment";
+        form.action = payData.action || "https://secure.payu.in/_payment";
 
         const fields = [
           "key",

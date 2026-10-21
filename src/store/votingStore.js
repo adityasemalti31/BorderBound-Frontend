@@ -25,7 +25,8 @@ export const useVotingStore = create((set, get) => ({
     });
   },
 
-  closeVoteModal: () => set({ isVoteModalOpen: false, targetContestant: null, error: null }),
+  closeVoteModal: () =>
+    set({ isVoteModalOpen: false, targetContestant: null, error: null }),
   setVotesCount: (count) => set({ votesCount: Math.max(1, count) }),
 
   submitVotePayment: async (simulateTest = false) => {
@@ -41,10 +42,18 @@ export const useVotingStore = create((set, get) => ({
       });
 
       if (!orderRes.data?.success) {
-        throw new Error(orderRes.data?.message || "Failed to create vote order.");
+        throw new Error(
+          orderRes.data?.message || "Failed to create vote order.",
+        );
       }
 
       const payData = orderRes.data.data;
+      console.log("PAYU ACTION URL:", payData?.action);
+      console.log("PAYU TRANSACTION ID:", payData?.txnid);
+      console.log(
+        "PAYU URL SOURCE:",
+        payData?.action ? "BACKEND RESPONSE" : "FRONTEND FALLBACK",
+      );
 
       if (simulateTest) {
         // Simulated instant payment verification
@@ -81,7 +90,7 @@ export const useVotingStore = create((set, get) => ({
       if (typeof window !== "undefined") {
         const form = document.createElement("form");
         form.method = "POST";
-        form.action = payData.action || "https://test.payu.in/_payment";
+        form.action = payData.action || "https://secure.payu.in/_payment";
 
         const fields = [
           "key",
