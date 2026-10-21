@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState, forwardRef } from "react";
@@ -23,6 +22,7 @@ import logo from "../../public/logo2.png";
 import { useRouter } from "next/navigation";
 
 const LogoutModal = ({ open, onClose, onConfirm }) => {
+  const { user } = useAuthStore();
   return (
     <AnimatePresence>
       {open && (
@@ -123,7 +123,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navbarHidden, setNavbarHidden] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
-  const appRouter = useRouter()
+  const appRouter = useRouter();
 
   useEffect(() => {
     checkAuth();
@@ -139,7 +139,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
       window.dispatchEvent(
         new CustomEvent("navbar-visibility", {
           detail: { hidden },
-        })
+        }),
       );
 
       if (onVisibilityChange) {
@@ -188,7 +188,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
     try {
       await logout();
-      appRouter.push("/")
+      appRouter.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -244,7 +244,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
       >
         {/* ================= DESKTOP NAVBAR ================= */}
         <div className="mx-auto hidden h-[76px] w-full max-w-[1500px] grid-cols-[1fr_auto_1fr] items-center px-6 lg:grid lg:px-10 xl:px-12">
-
           {/* LEFT */}
           <nav className="flex items-center gap-2 justify-self-start">
             <Link
@@ -286,7 +285,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
           {/* RIGHT */}
           <div className="flex items-center justify-self-end gap-3">
-
             {!isRegClosed && (
               <div className="hidden items-center gap-2 border border-red-500/15 bg-red-500/[0.04] px-3.5 py-2 lg:flex">
                 <span className="relative flex h-1.5 w-1.5">
@@ -304,22 +302,22 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
               </div>
             )}
 
-            <Link
-              href="/register"
-              className="group flex h-11 items-center gap-2 border border-red-500/20 bg-red-600 px-4 text-[9px] font-black uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.18)]"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-amber-300 transition-transform group-hover:rotate-12" />
+            {!user && (
+              <Link
+                href="/register"
+                className="group flex h-11 items-center gap-2 border border-red-500/20 bg-red-600 px-4 text-[9px] font-black uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.18)]"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-amber-300 transition-transform group-hover:rotate-12" />
 
-              <span className="hidden xl:inline">
-                {user ? "Register as Contestant" : "Register"}
-              </span>
+                <span className="hidden xl:inline">
+                  {user ? "Register as Contestant" : "Register"}
+                </span>
 
-              <span className="xl:hidden">
-                Register
-              </span>
+                <span className="xl:hidden">Register</span>
 
-              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </Link>
+            )}
 
             {user ? (
               <>
@@ -357,7 +355,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
         {/* ================= MOBILE / TABLET NAVBAR ================= */}
         <div className="flex h-[68px] w-full items-center justify-between px-4 sm:px-6 lg:hidden">
-
           <div className="w-10" />
 
           <Link
@@ -443,7 +440,6 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
               className="overflow-hidden border-t border-white/[0.07] bg-[#050506]/98 backdrop-blur-2xl lg:hidden"
             >
               <motion.div className="space-y-2 px-4 py-4">
-
                 <motion.div variants={itemVariants}>
                   <Link
                     href="/"
@@ -491,7 +487,9 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  <Link
+                  {
+                    !user && (
+                       <Link
                     href="/register"
                     onClick={() => setMobileOpen(false)}
                     className="group relative flex items-center justify-between overflow-hidden border border-red-500/25 bg-red-600 px-4 py-4 transition-all duration-300 hover:bg-red-500"
@@ -514,6 +512,10 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
                     <ArrowUpRight className="relative h-4 w-4 text-white transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                   </Link>
+
+                    )
+                  }
+                 
                 </motion.div>
 
                 {user?.role === "admin" && (

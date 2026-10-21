@@ -2,13 +2,8 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Flame,
-  Trophy,
-  Users,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, Flame, Trophy, Users, Zap } from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
 
 const reveal = {
   hidden: {
@@ -26,6 +21,8 @@ const reveal = {
 };
 
 export default function WhyToRegister() {
+
+  const { user } = useAuthStore();
   const reasons = [
     {
       number: "02",
@@ -140,9 +137,9 @@ export default function WhyToRegister() {
                   </h3>
 
                   <p className="mt-5 max-w-md text-xs leading-6 text-zinc-400 sm:text-sm sm:leading-7">
-                    You don&apos;t get remembered by watching from the
-                    outside. Register, enter the selection process and put
-                    yourself in the race for THE BORDERBOUND.
+                    You don&apos;t get remembered by watching from the outside.
+                    Register, enter the selection process and put yourself in
+                    the race for THE BORDERBOUND.
                   </p>
                 </div>
 
@@ -178,10 +175,7 @@ export default function WhyToRegister() {
 
                     <div className="relative flex items-start gap-5">
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-red-500/20 bg-red-500/[0.06] text-red-400 transition-all duration-300 group-hover:border-red-500/40 group-hover:bg-red-500/[0.1] group-hover:text-red-300">
-                        <Icon
-                          className="h-[18px] w-[18px]"
-                          strokeWidth={1.7}
-                        />
+                        <Icon className="h-[18px] w-[18px]" strokeWidth={1.7} />
                       </div>
 
                       <div className="min-w-0 flex-1">
@@ -207,8 +201,8 @@ export default function WhyToRegister() {
                             {number === "02"
                               ? "Don&apos;t Blend In."
                               : number === "03"
-                              ? "You Earn Your Place."
-                              : "The Border Is Waiting."}
+                                ? "You Earn Your Place."
+                                : "The Border Is Waiting."}
                           </span>
                         </div>
                       </div>
@@ -217,7 +211,7 @@ export default function WhyToRegister() {
                     {/* Hover Line */}
                     <div className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-red-500 to-amber-400 transition-all duration-500 group-hover:w-full" />
                   </motion.div>
-                )
+                ),
               )}
             </div>
           </div>
@@ -247,14 +241,15 @@ export default function WhyToRegister() {
                 </div>
               </div>
 
-              <Link
-                href="/register"
-                className="group flex shrink-0 items-center gap-3 border border-red-500/30 bg-red-600 px-5 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.25)]"
-              >
-                Register Now
-
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
+              {!user && (
+                <Link
+                  href="/register"
+                  className="group flex shrink-0 items-center gap-3 border border-red-500/30 bg-red-600 px-5 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.25)]"
+                >
+                  Register Now
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              )}
             </div>
           </motion.div>
         </div>

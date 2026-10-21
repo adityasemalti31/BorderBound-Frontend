@@ -259,35 +259,37 @@ export default function Page() {
                 </div>
 
                 {/* REGISTER AS */}
-                <div className="mt-8 sm:mt-10">
-                  <div className="mb-3 flex items-center gap-2 text-[8px] font-bold uppercase tracking-[0.3em] text-zinc-300 sm:text-[9px]">
-                    <span className="h-px w-5 bg-red-500" />
-                    Register As
-                  </div>
 
-                  <div className="grid max-w-2xl gap-3 sm:grid-cols-2">
-                    {/* CONTESTANT */}
-                    <Link
-                      href="/register"
-                      className="group relative flex min-h-[68px] items-center justify-between overflow-hidden border border-red-500/40 bg-red-600 px-5 text-left shadow-[0_0_30px_rgba(220,38,38,0.12)] transition-all duration-300 hover:border-red-300 hover:bg-red-500 hover:shadow-[0_0_50px_rgba(220,38,38,0.28)] sm:min-h-[76px] sm:px-6"
-                    >
-                      <span className="absolute inset-y-0 -left-12 w-10 rotate-[20deg] bg-white/15 blur-sm transition-all duration-700 group-hover:left-[120%]" />
+                {!user && (
+                  <div className="mt-8 sm:mt-10">
+                    <div className="mb-3 flex items-center gap-2 text-[8px] font-bold uppercase tracking-[0.3em] text-zinc-300 sm:text-[9px]">
+                      <span className="h-px w-5 bg-red-500" />
+                      Register As
+                    </div>
 
-                      <div className="relative z-10">
-                        <div className="text-[10px] font-black uppercase tracking-[0.18em] text-white sm:text-xs">
-                          Contestant
+                    <div className="grid max-w-2xl gap-3 sm:grid-cols-2">
+                      {/* CONTESTANT */}
+                      <Link
+                        href="/register"
+                        className="group relative flex min-h-[68px] items-center justify-between overflow-hidden border border-red-500/40 bg-red-600 px-5 text-left shadow-[0_0_30px_rgba(220,38,38,0.12)] transition-all duration-300 hover:border-red-300 hover:bg-red-500 hover:shadow-[0_0_50px_rgba(220,38,38,0.28)] sm:min-h-[76px] sm:px-6"
+                      >
+                        <span className="absolute inset-y-0 -left-12 w-10 rotate-[20deg] bg-white/15 blur-sm transition-all duration-700 group-hover:left-[120%]" />
+
+                        <div className="relative z-10">
+                          <div className="text-[10px] font-black uppercase tracking-[0.18em] text-white sm:text-xs">
+                            Contestant
+                          </div>
+
+                          <div className="mt-1 text-[8px] uppercase tracking-[0.1em] text-white/80">
+                            Enter the battlefield
+                          </div>
                         </div>
 
-                        <div className="mt-1 text-[8px] uppercase tracking-[0.1em] text-white/80">
-                          Enter the battlefield
-                        </div>
-                      </div>
+                        <ArrowRight className="relative z-10 h-4 w-4 shrink-0 text-white transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5" />
+                      </Link>
 
-                      <ArrowRight className="relative z-10 h-4 w-4 shrink-0 text-white transition-transform duration-300 group-hover:translate-x-1 sm:h-5 sm:w-5" />
-                    </Link>
-
-                    {/* SUPPORTING */}
-                    {/* <Link
+                      {/* SUPPORTING */}
+                      {/* <Link
                     href="/register/supporting"
                     className="group flex min-h-[68px] items-center justify-between border border-white/15 bg-white/[0.035] px-5 text-left backdrop-blur-xl transition-all duration-300 hover:border-white/30 hover:bg-white/[0.08] sm:min-h-[76px] sm:px-6"
                   >
@@ -303,8 +305,9 @@ export default function Page() {
 
                     <MoveUpRight className="h-4 w-4 shrink-0 text-zinc-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white sm:h-5 sm:w-5" />
                   </Link> */}
+                    </div>
                   </div>
-                </div>
+                )}
               </motion.div>
 
               <div className="sm:hidden block">
@@ -880,13 +883,15 @@ export default function Page() {
                 Thousands may enter. Only the strongest stories make it through.
               </p>
 
-              <Link
-                href="/register"
-                className="group mt-7 inline-flex min-h-[50px] items-center gap-3 bg-white px-6 py-4 text-[9px] font-black uppercase tracking-[0.17em] text-black transition-all hover:bg-zinc-200 sm:mt-9 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]"
-              >
-                Start Your Journey
-                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
+              {!user && (
+                <Link
+                  href="/register"
+                  className="group mt-7 inline-flex min-h-[50px] items-center gap-3 bg-white px-6 py-4 text-[9px] font-black uppercase tracking-[0.17em] text-black transition-all hover:bg-zinc-200 sm:mt-9 sm:px-8 sm:text-[10px] sm:tracking-[0.2em]"
+                >
+                  Start Your Journey
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              )}
             </motion.div>
           </div>
         </section>

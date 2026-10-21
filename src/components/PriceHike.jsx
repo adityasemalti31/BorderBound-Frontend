@@ -11,6 +11,8 @@ import {
   Zap,
 } from "lucide-react";
 
+import { useAuthStore } from "@/store/authStore";
+
 const reveal = {
   hidden: {
     opacity: 0,
@@ -27,6 +29,11 @@ const reveal = {
 };
 
 export default function PriceHike() {
+
+
+
+  const { user } = useAuthStore();
+
   return (
     <motion.section
       initial="hidden"
@@ -312,8 +319,9 @@ export default function PriceHike() {
             Once registration closes, applications will no longer be
             accepted.
           </p>
-
-          <Link
+{
+  !user && (
+     <Link
             href="/register"
             className="group mx-auto mt-7 inline-flex items-center gap-3 border border-red-500/30 bg-red-600 px-7 py-4 text-[9px] font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_40px_rgba(220,38,38,0.3)]"
           >
@@ -321,6 +329,10 @@ export default function PriceHike() {
 
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
+
+  )
+}
+         
         </motion.div>
       </div>
     </motion.section>
