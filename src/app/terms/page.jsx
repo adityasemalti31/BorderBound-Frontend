@@ -187,13 +187,13 @@ const sections = [
           <FeeCard
             label="EARLY REGISTRATION"
             amount="₹499"
-            dates="5 October – 19 October 2026"
+            dates="5 October – 30 October 2026"
           />
 
           <FeeCard
             label="REGULAR REGISTRATION"
             amount="₹1,499"
-            dates="20 October – 5 November 2026"
+            dates="31 October – 15 November 2026"
           />
         </div>
 
@@ -207,7 +207,7 @@ const sections = [
             Registration Closes
           </p>
           <p className="mt-2 text-xl font-black text-white">
-            5 November 2026
+            15 November 2026
           </p>
         </div>
       </>
