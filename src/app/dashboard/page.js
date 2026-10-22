@@ -42,23 +42,62 @@ import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
    PROFILE REQUIRED
 ========================================================= */
 
-const normalizeSocialUrl = (value) => {
+const normalizeSocialUrl = (value, platform) => {
   if (!value || typeof value !== "string") return null;
 
-  const url = value.trim();
-  if (!url) return null;
+  let input = value.trim();
+  if (!input) return null;
 
-  try {
-    const normalized = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  const domains = {
+    Instagram: "instagram.com",
+    Facebook: "facebook.com",
+    YouTube: "youtube.com",
+    Twitter: "x.com",
+  };
 
-    const parsed = new URL(normalized);
+  const domain = domains[platform];
+  if (!domain) return null;
 
-    if (!["http:", "https:"].includes(parsed.protocol)) return null;
+  if (/^https?:\/\//i.test(input)) {
+    try {
+      const url = new URL(input);
 
-    return parsed.href;
-  } catch {
-    return null;
+      if (!["http:", "https:"].includes(url.protocol)) return null;
+
+      const hostname = url.hostname.toLowerCase().replace(/^www\./, "");
+
+      if (
+        hostname === domain ||
+        (platform === "Twitter" && hostname === "twitter.com")
+      ) {
+        return url.href;
+      }
+
+      return null;
+    } catch {
+      return null;
+    }
   }
+
+  input = input.replace(/^https?:\/\//i, "").replace(/^www\./i, "");
+
+  if (input.startsWith(`${domain}/`) || input === domain) {
+    return `https://${input}`;
+  }
+
+  if (platform === "Twitter" && input.startsWith("twitter.com/")) {
+    return `https://${input}`;
+  }
+
+  if (input.includes(" ")) return null;
+
+  if (platform === "YouTube") {
+  input = input.startsWith("@") ? input : `@${input.replace(/^@/, "")}`;
+} else {
+  input = input.replace(/^@/, "");
+}
+
+  return `https://${domain}/${input}`;
 };
 
 function ProfileRequired() {
@@ -1137,9 +1176,9 @@ function DashboardContent() {
                     {social.name}
                   </p>
 
-                  {normalizeSocialUrl(social.value) ? (
+                  {normalizeSocialUrl(social.value, social.name) ? (
                     <a
-                      href={normalizeSocialUrl(social.value)}
+                      href={normalizeSocialUrl(social.value, social.name)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block text-xs text-zinc-300 mt-1 truncate hover:text-red-400 transition-colors"
