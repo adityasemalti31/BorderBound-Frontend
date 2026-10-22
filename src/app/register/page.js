@@ -775,7 +775,7 @@ export default function RegistrationWizard() {
                       <Field label="Instagram">
                         <input
                           type="text"
-                          placeholder="@your profile link"
+                          placeholder="your profile link"
                           value={profileForm.socialInstagram}
                           onChange={(e) =>
                             updateField(
