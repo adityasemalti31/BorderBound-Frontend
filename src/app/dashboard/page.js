@@ -36,11 +36,30 @@ import {
   CircleDot,
   Edit3,
 } from "lucide-react";
-import { FaFacebook, FaInstagram , FaTwitter, FaYoutube} from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
 
 /* =========================================================
    PROFILE REQUIRED
 ========================================================= */
+
+const normalizeSocialUrl = (value) => {
+  if (!value || typeof value !== "string") return null;
+
+  const url = value.trim();
+  if (!url) return null;
+
+  try {
+    const normalized = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+
+    const parsed = new URL(normalized);
+
+    if (!["http:", "https:"].includes(parsed.protocol)) return null;
+
+    return parsed.href;
+  } catch {
+    return null;
+  }
+};
 
 function ProfileRequired() {
   return (
@@ -161,9 +180,7 @@ function ProfileRequired() {
                   >
                     <Icon className="w-4 h-4 text-red-500 mb-3" />
 
-                    <p className="text-xs font-bold text-white">
-                      {item.title}
-                    </p>
+                    <p className="text-xs font-bold text-white">{item.title}</p>
 
                     <p className="text-[10px] leading-4 text-zinc-500 mt-1">
                       {item.text}
@@ -268,8 +285,8 @@ function DocumentCard({ type, status, icon: Icon }) {
           {approved
             ? "Verified"
             : pending
-            ? "Awaiting verification"
-            : "Not submitted"}
+              ? "Awaiting verification"
+              : "Not submitted"}
         </p>
       </div>
 
@@ -334,35 +351,33 @@ function DashboardContent() {
 
   const documents = myProfile.documents || [];
 
-  const photograph = documents.find(
-    (doc) => doc.docType === "photograph"
-  );
+  const photograph = documents.find((doc) => doc.docType === "photograph");
 
   const identityProof = documents.find(
-    (doc) => doc.docType === "identity_proof"
+    (doc) => doc.docType === "identity_proof",
   );
 
-const profileFields = [
-  myProfile.fullName,
-  myProfile.dob,
-  myProfile.gender,
-  myProfile.mobile,
-  myProfile.email,
-  myProfile.city,
-  myProfile.state,
-  myProfile.permanentAddress,
-  myProfile.occupation,
-  myProfile.education,
-  myProfile.bio,
-  myProfile.profilePhotoUrl,
-  myProfile.termsAccepted,
-];
+  const profileFields = [
+    myProfile.fullName,
+    myProfile.dob,
+    myProfile.gender,
+    myProfile.mobile,
+    myProfile.email,
+    myProfile.city,
+    myProfile.state,
+    myProfile.permanentAddress,
+    myProfile.occupation,
+    myProfile.education,
+    myProfile.bio,
+    myProfile.profilePhotoUrl,
+    myProfile.termsAccepted,
+  ];
 
-const completedFields = profileFields.filter(Boolean).length;
+  const completedFields = profileFields.filter(Boolean).length;
 
-const profileCompletion = Math.round(
-  (completedFields / profileFields.length) * 100
-);
+  const profileCompletion = Math.round(
+    (completedFields / profileFields.length) * 100,
+  );
 
   const shareUrl =
     typeof window !== "undefined"
@@ -464,8 +479,8 @@ const profileCompletion = Math.round(
                 </p>
 
                 <p className="text-xs text-emerald-300/70 mt-1">
-                  Transaction ID: {txnid || "BBTXN"} • Your application has
-                  been submitted for official review.
+                  Transaction ID: {txnid || "BBTXN"} • Your application has been
+                  submitted for official review.
                 </p>
               </div>
             </motion.div>
@@ -480,9 +495,7 @@ const profileCompletion = Math.round(
               <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
 
               <div>
-                <p className="text-sm font-bold text-red-400">
-                  Payment Failed
-                </p>
+                <p className="text-sm font-bold text-red-400">Payment Failed</p>
 
                 <p className="text-xs text-red-300/70 mt-1">
                   {reason ||
@@ -792,8 +805,8 @@ const profileCompletion = Math.round(
                         step.done
                           ? "bg-emerald-500/10 text-emerald-400"
                           : step.active
-                          ? "bg-red-500/10 text-red-400"
-                          : "bg-zinc-900 text-zinc-600"
+                            ? "bg-red-500/10 text-red-400"
+                            : "bg-zinc-900 text-zinc-600"
                       }`}
                     >
                       {step.done ? (
@@ -812,8 +825,8 @@ const profileCompletion = Math.round(
                         {step.done
                           ? "Completed"
                           : step.active
-                          ? "Current step"
-                          : "Locked"}
+                            ? "Current step"
+                            : "Locked"}
                       </p>
                     </div>
                   </div>
@@ -863,14 +876,11 @@ const profileCompletion = Math.round(
                 {
                   icon: CalendarDays,
                   label: "Date of Birth",
-                  value: new Date(myProfile.dob).toLocaleDateString(
-                    "en-IN",
-                    {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    }
-                  ),
+                  value: new Date(myProfile.dob).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  }),
                 },
                 {
                   icon: User,
@@ -999,9 +1009,7 @@ const profileCompletion = Math.round(
                   Mobile
                 </p>
 
-                <p className="text-sm text-zinc-300 mt-1">
-                  {myProfile.mobile}
-                </p>
+                <p className="text-sm text-zinc-300 mt-1">{myProfile.mobile}</p>
               </div>
 
               <div>
@@ -1129,9 +1137,20 @@ const profileCompletion = Math.round(
                     {social.name}
                   </p>
 
-                  <p className="text-xs text-zinc-300 mt-1 truncate">
-                    {social.value || "Not connected"}
-                  </p>
+                  {normalizeSocialUrl(social.value) ? (
+                    <a
+                      href={normalizeSocialUrl(social.value)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-xs text-zinc-300 mt-1 truncate hover:text-red-400 transition-colors"
+                    >
+                      {social.value}
+                    </a>
+                  ) : (
+                    <p className="text-xs text-zinc-500 mt-1 truncate">
+                      {social.value || "Not connected"}
+                    </p>
+                  )}
                 </div>
               );
             })}

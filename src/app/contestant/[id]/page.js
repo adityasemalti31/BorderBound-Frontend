@@ -462,20 +462,47 @@ export default function ContestantProfilePage() {
   );
 }
 
+
+
 function SocialButton({ href, icon, label }) {
+  const getValidUrl = (value) => {
+    if (!value || typeof value !== "string") return null;
+
+    const url = value.trim();
+    if (!url) return null;
+
+    try {
+      const normalizedUrl = /^https?:\/\//i.test(url)
+        ? url
+        : `https://${url}`;
+
+      const parsedUrl = new URL(normalizedUrl);
+
+      if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+        return null;
+      }
+
+      return parsedUrl.href;
+    } catch {
+      return null;
+    }
+  };
+
+  const validUrl = getValidUrl(href);
+
+  if (!validUrl) return null;
+
   return (
     <motion.a
-      href={href}
+      href={validUrl}
       target="_blank"
-      rel="noreferrer"
+      rel="noopener noreferrer"
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
       className="flex items-center gap-2 border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-[9px] font-black uppercase tracking-wider text-zinc-500 transition-all hover:border-red-600/50 hover:bg-red-600/5 hover:text-red-400"
     >
       {icon}
-
       {label}
-
       <LuExternalLink size={11} />
     </motion.a>
   );
