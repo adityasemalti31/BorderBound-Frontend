@@ -563,9 +563,7 @@ export default function RegistrationWizard() {
                     Something went wrong
                   </p>
 
-                  <p className="text-[11px] text-rose-300/70 mt-1 leading-5">
-                    {error}
-                  </p>
+                 
                 </div>
               </div>
             </motion.div>

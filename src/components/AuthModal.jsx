@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -29,13 +30,14 @@ export default function AuthModal() {
     register,
     loading,
     error,
-    googleLogin,forgotPassword
+    googleLogin,
+    forgotPassword,
   } = useAuthStore();
 
-
   const [forgotMode, setForgotMode] = useState(false);
-const [forgotEmail, setForgotEmail] = useState("");
-const [forgotSuccess, setForgotSuccess] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotError, setForgotError] = useState("");
+  const [forgotSuccess, setForgotSuccess] = useState(false);
 
   const [loginData, setLoginData] = useState({
     email: "",
@@ -96,11 +98,50 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
     } catch (err) {}
   };
 
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+
+    setForgotError("");
+    setForgotSuccess(false);
+
+    try {
+      await forgotPassword(forgotEmail.trim());
+      setForgotSuccess(true);
+    } catch (err) {
+      setForgotError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to process your request. Please try again."
+      );
+    }
+  };
+
+  const openForgotMode = () => {
+    setForgotMode(true);
+    setForgotSuccess(false);
+    setForgotError("");
+    setForgotEmail("");
+  };
+
+  const backToLogin = () => {
+    setForgotMode(false);
+    setForgotSuccess(false);
+    setForgotError("");
+  };
+
+  const changeAuthMode = (mode) => {
+    setForgotMode(false);
+    setForgotSuccess(false);
+    setForgotError("");
+    setAuthMode(mode);
+  };
+
   const modeMeta = {
     login: {
       eyebrow: "WELCOME BACK",
       title: "Continue your journey.",
-      description: "Sign in to access your BorderBound contestant account.",
+      description:
+        "Sign in to access your BorderBound contestant account.",
       icon: Lock,
     },
     register: {
@@ -122,14 +163,13 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className=" fixed inset-0 z-[999] flex items-end sm:items-center justify-center  bg-black/85 backdrop-blur-xl p-0 sm:p-4"
+        className="fixed inset-0 z-[999] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-xl p-0 sm:p-4"
         onMouseDown={(e) => {
           if (e.target === e.currentTarget) {
             closeAuthModal();
           }
         }}
       >
-        {/* Background atmosphere */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
             animate={{
@@ -141,14 +181,12 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className=" absolute top-[15%] left-1/2 -translate-x-1/2
-              w-[260px] h-[260px] sm:w-[450px] sm:h-[450px] rounded-full bg-rose-600/[0.07] blur-[100px] sm:blur-[110px] "
+            className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[260px] h-[260px] sm:w-[450px] sm:h-[450px] rounded-full bg-rose-600/[0.07] blur-[100px] sm:blur-[110px]"
           />
 
-          <div className=" absolute bottom-0 right-0 w-[220px] h-[220px] bg-orange-500/[0.04]  blur-[100px] rounded-full " />
+          <div className="absolute bottom-0 right-0 w-[220px] h-[220px] bg-orange-500/[0.04] blur-[100px] rounded-full" />
         </div>
 
-        {/* Modal */}
         <motion.div
           initial={{
             opacity: 0,
@@ -169,40 +207,24 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
             duration: 0.35,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className=" relative w-full sm:max-w-md h-auto max-h-[100dvh] sm:max-h-[92dvh] flex flex-col"
+          className="relative w-full sm:max-w-md h-auto max-h-[100dvh] sm:max-h-[92dvh] flex flex-col"
         >
-          <div
-            className=" relative flex flex-col  overflow-hidden rounded-t-[28px] sm:rounded-[30px] border
-              border-white/10
-              bg-[#0a0a0a]
-              shadow-[0_-20px_80px_rgba(0,0,0,0.5)] sm:shadow-2xl max-h-[100dvh] sm:max-h-[92dvh] "
-          >
-            {/* Top accent */}
-            <div
-              className=" absolute top-0 left-0 right-0 h-px bg-gradient-to-r
-              from-transparent
-              via-rose-500/70
-              to-transparent
-            "
-            />
+          <div className="relative flex flex-col overflow-hidden rounded-t-[28px] sm:rounded-[30px] border border-white/10 bg-[#0a0a0a] shadow-[0_-20px_80px_rgba(0,0,0,0.5)] sm:shadow-2xl max-h-[100dvh] sm:max-h-[92dvh]">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-rose-500/70 to-transparent" />
 
-            {/* Close */}
             <button
               type="button"
               onClick={closeAuthModal}
-              className=" absolute z-20 top-3.5 right-3.5 sm:top-5 sm:right-5 w-9 h-9
-                rounded-xl border border-white/8 bg-white/[0.04] flex items-center justify-center
-                text-zinc-500 hover:text-white hover:bg-white/[0.08] transition-all active:scale-95 "
+              className="absolute z-20 top-3.5 right-3.5 sm:top-5 sm:right-5 w-9 h-9 rounded-xl border border-white/8 bg-white/[0.04] flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/[0.08] transition-all active:scale-95"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
 
-            {/* Header */}
-            <div className=" shrink-0 px-5 pt-6 pb-4 sm:px-7 sm:pt-7 sm:pb-6 ">
+            <div className="shrink-0 px-5 pt-6 pb-4 sm:px-7 sm:pt-7 sm:pb-6">
               <div className="flex items-start gap-3 pr-10">
                 <motion.div
-                  key={authMode}
+                  key={forgotMode ? "forgot" : authMode}
                   initial={{
                     scale: 0.8,
                     opacity: 0,
@@ -214,828 +236,517 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
                     rotate: 0,
                   }}
                   transition={{ duration: 0.3 }}
-                  className=" w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-rose-500/15 to-orange-500/10 border
-                    border-rose-500/15 flex items-center justify-center flex-shrink-0 "
+                  className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-rose-500/15 to-orange-500/10 border border-rose-500/15 flex items-center justify-center flex-shrink-0"
                 >
-                  <CurrentIcon className="w-5 h-5 text-rose-400" />
+                  {forgotMode ? (
+                    <Mail className="w-5 h-5 text-rose-400" />
+                  ) : (
+                    <CurrentIcon className="w-5 h-5 text-rose-400" />
+                  )}
                 </motion.div>
 
                 <div className="min-w-0">
-                  <p className=" text-[9px] uppercase tracking-[0.25em]  text-rose-400 font-bold ">
-                    {current.eyebrow}
+                  <p className="text-[9px] uppercase tracking-[0.25em] text-rose-400 font-bold">
+                    {forgotMode ? "ACCOUNT RECOVERY" : current.eyebrow}
                   </p>
 
                   <AnimatePresence mode="wait">
                     <motion.h2
-                      key={authMode}
-                      initial={{
-                        opacity: 0,
-                        y: 6,
-                      }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        y: -6,
-                      }}
-                      className=" text-xl sm:text-2xl font-black tracking-tight text-white mt-1 leading-tight "
+                      key={forgotMode ? "forgot-title" : authMode}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      className="text-xl sm:text-2xl font-black tracking-tight text-white mt-1 leading-tight"
                     >
-                      {current.title}
+                      {forgotMode
+                        ? "Reset your password"
+                        : current.title}
                     </motion.h2>
                   </AnimatePresence>
 
-                  <p className=" text-[11px] sm:text-xs leading-5 text-zinc-600  mt-1.5 max-w-[290px] ">
-                    {current.description}
+                  <p className="text-[11px] sm:text-xs leading-5 text-zinc-600 mt-1.5 max-w-[290px]">
+                    {forgotMode
+                      ? "Enter your registered email to receive a secure password reset link."
+                      : current.description}
                   </p>
                 </div>
               </div>
 
-              {/* Mode switch */}
-              <div className=" flex mt-5 sm:mt-6 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] ">
-                <ModeButton
-                  active={authMode === "login"}
-                  onClick={() => setAuthMode("login")}
-                >
-                  Sign In
-                </ModeButton>
+              {!forgotMode && (
+                <div className="flex mt-5 sm:mt-6 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                  <ModeButton
+                    active={authMode === "login"}
+                    onClick={() => changeAuthMode("login")}
+                  >
+                    Sign In
+                  </ModeButton>
 
-                <ModeButton
-                  active={authMode === "register"}
-                  onClick={() => setAuthMode("register")}
-                >
-                  Register
-                </ModeButton>
-              </div>
+                  <ModeButton
+                    active={authMode === "register"}
+                    onClick={() => changeAuthMode("register")}
+                  >
+                    Register
+                  </ModeButton>
+                </div>
+              )}
             </div>
 
-            {/* Error */}
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    height: 0,
-                    y: -5,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    height: "auto",
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    height: 0,
-                    y: -5,
-                  }}
-                  className="
-                    px-5
-                    sm:px-7
-                    overflow-hidden
-                    shrink-0
-                  "
-                >
-                  <div
-                    className="
-                    flex
-                    gap-3
-                    p-3.5
-                    rounded-2xl
-                    bg-rose-500/[0.07]
-                    border
-                    border-rose-500/15
-                    mb-2
-                  "
+            {!forgotMode && (
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0, y: -5 }}
+                    animate={{ opacity: 1, height: "auto", y: 0 }}
+                    exit={{ opacity: 0, height: 0, y: -5 }}
+                    className="px-5 sm:px-7 overflow-hidden shrink-0"
                   >
-                    <div
-                      className="
-                      w-7
-                      h-7
-                      rounded-lg
-                      bg-rose-500/10
-                      flex
-                      items-center
-                      justify-center
-                      flex-shrink-0
-                    "
-                    >
-                      <AlertCircle
-                        className="
-                        w-3.5
-                        h-3.5
-                        text-rose-400
-                      "
-                      />
+                    <div className="flex gap-3 p-3.5 rounded-2xl bg-rose-500/[0.07] border border-rose-500/15 mb-2">
+                      <div className="w-7 h-7 rounded-lg bg-rose-500/10 flex items-center justify-center flex-shrink-0">
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+                      </div>
+
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-bold text-rose-300">
+                          Unable to continue
+                        </p>
+
+                        <p className="text-[10px] text-rose-300/60 leading-4 mt-0.5 break-words">
+                          {error}
+                        </p>
+                      </div>
                     </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
 
-                    <div className="min-w-0">
-                      <p
-                        className="
-                        text-[10px]
-                        font-bold
-                        text-rose-300
-                      "
-                      >
-                        Unable to continue
-                      </p>
-
-                      <p
-                        className="
-                        text-[10px]
-                        text-rose-300/60
-                        leading-4
-                        mt-0.5
-                        break-words
-                      "
-                      >
-                        {error}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Body */}
-            <div
-              className="
-              flex-1
-              min-h-0
-              px-5
-              sm:px-7
-              pb-5
-              sm:pb-6
-              overflow-y-auto
-              overscroll-contain
-              scrollbar-thin
-              scrollbar-thumb-white/10
-              scrollbar-track-transparent
-            "
-            >
-
-
+            <div className="flex-1 min-h-0 px-5 sm:px-7 pb-5 sm:pb-6 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
               {forgotMode ? (
-  <form
-    onSubmit={async (e) => {
-      e.preventDefault();
+                <form
+                  onSubmit={handleForgotPassword}
+                  className="space-y-5"
+                >
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">
+                      Email Address
+                    </label>
 
-      try {
-        await forgotPassword(forgotEmail);
-        setForgotSuccess(true);
-      } catch (err) {}
-    }}
-    className="space-y-5"
-  >
-    <div>
-      <p className="text-[10px] uppercase tracking-[0.2em] text-rose-400 font-bold">
-        ACCOUNT RECOVERY
-      </p>
-
-      <h2 className="text-2xl font-black text-white mt-2">
-        Reset your password
-      </h2>
-
-      <p className="text-xs text-zinc-500 mt-2 leading-5">
-        Enter your registered email and we'll send you a secure
-        password reset link.
-      </p>
-    </div>
-
-    {forgotSuccess ? (
-      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4">
-        <p className="text-sm font-bold text-emerald-400">
-          Reset link sent
-        </p>
-
-        <p className="text-xs text-zinc-500 mt-1 leading-5">
-          Check your email for the password reset link. The link
-          will expire after 15 minutes.
-        </p>
-      </div>
-    ) : (
-      <>
-        <div>
-          <label className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">
-            Email Address
-          </label>
-
-          <input
-            type="email"
-            required
-            value={forgotEmail}
-            onChange={(e) => setForgotEmail(e.target.value)}
-            placeholder="you@example.com"
-            className="mt-2 w-full h-12 rounded-2xl bg-white/[0.03] border border-white/10 px-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-rose-500/40 focus:ring-4 focus:ring-rose-500/[0.06]"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full h-13 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          {loading ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Sending reset link...
-            </>
-          ) : (
-            <>
-              Send Reset Link
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
-        </button>
-      </>
-    )}
-
-    <button
-      type="button"
-      onClick={() => {
-        setForgotMode(false);
-        setForgotSuccess(false);
-      }}
-      className="w-full text-xs text-zinc-500 hover:text-white transition-colors"
-    >
-      ← Back to login
-    </button>
-  </form>
-) : (
-  <AnimatePresence mode="wait">
-                {/* LOGIN */}
-               {authMode === "login" && (
-  <motion.form
-    key="login"
-    initial={{
-      opacity: 0,
-      x: 15,
-    }}
-    animate={{
-      opacity: 1,
-      x: 0,
-    }}
-    exit={{
-      opacity: 0,
-      x: -15,
-    }}
-    transition={{
-      duration: 0.22,
-    }}
-    onSubmit={handleLoginSubmit}
-    className="space-y-4"
-  >
-    <AuthInput
-      label="Email Address"
-      icon={Mail}
-      type="email"
-      required
-      autoComplete="email"
-      placeholder="you@example.com"
-      value={loginData.email}
-      onChange={(e) =>
-        setLoginData({
-          ...loginData,
-          email: e.target.value,
-        })
-      }
-    />
-
-    <AuthInput
-      label="Password"
-      icon={Lock}
-      type="password"
-      required
-      autoComplete="current-password"
-      placeholder="Enter your password"
-      value={loginData.password}
-      onChange={(e) =>
-        setLoginData({
-          ...loginData,
-          password: e.target.value,
-        })
-      }
-    />
-
-    <div className="flex justify-end mt-2">
-  <button
-    type="button"
-    onClick={() => {
-      setForgotMode(true);
-      setForgotSuccess(false);
-      setForgotEmail("");
-    }}
-    className="text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors"
-  >
-    Forgot password?
-  </button>
-</div>
-
-    <button
-      type="submit"
-      disabled={loading}
-      className="
-        group
-        relative
-        overflow-hidden
-        w-full
-        min-h-14
-        rounded-2xl
-        bg-white
-        text-black
-        font-black
-        text-sm
-        flex
-        items-center
-        justify-center
-        gap-3
-        transition-all
-        hover:bg-zinc-200
-        active:scale-[0.985]
-        disabled:opacity-50
-        disabled:cursor-not-allowed
-      "
-    >
-      {loading ? (
-        <LoadingSpinner text="Signing you in..." dark />
-      ) : (
-        <>
-          Enter BorderBound
-          <ArrowRight
-            className="
-              w-4
-              h-4
-              group-hover:translate-x-1
-              transition-transform
-            "
-          />
-        </>
-      )}
-    </button>
-
-    <div className="relative py-1">
-      <div className="absolute inset-0 flex items-center">
-        <div className="w-full border-t border-white/[0.06]" />
-      </div>
-
-      <div className="relative flex justify-center">
-        <span className="bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-700">
-          OR
-        </span>
-      </div>
-    </div>
-
-    <button
-      type="button"
-      disabled={loading}
-      onClick={async () => {
-        try {
-          await googleLogin();
-        } catch (err) {}
-      }}
-      className="
-        group
-        w-full
-        min-h-12
-        rounded-2xl
-        bg-white/[0.035]
-        border
-        border-white/[0.09]
-        text-white
-        font-bold
-        text-sm
-        flex
-        items-center
-        justify-center
-        gap-3
-        transition-all
-        hover:bg-white/[0.07]
-        hover:border-white/[0.15]
-        active:scale-[0.985]
-        disabled:opacity-50
-        disabled:cursor-not-allowed
-      "
-    >
-      {loading ? (
-        <LoadingSpinner text="Connecting to Google..." />
-      ) : (
-        <>
-          <FaChrome className="w-4 h-4" />
-          Continue with Google
-        </>
-      )}
-    </button>
-
-    <SecurityNote text="Your account is protected by secure authentication." />
-  </motion.form>
-)}
-
-                {/* REGISTER */}
-                {authMode === "register" && (
-                  <motion.form
-                    key="register"
-                    initial={{
-                      opacity: 0,
-                      x: 15,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      x: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      x: -15,
-                    }}
-                    transition={{
-                      duration: 0.22,
-                    }}
-                    onSubmit={handleRegisterSubmit}
-                    className="space-y-4"
-                  >
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={async () => {
-                        try {
-                          await googleLogin();
-                        } catch (err) {}
-                      }}
-                      className="
-    group
-    w-full
-    min-h-12
-    rounded-2xl
-    bg-white/[0.035]
-    border
-    border-white/[0.09]
-    text-white
-    font-bold
-    text-sm
-    flex
-    items-center
-    justify-center
-    gap-3
-    transition-all
-    hover:bg-white/[0.07]
-    hover:border-white/[0.15]
-    active:scale-[0.985]
-    disabled:opacity-50
-    disabled:cursor-not-allowed
-  "
-                    >
-                      {loading ? (
-                        <LoadingSpinner text="Connecting to Google..." />
-                      ) : (
-                        <>
-                          <FaChrome className="w-4 h-4 text-white" />
-                          Continue with Google
-                        </>
-                      )}
-                    </button>
-
-                    <div className="relative py-1">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/[0.06]" />
-                      </div>
-
-                      <div className="relative flex justify-center">
-                        <span className="bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-700">
-                          OR CREATE WITH EMAIL
-                        </span>
-                      </div>
-                    </div>
-                    <AuthInput
-                      label="Full Name"
-                      icon={User}
-                      type="text"
-                      required
-                      autoComplete="name"
-                      placeholder="Your full name"
-                      value={regData.fullName}
-                      onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          fullName: e.target.value,
-                        })
-                      }
-                    />
-
-                    <AuthInput
-                      label="Mobile Number"
-                      icon={Phone}
-                      type="tel"
-                      required
-                      autoComplete="tel"
-                      inputMode="numeric"
-                      maxLength={10}
-                      placeholder="9876543210"
-                      value={regData.mobile}
-                      onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          mobile: e.target.value
-                            .replace(/\D/g, "")
-                            .slice(0, 10),
-                        })
-                      }
-                    />
-
-                    <AuthInput
-                      label="Email Address"
-                      icon={Mail}
+                    <input
                       type="email"
                       required
                       autoComplete="email"
-                      placeholder="you@email.com"
-                      value={regData.email}
-                      onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          email: e.target.value,
-                        })
-                      }
+                      value={forgotEmail}
+                      onChange={(e) => {
+                        setForgotEmail(e.target.value);
+                        if (forgotError) setForgotError("");
+                      }}
+                      placeholder="you@example.com"
+                      className="mt-2 w-full h-12 rounded-2xl bg-white/[0.03] border border-white/10 px-4 text-sm text-white placeholder:text-zinc-700 outline-none focus:border-rose-500/40 focus:ring-4 focus:ring-rose-500/[0.06]"
                     />
+                  </div>
 
-                    <div
-                      className="
-                      grid
-                      grid-cols-1
-                      sm:grid-cols-2
-                      gap-4
-                    "
-                    >
-                      <AuthInput
-                        label="Date of Birth"
-                        icon={CalendarDays}
-                        type="date"
-                        required
-                        value={regData.dob}
-                        onChange={(e) =>
-                          setRegData({
-                            ...regData,
-                            dob: e.target.value,
-                          })
-                        }
-                      />
-
-                      <div>
-                        <label
-                          className="
-                          block
-                          text-[9px]
-                          uppercase
-                          tracking-[0.15em]
-                          font-bold
-                          text-zinc-500
-                          mb-2
-                        "
-                        >
-                          Gender
-                          <span className="text-rose-400 ml-1">*</span>
-                        </label>
-
-                        <div className="relative">
-                          <User
-                            className="
-                            absolute
-                            left-3.5
-                            top-1/2
-                            -translate-y-1/2
-                            w-4
-                            h-4
-                            text-zinc-600
-                            pointer-events-none
-                          "
-                          />
-
-                          <select
-                            required
-                            value={regData.gender}
-                            onChange={(e) =>
-                              setRegData({
-                                ...regData,
-                                gender: e.target.value,
-                              })
-                            }
-                            className={selectClass()}
-                          >
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      className="
-                      grid
-                      grid-cols-1
-                      sm:grid-cols-2
-                      gap-4
-                    "
-                    >
-                      <AuthInput
-                        label="City"
-                        icon={MapPin}
-                        type="text"
-                        required
-                        autoComplete="address-level2"
-                        placeholder="Your city"
-                        value={regData.city}
-                        onChange={(e) =>
-                          setRegData({
-                            ...regData,
-                            city: e.target.value,
-                          })
-                        }
-                      />
-
-                      <AuthInput
-                        label="State"
-                        icon={MapPin}
-                        type="text"
-                        required
-                        autoComplete="address-level1"
-                        placeholder="Your state"
-                        value={regData.state}
-                        onChange={(e) =>
-                          setRegData({
-                            ...regData,
-                            state: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <AuthInput
-                      label="Create Password"
-                      icon={Lock}
-                      type="password"
-                      required
-                      autoComplete="new-password"
-                      placeholder="Choose a secure password"
-                      value={regData.password}
-                      onChange={(e) =>
-                        setRegData({
-                          ...regData,
-                          password: e.target.value,
-                        })
-                      }
-                    />
-                    
-
-
-                    {/* Security info */}
-                    <div
-                      className="
-                      flex
-                      items-start
-                      gap-2.5
-                      p-3.5
-                      rounded-2xl
-                      bg-white/[0.025]
-                      border
-                      border-white/[0.06]
-                    "
-                    >
-                      <ShieldCheck
-                        className="
-                        w-3.5
-                        h-3.5
-                        text-zinc-600
-                        mt-0.5
-                        flex-shrink-0
-                      "
-                      />
-
-                      <p
-                        className="
-                        text-[9px]
-                        leading-4
-                        text-zinc-600
-                      "
+                  <AnimatePresence>
+                    {forgotError && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0, y: -5 }}
+                        animate={{ opacity: 1, height: "auto", y: 0 }}
+                        exit={{ opacity: 0, height: 0, y: -5 }}
+                        className="overflow-hidden"
                       >
-                        Your information is securely stored and your account is
-                        protected with secure authentication.
+                        <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-rose-500/[0.07] border border-rose-500/15">
+                          <div className="w-7 h-7 rounded-lg bg-rose-500/10 flex items-center justify-center shrink-0">
+                            <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="text-xs font-bold text-rose-300">
+                              Unable to reset password
+                            </p>
+
+                            <p className="text-xs text-rose-300/80 leading-5 mt-1 break-words">
+                              {forgotError}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {forgotSuccess ? (
+                    <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.06] p-4">
+                      <p className="text-sm font-bold text-emerald-400">
+                        Reset link sent
+                      </p>
+
+                      <p className="text-xs text-zinc-500 mt-1 leading-5">
+                        Check your email for the password reset link. The link
+                        will expire after 15 minutes.
                       </p>
                     </div>
-
+                  ) : (
                     <button
                       type="submit"
                       disabled={loading}
-                      className="
-                        group
-                        w-full
-                        min-h-14
-                        rounded-2xl
-                        bg-gradient-to-r
-                        from-rose-600
-                        via-rose-500
-                        to-orange-500
-                        text-white
-                        font-black
-                        text-sm
-                        flex
-                        items-center
-                        justify-center
-                        gap-3
-                        shadow-xl
-                        shadow-rose-500/10
-                        hover:brightness-110
-                        active:scale-[0.985]
-                        transition-all
-                        disabled:opacity-50
-                        disabled:cursor-not-allowed
-                      "
+                      className="w-full min-h-13 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.985] transition-all"
                     >
                       {loading ? (
-                        <LoadingSpinner text="Creating account..." />
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Sending reset link...
+                        </>
                       ) : (
                         <>
-                          Create My Account
-                          <ArrowRight
-                            className="
-                            w-4
-                            h-4
-                            group-hover:translate-x-1
-                            transition-transform
-                          "
-                          />
+                          Send Reset Link
+                          <ArrowRight className="w-4 h-4" />
                         </>
                       )}
                     </button>
-                  </motion.form>
-                )}
-              </AnimatePresence>
-)}
-              
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={backToLogin}
+                    className="w-full text-xs text-zinc-500 hover:text-white transition-colors"
+                  >
+                    ← Back to login
+                  </button>
+                </form>
+              ) : (
+                <AnimatePresence mode="wait">
+                  {authMode === "login" && (
+                    <motion.form
+                      key="login"
+                      initial={{ opacity: 0, x: 15 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -15 }}
+                      transition={{ duration: 0.22 }}
+                      onSubmit={handleLoginSubmit}
+                      className="space-y-4"
+                    >
+                      <AuthInput
+                        label="Email Address"
+                        icon={Mail}
+                        type="email"
+                        required
+                        autoComplete="email"
+                        placeholder="you@example.com"
+                        value={loginData.email}
+                        onChange={(e) =>
+                          setLoginData({
+                            ...loginData,
+                            email: e.target.value,
+                          })
+                        }
+                      />
+
+                      <AuthInput
+                        label="Password"
+                        icon={Lock}
+                        type="password"
+                        required
+                        autoComplete="current-password"
+                        placeholder="Enter your password"
+                        value={loginData.password}
+                        onChange={(e) =>
+                          setLoginData({
+                            ...loginData,
+                            password: e.target.value,
+                          })
+                        }
+                      />
+
+                      <div className="flex justify-end mt-2">
+                        <button
+                          type="button"
+                          onClick={openForgotMode}
+                          className="text-xs font-semibold text-rose-400 hover:text-rose-300 transition-colors"
+                        >
+                          Forgot password?
+                        </button>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="group relative overflow-hidden w-full min-h-14 rounded-2xl bg-white text-black font-black text-sm flex items-center justify-center gap-3 transition-all hover:bg-zinc-200 active:scale-[0.985] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <LoadingSpinner
+                            text="Signing you in..."
+                            dark
+                          />
+                        ) : (
+                          <>
+                            Enter BorderBound
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </>
+                        )}
+                      </button>
+
+                      <div className="relative py-1">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-white/[0.06]" />
+                        </div>
+
+                        <div className="relative flex justify-center">
+                          <span className="bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-700">
+                            OR
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        disabled={loading}
+                        onClick={async () => {
+                          try {
+                            await googleLogin();
+                          } catch (err) {}
+                        }}
+                        className="group w-full min-h-12 rounded-2xl bg-white/[0.035] border border-white/[0.09] text-white font-bold text-sm flex items-center justify-center gap-3 transition-all hover:bg-white/[0.07] hover:border-white/[0.15] active:scale-[0.985] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <LoadingSpinner text="Connecting to Google..." />
+                        ) : (
+                          <>
+                            <FaChrome className="w-4 h-4" />
+                            Continue with Google
+                          </>
+                        )}
+                      </button>
+
+                      <SecurityNote text="Your account is protected by secure authentication." />
+                    </motion.form>
+                  )}
+
+                  {authMode === "register" && (
+                    <motion.form
+                      key="register"
+                      initial={{ opacity: 0, x: 15 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -15 }}
+                      transition={{ duration: 0.22 }}
+                      onSubmit={handleRegisterSubmit}
+                      className="space-y-4"
+                    >
+                      <button
+                        type="button"
+                        disabled={loading}
+                        onClick={async () => {
+                          try {
+                            await googleLogin();
+                          } catch (err) {}
+                        }}
+                        className="group w-full min-h-12 rounded-2xl bg-white/[0.035] border border-white/[0.09] text-white font-bold text-sm flex items-center justify-center gap-3 transition-all hover:bg-white/[0.07] hover:border-white/[0.15] active:scale-[0.985] disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <LoadingSpinner text="Connecting to Google..." />
+                        ) : (
+                          <>
+                            <FaChrome className="w-4 h-4 text-white" />
+                            Continue with Google
+                          </>
+                        )}
+                      </button>
+
+                      <div className="relative py-1">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-white/[0.06]" />
+                        </div>
+
+                        <div className="relative flex justify-center">
+                          <span className="bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-700">
+                            OR CREATE WITH EMAIL
+                          </span>
+                        </div>
+                      </div>
+
+                      <AuthInput
+                        label="Full Name"
+                        icon={User}
+                        type="text"
+                        required
+                        autoComplete="name"
+                        placeholder="Your full name"
+                        value={regData.fullName}
+                        onChange={(e) =>
+                          setRegData({
+                            ...regData,
+                            fullName: e.target.value,
+                          })
+                        }
+                      />
+
+                      <AuthInput
+                        label="Mobile Number"
+                        icon={Phone}
+                        type="tel"
+                        required
+                        autoComplete="tel"
+                        inputMode="numeric"
+                        maxLength={10}
+                        placeholder="9876543210"
+                        value={regData.mobile}
+                        onChange={(e) =>
+                          setRegData({
+                            ...regData,
+                            mobile: e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 10),
+                          })
+                        }
+                      />
+
+                      <AuthInput
+                        label="Email Address"
+                        icon={Mail}
+                        type="email"
+                        required
+                        autoComplete="email"
+                        placeholder="you@email.com"
+                        value={regData.email}
+                        onChange={(e) =>
+                          setRegData({
+                            ...regData,
+                            email: e.target.value,
+                          })
+                        }
+                      />
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <AuthInput
+                          label="Date of Birth"
+                          icon={CalendarDays}
+                          type="date"
+                          required
+                          value={regData.dob}
+                          onChange={(e) =>
+                            setRegData({
+                              ...regData,
+                              dob: e.target.value,
+                            })
+                          }
+                        />
+
+                        <div>
+                          <label className="block text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-500 mb-2">
+                            Gender
+                            <span className="text-rose-400 ml-1">*</span>
+                          </label>
+
+                          <div className="relative">
+                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+
+                            <select
+                              required
+                              value={regData.gender}
+                              onChange={(e) =>
+                                setRegData({
+                                  ...regData,
+                                  gender: e.target.value,
+                                })
+                              }
+                              className={selectClass()}
+                            >
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="other">Other</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <AuthInput
+                          label="City"
+                          icon={MapPin}
+                          type="text"
+                          required
+                          autoComplete="address-level2"
+                          placeholder="Your city"
+                          value={regData.city}
+                          onChange={(e) =>
+                            setRegData({
+                              ...regData,
+                              city: e.target.value,
+                            })
+                          }
+                        />
+
+                        <AuthInput
+                          label="State"
+                          icon={MapPin}
+                          type="text"
+                          required
+                          autoComplete="address-level1"
+                          placeholder="Your state"
+                          value={regData.state}
+                          onChange={(e) =>
+                            setRegData({
+                              ...regData,
+                              state: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+
+                      <AuthInput
+                        label="Create Password"
+                        icon={Lock}
+                        type="password"
+                        required
+                        autoComplete="new-password"
+                        placeholder="Choose a secure password"
+                        value={regData.password}
+                        onChange={(e) =>
+                          setRegData({
+                            ...regData,
+                            password: e.target.value,
+                          })
+                        }
+                      />
+
+                      <div className="flex items-start gap-2.5 p-3.5 rounded-2xl bg-white/[0.025] border border-white/[0.06]">
+                        <ShieldCheck className="w-3.5 h-3.5 text-zinc-600 mt-0.5 flex-shrink-0" />
+
+                        <p className="text-[9px] leading-4 text-zinc-600">
+                          Your information is securely stored and your account
+                          is protected with secure authentication.
+                        </p>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="group w-full min-h-14 rounded-2xl bg-gradient-to-r from-rose-600 via-rose-500 to-orange-500 text-white font-black text-sm flex items-center justify-center gap-3 shadow-xl shadow-rose-500/10 hover:brightness-110 active:scale-[0.985] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {loading ? (
+                          <LoadingSpinner text="Creating account..." />
+                        ) : (
+                          <>
+                            Create My Account
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                          </>
+                        )}
+                      </button>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+              )}
             </div>
 
-            {/* Footer */}
-            <div
-              className="
-              shrink-0
-              px-5
-              sm:px-7
-              py-3.5
-              sm:py-4
-              border-t
-              border-white/[0.06]
-              bg-white/[0.012]
-            "
-            >
-              <div
-                className="
-                flex
-                items-center
-                justify-between
-                gap-3
-              "
-              >
-                <div
-                  className="
-                  flex
-                  items-center
-                  gap-2
-                  min-w-0
-                "
-                >
-                  <Sparkles
-                    className="
-                    w-3
-                    h-3
-                    text-zinc-700
-                    flex-shrink-0
-                  "
-                  />
+            <div className="shrink-0 px-5 sm:px-7 py-3.5 sm:py-4 border-t border-white/[0.06] bg-white/[0.012]">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Sparkles className="w-3 h-3 text-zinc-700 flex-shrink-0" />
 
-                  <span
-                    className="
-                    text-[8px]
-                    sm:text-[9px]
-                    uppercase
-                    tracking-[0.15em]
-                    text-zinc-700
-                    font-bold
-                    truncate
-                  "
-                  >
+                  <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.15em] text-zinc-700 font-bold truncate">
                     THE BORDERBOUND
                   </span>
                 </div>
 
-                <div
-                  className="
-                  flex
-                  items-center
-                  gap-1.5
-                  text-zinc-700
-                  flex-shrink-0
-                "
-                >
+                <div className="flex items-center gap-1.5 text-zinc-700 flex-shrink-0">
                   <ShieldCheck className="w-3 h-3" />
-
                   <span className="text-[8px]">Secure registration</span>
                 </div>
               </div>
@@ -1047,10 +758,6 @@ const [forgotSuccess, setForgotSuccess] = useState(false);
   );
 }
 
-/* =========================
-   AUTH INPUT
-========================= */
-
 function AuthInput({
   label,
   icon: Icon,
@@ -1060,99 +767,40 @@ function AuthInput({
 }) {
   return (
     <div className="w-full">
-      <label
-        className="
-        block
-        text-[9px]
-        uppercase
-        tracking-[0.15em]
-        font-bold
-        text-zinc-500
-        mb-2
-      "
-      >
+      <label className="block text-[9px] uppercase tracking-[0.15em] font-bold text-zinc-500 mb-2">
         {label}
-
         {required && <span className="text-rose-400 ml-1">*</span>}
       </label>
 
       <div className="relative group">
-        <Icon
-          className="
-          absolute
-          left-3.5
-          top-1/2
-          -translate-y-1/2
-          w-4
-          h-4
-          text-zinc-700
-          group-focus-within:text-rose-400
-          transition-colors
-          pointer-events-none
-        "
-        />
+        <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-700 group-focus-within:text-rose-400 transition-colors pointer-events-none" />
 
         <input
           type={type}
           required={required}
           {...props}
-          className={`
-            w-full
-            h-12
-            rounded-2xl
-            bg-white/[0.025]
-            border
-            border-white/[0.08]
-            pl-10
-            pr-4
-            text-sm
-            text-white
-            placeholder:text-zinc-700
-            outline-none
-            transition-all
-            duration-200
-            focus:bg-white/[0.04]
-            focus:border-rose-500/35
-            focus:ring-4 focus:ring-rose-500/[0.05]
-            ${type === "date" ? "[color-scheme:dark]" : ""}
-          `}
+          className={`w-full h-12 rounded-2xl bg-white/[0.025] border border-white/[0.08] pl-10 pr-4 text-sm text-white placeholder:text-zinc-700 outline-none transition-all duration-200 focus:bg-white/[0.04] focus:border-rose-500/35 focus:ring-4 focus:ring-rose-500/[0.05] ${
+            type === "date" ? "[color-scheme:dark]" : ""
+          }`}
         />
       </div>
     </div>
   );
 }
 
-/* =========================
-   MODE BUTTON
-========================= */
-
 function ModeButton({ active, children, onClick }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`
-        relative
-        flex-1
-        h-9
-        rounded-lg
-        text-[10px]
-        font-bold
-        transition-all
-        ${active ? "text-white" : "text-zinc-600 hover:text-zinc-400"}
-      `}
+      className={`relative flex-1 h-9 rounded-lg text-[10px] font-bold transition-all ${
+        active ? "text-white" : "text-zinc-600 hover:text-zinc-400"
+      }`}
     >
       {active && (
         <motion.div
           layoutId="auth-mode-pill"
-          className="
-            absolute
-            inset-0
-            rounded-lg
-            bg-white/[0.07]
-            border
-            border-white/[0.07]
-          "
+          className="absolute inset-0 rounded-lg bg-white/[0.07] border border-white/[0.07]"
           transition={{
             type: "spring",
             stiffness: 350,
@@ -1166,26 +814,15 @@ function ModeButton({ active, children, onClick }) {
   );
 }
 
-/* =========================
-   LOADING
-========================= */
-
 function LoadingSpinner({ text, dark = false }) {
   return (
     <>
       <span
-        className={`
-          w-4
-          h-4
-          rounded-full
-          border-2
-          ${
-            dark
-              ? "border-black/30 border-t-black"
-              : "border-white/30 border-t-white"
-          }
-          animate-spin
-        `}
+        className={`w-4 h-4 rounded-full border-2 ${
+          dark
+            ? "border-black/30 border-t-black"
+            : "border-white/30 border-t-white"
+        } animate-spin`}
       />
 
       <span>{text}</span>
@@ -1193,53 +830,22 @@ function LoadingSpinner({ text, dark = false }) {
   );
 }
 
-/* =========================
-   SECURITY NOTE
-========================= */
-
 function SecurityNote({ text }) {
   return (
-    <div
-      className="
-      flex
-      items-center
-      justify-center
-      gap-2
-      px-2
-      text-center
-    "
-    >
-      <ShieldCheck
-        className="
-        w-3
-        h-3
-        text-zinc-700
-        flex-shrink-0
-      "
-      />
+    <div className="flex items-center justify-center gap-2 px-2 text-center">
+      <ShieldCheck className="w-3 h-3 text-zinc-700 flex-shrink-0" />
 
-      <span
-        className="
-        text-[9px]
-        text-zinc-700
-      "
-      >
-        {text}
-      </span>
+      <span className="text-[9px] text-zinc-700">{text}</span>
     </div>
   );
 }
-
-/* =========================
-   SELECT
-========================= */
 
 function selectClass() {
   return `
     w-full
     h-12
     rounded-2xl
-    bg-white/[0.025]
+    bg-[#111111]
     border
     border-white/[0.08]
     pl-10
