@@ -4,6 +4,7 @@ import { useEffect, Suspense } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useContestantStore } from "@/store/contestantStore";
 import { useSearchParams } from "next/navigation";
+import api from "@/lib/api";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -359,6 +360,19 @@ function DashboardContent() {
       fetchMyProfile();
     }
   }, [user, fetchMyProfile]);
+
+  useEffect(() => {
+    if (user && txnid) {
+      api
+        .get(`/contestants/payment-status/${txnid}`)
+        .then((res) => {
+          if (res.data?.success && res.data?.verified) {
+            fetchMyProfile();
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user, txnid, fetchMyProfile]);
 
   if (loading) {
     return (

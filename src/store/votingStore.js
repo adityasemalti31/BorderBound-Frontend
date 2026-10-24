@@ -1,3 +1,4 @@
+
 import { create } from "zustand";
 import api from "@/lib/api";
 import confetti from "canvas-confetti";
@@ -9,6 +10,7 @@ export const useVotingStore = create((set, get) => ({
   unitPrice: 5,
   loading: false,
   error: null,
+
   packages: [
     { votes: 1, amount: 5, label: "1 Vote (₹5)" },
     { votes: 10, amount: 50, label: "10 Votes (₹50)" },
@@ -22,41 +24,59 @@ export const useVotingStore = create((set, get) => ({
       targetContestant: contestant,
       votesCount: defaultVotes,
       error: null,
+      loading: false,
     });
   },
 
   closeVoteModal: () =>
-    set({ isVoteModalOpen: false, targetContestant: null, error: null }),
-  setVotesCount: (count) => set({ votesCount: Math.max(1, count) }),
+    set({
+      isVoteModalOpen: false,
+      targetContestant: null,
+      error: null,
+      loading: false,
+    }),
+
+  setVotesCount: (count) =>
+    set({ votesCount: Math.max(1, count) }),
 
   submitVotePayment: async (simulateTest = false) => {
+    if (get().loading) return;
+
+    set({ loading: true, error: null });
+
     try {
-      set({ loading: true, error: null });
       const { targetContestant, votesCount } = get();
 
-      if (!targetContestant) throw new Error("No target contestant selected.");
+      if (!targetContestant) {
+        throw new Error("No target contestant selected.");
+      }
 
       const orderRes = await api.post("/voting/create-order", {
-        contestantId: targetContestant.id || targetContestant._id,
+        contestantId:
+          targetContestant.id || targetContestant._id,
         votesCount,
       });
 
       if (!orderRes.data?.success) {
         throw new Error(
-          orderRes.data?.message || "Failed to create vote order.",
+          orderRes.data?.message || "Failed to create vote order."
         );
       }
 
       const payData = orderRes.data.data;
-      console.log("PAYU ACTION URL:", payData?.action);
-      console.log("PAYU TRANSACTION ID:", payData?.txnid);
+
+      if (!payData) {
+        throw new Error("Payment order data is missing.");
+      }
+
+      console.log("PAYU ACTION URL:", payData.action);
+      console.log("PAYU TRANSACTION ID:", payData.txnid);
       console.log(
         "PAYU URL SOURCE:",
-        payData?.action ? "BACKEND RESPONSE" : "FRONTEND FALLBACK",
+        payData.action ? "BACKEND RESPONSE" : "FRONTEND FALLBACK"
       );
 
       if (simulateTest) {
-        // Simulated instant payment verification
         const verifyRes = await api.post("/voting/verify-payment", {
           status: "success",
           txnid: payData.txnid,
@@ -71,63 +91,96 @@ export const useVotingStore = create((set, get) => ({
           hash: payData.hash,
         });
 
-        if (verifyRes.data?.success) {
-          try {
-            confetti({
-              particleCount: 120,
-              spread: 70,
-              origin: { y: 0.6 },
-              colors: ["#FF2A5F", "#FFB800", "#00F0FF", "#00E676"],
-            });
-          } catch (e) {}
-
-          set({ isVoteModalOpen: false, loading: false });
-          return verifyRes.data;
+        if (!verifyRes.data?.success) {
+          throw new Error(
+            verifyRes.data?.message ||
+              "Payment verification failed."
+          );
         }
-      }
 
-      // Real PayU Hosted Form Submission
-      if (typeof window !== "undefined") {
-        const form = document.createElement("form");
-        form.method = "POST";
-        form.action = payData.action || "https://secure.payu.in/_payment";
+        try {
+          confetti({
+            particleCount: 120,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ["#FF2A5F", "#FFB800", "#00F0FF", "#00E676"],
+          });
+        } catch (e) {}
 
-        const fields = [
-          "key",
-          "txnid",
-          "amount",
-          "productinfo",
-          "firstname",
-          "email",
-          "phone",
-          "surl",
-          "furl",
-          "hash",
-          "udf1",
-          "udf2",
-          "udf3",
-          "udf4",
-          "udf5",
-        ];
-
-        fields.forEach((field) => {
-          if (payData[field] !== undefined && payData[field] !== null) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = field;
-            input.value = payData[field];
-            form.appendChild(input);
-          }
+        set({
+          isVoteModalOpen: false,
+          loading: false,
+          error: null,
         });
 
-        document.body.appendChild(form);
+        return verifyRes.data;
+      }
+
+      if (typeof window === "undefined") {
+        throw new Error("Payment is only available in the browser.");
+      }
+
+      if (!payData.action && !payData.key) {
+        throw new Error("PayU payment configuration is missing.");
+      }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action =
+        payData.action || "https://secure.payu.in/_payment";
+
+      const fields = [
+        "key",
+        "txnid",
+        "amount",
+        "productinfo",
+        "firstname",
+        "email",
+        "phone",
+        "surl",
+        "furl",
+        "hash",
+        "udf1",
+        "udf2",
+        "udf3",
+        "udf4",
+        "udf5",
+      ];
+
+      fields.forEach((field) => {
+        if (
+          payData[field] !== undefined &&
+          payData[field] !== null
+        ) {
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = field;
+          input.value = String(payData[field]);
+          form.appendChild(input);
+        }
+      });
+
+      document.body.appendChild(form);
+
+      try {
         form.submit();
+      } catch (err) {
+        form.remove();
+        throw err;
       }
 
       return payData;
     } catch (err) {
-      const msg = err.response?.data?.message || err.message || "Voting failed";
-      set({ error: msg, loading: false });
+      const msg =
+        err.response?.data?.message ||
+        err.message ||
+        "Voting failed";
+
+      set({
+        error: msg,
+        loading: false,
+      });
+
       throw new Error(msg);
     }
   },

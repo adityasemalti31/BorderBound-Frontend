@@ -38,7 +38,7 @@ export default function VoteModal() {
     try {
       await submitVotePayment(simulate);
       fetchLeaderboard();
-    } catch (err) {}
+    } catch (err) { }
   };
 
   return (
@@ -209,20 +209,18 @@ export default function VoteModal() {
                   key={pkg.votes}
                   type="button"
                   onClick={() => setVotesCount(pkg.votes)}
-                  className={`group relative overflow-hidden rounded-xl border p-3 text-center transition-all duration-300 ${
-                    selected
+                  className={`group relative overflow-hidden rounded-xl border p-3 text-center transition-all duration-300 ${selected
                       ? "border-red-500/60 bg-red-500/[0.10] shadow-[0_8px_30px_rgba(239,68,68,0.12)]"
                       : "border-white/[0.07] bg-white/[0.025] hover:border-white/[0.14] hover:bg-white/[0.045]"
-                  }`}
+                    }`}
                 >
                   {selected && (
                     <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-red-500 to-amber-400" />
                   )}
 
                   <div
-                    className={`mb-1 text-sm font-black ${
-                      selected ? "text-white" : "text-zinc-300"
-                    }`}
+                    className={`mb-1 text-sm font-black ${selected ? "text-white" : "text-zinc-300"
+                      }`}
                   >
                     {pkg.votes}
                   </div>
@@ -232,9 +230,8 @@ export default function VoteModal() {
                   </div>
 
                   <div
-                    className={`mt-2 text-[10px] font-black ${
-                      selected ? "text-amber-400" : "text-zinc-500"
-                    }`}
+                    className={`mt-2 text-[10px] font-black ${selected ? "text-amber-400" : "text-zinc-500"
+                      }`}
                   >
                     ₹{pkg.amount}
                   </div>
@@ -360,8 +357,11 @@ export default function VoteModal() {
               <>
                 <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
 
-                <span className="relative">
-                  Processing Payment...
+                <span className="relative flex flex-col items-center gap-1">
+                  <span>Processing Payment...</span>
+                  <span className="text-xs text-gray-400 text-center">
+                    Please do not press the back button or refresh the page.
+                  </span>
                 </span>
               </>
             ) : (

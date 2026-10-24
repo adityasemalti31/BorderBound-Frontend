@@ -32,6 +32,7 @@ export default function ContestantProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [voteNotice, setVoteNotice] = useState(null);
 
   const { openVoteModal } = useVotingStore();
 
@@ -57,6 +58,50 @@ export default function ContestantProfilePage() {
       .finally(() => {
         setLoading(false);
       });
+  }, [params?.id]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const search = new URLSearchParams(window.location.search);
+    const voting = search.get("voting");
+    const txnid = search.get("txnid");
+    const votes = search.get("votes");
+
+    if (txnid && txnid.startsWith("BBVOTE")) {
+      api
+        .get(`/voting/payment-status/${txnid}`)
+        .then((res) => {
+          if (res.data?.success) {
+            setVoteNotice({
+              type: "success",
+              text: `Payment verified! ${votes ? `${votes} vote(s)` : "Your votes"} have been cast.`,
+            });
+            if (params?.id) {
+              api.get(`/contestants/public/${params.id}`).then((r) => {
+                if (r.data?.success) setProfile(r.data.data);
+              });
+            }
+          } else if (voting === "pending") {
+            setVoteNotice({
+              type: "pending",
+              text: "Payment is being confirmed with PayU. Please check back in a moment.",
+            });
+          }
+        })
+        .catch(() => {
+          if (voting === "success") {
+            setVoteNotice({
+              type: "success",
+              text: "Voting payment received successfully!",
+            });
+          }
+        });
+    } else if (voting === "success") {
+      setVoteNotice({
+        type: "success",
+        text: `Voting payment successful! ${votes ? `${votes} vote(s) added.` : ""}`,
+      });
+    }
   }, [params?.id]);
 
   const handleShare = async () => {
@@ -187,6 +232,24 @@ export default function ContestantProfilePage() {
             </span>
           </div>
         </motion.div>
+
+        {voteNotice && (
+          <div
+            className={`mb-6 p-4 rounded border flex items-center justify-between text-xs font-bold ${
+              voteNotice.type === "success"
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                : "bg-amber-500/10 border-amber-500/20 text-amber-400"
+            }`}
+          >
+            <span>{voteNotice.text}</span>
+            <button
+              onClick={() => setVoteNotice(null)}
+              className="text-xs opacity-70 hover:opacity-100"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Main Card */}
         <motion.section
