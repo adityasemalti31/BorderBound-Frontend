@@ -175,7 +175,7 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
     };
   }, [onVisibilityChange]);
 
-  const regAmount = configData?.registration?.amount || 499;
+  const regAmount = configData?.registration?.amount || 1499;
   const isRegClosed = configData?.registration?.isClosed;
 
   const handleLogoutClick = () => {

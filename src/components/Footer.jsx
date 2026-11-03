@@ -28,12 +28,12 @@ export default function Footer() {
       title: "Public Voting Opens",
       active: false,
     },
-    {
-      date: "31 OCT",
-      title: "Fee Changes",
-      active: false,
-      detail: "₹499 → ₹1,499",
-    },
+    // {
+    //   date: "31 OCT",
+    //   title: "Fee Changes",
+    //   active: false,
+    //   detail: "₹499 → ₹1,499",
+    // },
     {
       date: "15 NOV",
       title: "Registration Closes",

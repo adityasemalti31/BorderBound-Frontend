@@ -184,11 +184,11 @@ const sections = [
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <FeeCard
+          {/* <FeeCard
             label="EARLY REGISTRATION"
             amount="₹499"
             dates="5 October – 30 October 2026"
-          />
+          /> */}
 
           <FeeCard
             label="REGULAR REGISTRATION"
