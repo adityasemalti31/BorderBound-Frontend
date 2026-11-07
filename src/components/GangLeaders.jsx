@@ -30,6 +30,7 @@ const leaders = [
     revealed: true,
     description: "A new contender enters the battlefield.",
   },
+  
   {
     id: 4,
     name: "Zorawar Singh",
