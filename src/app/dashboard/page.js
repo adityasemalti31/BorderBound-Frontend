@@ -682,8 +682,18 @@ function DashboardContent() {
                     {myProfile.bio}
                   </p>
                 )}
+                
               </div>
             </div>
+            <div className="mt-5 flex justify-center md:justify-start">
+  <Link
+    href="/edit-profile"
+    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-red-950/30"
+  >
+    <Edit3 className="w-4 h-4" />
+    Edit Profile
+  </Link>
+</div>
           </div>
 
           {/* Bottom Stats */}
