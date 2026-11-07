@@ -32,11 +32,11 @@ const leaders = [
   },
   {
     id: 4,
-    name: "?",
+    name: "Zorawar Singh",
     gang: "GANG 04",
-    image: null,
-    revealed: false,
-    description: "The fourth leader has not been revealed yet.",
+    image: "/zorawar.jpeg",
+    revealed: true,
+    description: "The game becomes exciting.",
   },
 ];
 
