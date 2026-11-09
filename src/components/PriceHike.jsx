@@ -449,7 +449,7 @@ export default function PriceHike() {
               <div className="mt-12">
                 <div className="flex flex-wrap items-end gap-3">
                   <span className="text-7xl font-black tracking-[-0.08em] text-white sm:text-8xl">
-                    ₹1,499
+                    ₹499
                   </span>
 
                   <span className="mb-3 text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">
