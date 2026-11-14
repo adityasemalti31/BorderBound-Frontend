@@ -563,6 +563,8 @@ export default function RegistrationWizard() {
                     Something went wrong
                   </p>
 
+                <p>{error}</p>
+
                  
                 </div>
               </div>
