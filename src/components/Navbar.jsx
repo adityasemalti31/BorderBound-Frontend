@@ -130,50 +130,86 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
     fetchPublicConfig();
   }, [checkAuth, fetchPublicConfig]);
 
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
+  // useEffect(() => {
+  //   let lastScrollY = window.scrollY;
 
-    const updateNavbar = (hidden) => {
-      setNavbarHidden(hidden);
+  //   const updateNavbar = (hidden) => {
+  //     setNavbarHidden(hidden);
 
-      window.dispatchEvent(
-        new CustomEvent("navbar-visibility", {
-          detail: { hidden },
-        }),
-      );
+  //     window.dispatchEvent(
+  //       new CustomEvent("navbar-visibility", {
+  //         detail: { hidden },
+  //       }),
+  //     );
 
-      if (onVisibilityChange) {
-        onVisibilityChange(hidden);
-      }
-    };
+  //     if (onVisibilityChange) {
+  //       onVisibilityChange(hidden);
+  //     }
+  //   };
 
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+  //   const handleScroll = () => {
+  //     const currentScrollY = window.scrollY;
 
-      if (currentScrollY <= 10) {
-        updateNavbar(false);
-        lastScrollY = currentScrollY;
-        return;
-      }
+  //     if (currentScrollY <= 10) {
+  //       updateNavbar(false);
+  //       lastScrollY = currentScrollY;
+  //       return;
+  //     }
 
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        updateNavbar(true);
-        setMobileOpen(false);
-      } else if (currentScrollY < lastScrollY) {
-        updateNavbar(false);
-      }
+  //     if (currentScrollY > lastScrollY && currentScrollY > 80) {
+  //       updateNavbar(true);
+  //       setMobileOpen(false);
+  //     } else if (currentScrollY < lastScrollY) {
+  //       updateNavbar(false);
+  //     }
 
+  //     lastScrollY = currentScrollY;
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll, {
+  //     passive: true,
+  //   });
+
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, [onVisibilityChange]);
+
+
+
+
+useEffect(() => {
+  let lastScrollY = window.scrollY;
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    // Menu open hai toh navbar ko hide mat karo
+    if (mobileOpen) {
       lastScrollY = currentScrollY;
-    };
+      return;
+    }
 
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
+    if (currentScrollY <= 80) {
+      setNavbarHidden(false);
+    } else if (currentScrollY > lastScrollY + 2) {
+      setNavbarHidden(true);
+    } else if (currentScrollY < lastScrollY - 2) {
+      setNavbarHidden(false);
+    }
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [onVisibilityChange]);
+    lastScrollY = currentScrollY;
+  };
+
+  window.addEventListener("scroll", handleScroll, {
+    passive: true,
+  });
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [mobileOpen]);
+
 
   const regAmount = configData?.registration?.amount || 499;
   const isRegClosed = configData?.registration?.isClosed;
@@ -374,7 +410,13 @@ const Navbar = forwardRef(function Navbar({ onVisibilityChange }, ref) {
 
           <motion.button
             whileTap={{ scale: 0.88 }}
-            onClick={() => setMobileOpen((prev) => !prev)}
+            onClick={() => {
+    if (!mobileOpen) {
+      setNavbarHidden(false);
+    }
+
+    setMobileOpen((prev) => !prev);
+  }}
             className="relative flex h-10 w-10 items-center justify-center border border-white/[0.08] bg-white/[0.02] text-zinc-400 transition-colors hover:border-red-500/30 hover:bg-red-500/[0.05] hover:text-white"
           >
             <AnimatePresence mode="wait" initial={false}>

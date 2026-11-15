@@ -995,7 +995,7 @@ export default function RegistrationWizard() {
                     {
                       number: "03",
                       title: "Public voting",
-                      text: "I understand that public voting closes on 15 November and submitted votes may be subject to verification.",
+                      text: "I understand that public voting closes on 20 November and submitted votes may be subject to verification.",
                     },
                   ].map((item, index) => (
                     <motion.div
