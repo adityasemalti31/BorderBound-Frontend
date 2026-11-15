@@ -57,7 +57,7 @@ const rules = [
               Voting Closes
             </div>
             <div className="mt-2 text-lg font-black text-white">
-              15 November 2026
+              20 November 2026
             </div>
           </div>
         </div>
