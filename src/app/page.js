@@ -895,7 +895,7 @@ export default function Page() {
             </motion.div>
           </div>
         </section>
-        <RegistrationCountdown />
+        {/* <RegistrationCountdown /> */}
       </div>
     </>
   );
