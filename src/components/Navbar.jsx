@@ -321,7 +321,7 @@ useEffect(() => {
 
           {/* RIGHT */}
           <div className="flex items-center justify-self-end gap-3">
-            {!isRegClosed && (
+            {/* {!isRegClosed && (
               <div className="hidden items-center gap-2 border border-red-500/15 bg-red-500/[0.04] px-3.5 py-2 lg:flex">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
@@ -336,9 +336,9 @@ useEffect(() => {
                   ₹{regAmount}
                 </span>
               </div>
-            )}
+            )} */}
 
-            {!user && (
+            {/* {!user && (
               <Link
                 href="/register"
                 className="group flex h-11 items-center gap-2 border border-red-500/20 bg-red-600 px-4 text-[9px] font-black uppercase tracking-[0.16em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_30px_rgba(220,38,38,0.18)]"
@@ -353,7 +353,7 @@ useEffect(() => {
 
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </Link>
-            )}
+            )} */}
 
             {user ? (
               <>
@@ -529,7 +529,7 @@ useEffect(() => {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  {
+                  {/* {
                     !user && (
                        <Link
                     href="/register"
@@ -556,7 +556,7 @@ useEffect(() => {
                   </Link>
 
                     )
-                  }
+                  } */}
                  
                 </motion.div>
 
@@ -640,7 +640,7 @@ useEffect(() => {
                 {!user && (
                   <motion.div
                     variants={itemVariants}
-                    className="grid grid-cols-2 gap-2 pt-1"
+                    className="grid grid-cols-1 gap-2 pt-1"
                   >
                     <button
                       onClick={() => {
@@ -652,7 +652,7 @@ useEffect(() => {
                       Sign In
                     </button>
 
-                    <button
+                    {/* <button
                       onClick={() => {
                         setMobileOpen(false);
                         openAuthModal("register");
@@ -660,7 +660,7 @@ useEffect(() => {
                       className="bg-red-600 px-4 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-colors hover:bg-red-500"
                     >
                       Create Account
-                    </button>
+                    </button> */}
                   </motion.div>
                 )}
 
