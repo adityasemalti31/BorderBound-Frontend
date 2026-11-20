@@ -104,7 +104,7 @@ export default function RootLayout({ children }) {
         <Footer />
 
         {/* Global Modals */}
-        <VoteModal />
+        {/* <VoteModal /> */}
         <AuthModal />
       </body>
     </html>
