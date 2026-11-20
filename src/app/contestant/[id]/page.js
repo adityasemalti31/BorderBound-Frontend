@@ -435,74 +435,7 @@ export default function ContestantProfilePage() {
                 </div>
               </div>
 
-              {/* Right Stats */}
-              <div className="border-t border-zinc-900 md:border-l md:border-t-0">
-                <div className="p-5 sm:p-8">
-                  <div className="mb-5 flex items-center justify-between">
-                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-zinc-600">
-                      Current Votes
-                    </span>
-
-                    <LuVote size={15} className="text-red-500" />
-                  </div>
-
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <p className="text-4xl font-black tracking-tight text-white sm:text-5xl">
-                      {Number(
-                        profile.totalValidVotes || 0
-                      ).toLocaleString("en-IN")}
-                    </p>
-
-                    <p className="mt-2 text-[9px] font-bold uppercase tracking-[0.2em] text-zinc-600">
-                      Valid Votes
-                    </p>
-                  </motion.div>
-
-                  <div className="my-7 h-px bg-zinc-900" />
-
-                  {/* Share */}
-                  <button
-                    onClick={handleShare}
-                    className="group mb-3 flex w-full items-center justify-center gap-2 border border-zinc-800 bg-zinc-950 px-4 py-3.5 text-[10px] font-black uppercase tracking-[0.18em] text-zinc-400 transition-all hover:border-zinc-600 hover:text-white"
-                  >
-                    {copied ? (
-                      <>
-                        <LuCheck size={15} className="text-green-500" />
-                        Link Copied
-                      </>
-                    ) : (
-                      <>
-                        <LuShare2
-                          size={15}
-                          className="transition group-hover:rotate-12"
-                        />
-                        Share Profile
-                      </>
-                    )}
-                  </button>
-
-                  {/* Vote */}
-                  {/* <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => openVoteModal(profile)}
-                    className="group relative flex w-full items-center justify-center gap-3 overflow-hidden bg-red-600 px-4 py-4 text-[11px] font-black uppercase tracking-[0.18em] text-white shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all hover:bg-red-500 hover:shadow-[0_0_40px_rgba(220,38,38,0.3)]"
-                  >
-                    <span className="absolute inset-0 -translate-x-full bg-white/10 transition-transform duration-500 group-hover:translate-x-full" />
-
-                    <LuVote size={18} />
-
-                    <span>
-                      Vote For{" "}
-                      {profile.fullName?.split(" ")[0]?.toUpperCase()}
-                    </span>
-                  </motion.button> */}
-                </div>
-              </div>
+              
             </div>
           </div>
         </motion.section>

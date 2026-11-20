@@ -386,7 +386,7 @@ function ContestantCard({ contestant, index }) {
         </p>
 
         <div className="mt-4 grid grid-cols-[1fr_auto] gap-2 border-t border-zinc-900 pt-3">
-          <div>
+          {/* <div>
             <p className="text-[8px] font-bold uppercase tracking-widest text-zinc-700">
               Valid Votes
             </p>
@@ -394,7 +394,7 @@ function ContestantCard({ contestant, index }) {
             <p className="mt-0.5 text-sm font-black text-white">
               {Number(totalValidVotes || 0).toLocaleString("en-IN")}
             </p>
-          </div>
+          </div> */}
 
           <Link
             href={profileUrl}
