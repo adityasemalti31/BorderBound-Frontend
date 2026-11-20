@@ -283,7 +283,7 @@ const remaining = sortedLeaderboard.filter(
         )}
 
         {/* ================= WILDCARD ================= */}
-        {wildcardPool.length > 0 && (
+        {/* {wildcardPool.length > 0 && (
           <section className="mb-14">
 
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -325,10 +325,10 @@ const remaining = sortedLeaderboard.filter(
               ))}
             </div>
           </section>
-        )}
+        )} */}
 
         {/* ================= OUTSIDE TOP 50 ================= */}
-        {remaining.length > 0 && (
+        {/* {remaining.length > 0 && (
           <section>
 
             <div className="mb-6 flex items-center justify-between border-b border-white/[0.06] pb-4">
@@ -354,7 +354,7 @@ const remaining = sortedLeaderboard.filter(
               ))}
             </div>
           </section>
-        )}
+        )} */}
       </div>
     </main>
   );
