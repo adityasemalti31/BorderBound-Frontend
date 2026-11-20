@@ -38,7 +38,7 @@ export default function VoteModal() {
     try {
       await submitVotePayment(simulate);
       fetchLeaderboard();
-    } catch (err) { }
+    } catch (err) {}
   };
 
   return (
@@ -209,18 +209,20 @@ export default function VoteModal() {
                   key={pkg.votes}
                   type="button"
                   onClick={() => setVotesCount(pkg.votes)}
-                  className={`group relative overflow-hidden rounded-xl border p-3 text-center transition-all duration-300 ${selected
+                  className={`group relative overflow-hidden rounded-xl border p-3 text-center transition-all duration-300 ${
+                    selected
                       ? "border-red-500/60 bg-red-500/[0.10] shadow-[0_8px_30px_rgba(239,68,68,0.12)]"
                       : "border-white/[0.07] bg-white/[0.025] hover:border-white/[0.14] hover:bg-white/[0.045]"
-                    }`}
+                  }`}
                 >
                   {selected && (
                     <div className="absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r from-red-500 to-amber-400" />
                   )}
 
                   <div
-                    className={`mb-1 text-sm font-black ${selected ? "text-white" : "text-zinc-300"
-                      }`}
+                    className={`mb-1 text-sm font-black ${
+                      selected ? "text-white" : "text-zinc-300"
+                    }`}
                   >
                     {pkg.votes}
                   </div>
@@ -230,8 +232,9 @@ export default function VoteModal() {
                   </div>
 
                   <div
-                    className={`mt-2 text-[10px] font-black ${selected ? "text-amber-400" : "text-zinc-500"
-                      }`}
+                    className={`mt-2 text-[10px] font-black ${
+                      selected ? "text-amber-400" : "text-zinc-500"
+                    }`}
                   >
                     ₹{pkg.amount}
                   </div>
@@ -260,7 +263,7 @@ export default function VoteModal() {
             <div className="relative">
               <Vote className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-600" />
 
-              <input
+              {/* <input
                 id="customVotes"
                 type="number"
                 min="1"
@@ -269,6 +272,29 @@ export default function VoteModal() {
                   const value = Number(e.target.value);
 
                   setVotesCount(value < 1 ? 1 : value);
+                }}
+                className="h-12 w-full rounded-xl border border-white/[0.08] bg-white/[0.025] pl-11 pr-28 text-sm font-black text-white outline-none transition-all placeholder:text-zinc-700 focus:border-red-500/50 focus:bg-white/[0.04] focus:ring-4 focus:ring-red-500/[0.06]"
+                placeholder="Enter votes"
+              /> */}
+              <input
+                id="customVotes"
+                type="number"
+                min="1"
+                value={votesCount === 0 ? "" : votesCount}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  if (value === "") {
+                    setVotesCount(0);
+                    return;
+                  }
+
+                  setVotesCount(Number(value));
+                }}
+                onBlur={() => {
+                  if (votesCount < 1) {
+                    setVotesCount(1);
+                  }
                 }}
                 className="h-12 w-full rounded-xl border border-white/[0.08] bg-white/[0.025] pl-11 pr-28 text-sm font-black text-white outline-none transition-all placeholder:text-zinc-700 focus:border-red-500/50 focus:bg-white/[0.04] focus:ring-4 focus:ring-red-500/[0.06]"
                 placeholder="Enter votes"
@@ -314,9 +340,7 @@ export default function VoteModal() {
                     {votesCount}
                   </span>
 
-                  <span className="text-[9px] text-zinc-600">
-                    Votes
-                  </span>
+                  <span className="text-[9px] text-zinc-600">Votes</span>
 
                   <span className="text-zinc-700">×</span>
 
@@ -368,9 +392,7 @@ export default function VoteModal() {
               <>
                 <Sparkles className="relative h-4 w-4" />
 
-                <span className="relative">
-                  Pay ₹{totalAmount} with PayU
-                </span>
+                <span className="relative">Pay ₹{totalAmount} with PayU</span>
 
                 <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </>
