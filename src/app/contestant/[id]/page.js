@@ -486,7 +486,7 @@ export default function ContestantProfilePage() {
                   </button>
 
                   {/* Vote */}
-                  <motion.button
+                  {/* <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => openVoteModal(profile)}
@@ -500,7 +500,7 @@ export default function ContestantProfilePage() {
                       Vote For{" "}
                       {profile.fullName?.split(" ")[0]?.toUpperCase()}
                     </span>
-                  </motion.button>
+                  </motion.button> */}
                 </div>
               </div>
             </div>

@@ -405,7 +405,7 @@ function ContestantCard({ contestant, index }) {
           </Link>
         </div>
 
-        <motion.button
+        {/* <motion.button
           type="button"
           whileHover={{ scale: 1.015 }}
           whileTap={{ scale: 0.985 }}
@@ -422,7 +422,7 @@ function ContestantCard({ contestant, index }) {
           <span className="relative">
             Vote For {fullName?.split(" ")[0]?.toUpperCase()}
           </span>
-        </motion.button>
+        </motion.button> */}
       </div>
 
       <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-red-600 to-red-400 transition-all duration-500 group-hover:w-full" />
