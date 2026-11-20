@@ -201,13 +201,13 @@ export default function ContestantCard({ contestant }) {
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
 
-          <button
+          {/* <button
             onClick={() => openVoteModal(contestant)}
             className="flex h-10 items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-[10px] font-black uppercase tracking-wider text-white shadow-lg shadow-red-600/10 transition hover:from-red-500 hover:to-orange-500 active:scale-[0.97]"
           >
             <Vote className="h-3.5 w-3.5" />
             Vote Now
-          </button>
+          </button> */}
 
         </div>
       </div>
