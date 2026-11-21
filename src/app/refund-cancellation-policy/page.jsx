@@ -505,7 +505,7 @@ export default function RefundCancellationPolicyPage() {
               />
             </Link>
 
-            <Link
+            {/* <Link
               href="/voting-rules"
               className="group inline-flex items-center justify-center gap-3 border border-white/10 bg-white/[0.03] px-7 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-300 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
             >
@@ -515,7 +515,7 @@ export default function RefundCancellationPolicyPage() {
                 size={15}
                 className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>

@@ -283,7 +283,7 @@ const remaining = sortedLeaderboard.filter(
         )}
 
         {/* ================= WILDCARD ================= */}
-        {wildcardPool.length > 0 && (
+        {/* {wildcardPool.length > 0 && (
           <section className="mb-14">
 
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -325,7 +325,7 @@ const remaining = sortedLeaderboard.filter(
               ))}
             </div>
           </section>
-        )}
+        )} */}
 
         {/* ================= OUTSIDE TOP 50 ================= */}
         {/* {remaining.length > 0 && (

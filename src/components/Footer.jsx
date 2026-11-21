@@ -50,7 +50,7 @@ export default function Footer() {
     ["Home", "/"],
     ["Leaderboard", "/leaderboard"],
     ["Register", "/register"],
-    ["Support a Contestant", "/register/supporting"],
+    // ["Support a Contestant", "/register/supporting"],
   ];
 
   const legalLinks = [
@@ -59,11 +59,11 @@ export default function Footer() {
       href: "/terms",
       icon: FileText,
     },
-    {
-      label: "Voting Rules",
-      href: "/voting-rules",
-      icon: Vote,
-    },
+    // {
+    //   label: "Voting Rules",
+    //   href: "/voting-rules",
+    //   icon: Vote,
+    // },
     {
       label: "Privacy Policy",
       href: "/privacy",
@@ -93,27 +93,27 @@ export default function Footer() {
                   Official Protocol
                 </span>
               </div>
-
+{/* 
               <h2 className="text-2xl font-black uppercase tracking-[-0.03em] text-white sm:text-3xl">
                 BorderBound Timeline
-              </h2>
+              </h2> */}
 
-              <p className="mt-2 max-w-xl text-xs leading-5 text-zinc-400 sm:text-sm">
+              {/* <p className="mt-2 max-w-xl text-xs leading-5 text-zinc-400 sm:text-sm">
                 India chooses who gets the opportunity. The BorderBound decides
                 who survives it.
-              </p>
+              </p> */}
             </div>
 
-            <div className="flex items-center gap-3 self-start rounded-full border border-red-500/15 bg-red-500/[0.04] px-4 py-2.5 lg:self-auto">
+            {/* <div className="flex items-center gap-3 self-start rounded-full border border-red-500/15 bg-red-500/[0.04] px-4 py-2.5 lg:self-auto">
               <Users className="h-4 w-4 text-red-400" />
 
               <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-300 sm:text-[10px]">
                 32 Initial + 04 Wild Cards
               </span>
-            </div>
+            </div> */}
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-5">
+          {/* <div className="mt-10 grid grid-cols-1 gap-0 sm:grid-cols-2 lg:grid-cols-5">
             {timeline.map((item, index) => (
               <div
                 key={item.date}
@@ -144,7 +144,7 @@ export default function Footer() {
                 </div>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Main Footer */}
@@ -180,13 +180,13 @@ export default function Footer() {
                 </span>
               </div>
 
-              <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-2">
+              {/* <div className="flex items-center gap-2 rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-2">
                 <Vote className="h-3.5 w-3.5 text-amber-400" />
 
                 <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-zinc-400">
                   ₹5 / Vote
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -238,12 +238,12 @@ export default function Footer() {
 
           {/* Trust + Contact */}
           <div>
-            <div className="mb-5 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
+            {/* <div className="mb-5 text-[9px] font-bold uppercase tracking-[0.25em] text-zinc-500">
               Trust & Verification
-            </div>
+            </div> */}
 
             <div className="space-y-4">
-              <div className="flex gap-3">
+              {/* <div className="flex gap-3">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
 
                 <div>
@@ -255,9 +255,9 @@ export default function Footer() {
                     Payments processed through a secure gateway.
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="flex gap-3">
+              {/* <div className="flex gap-3">
                 <Vote className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
 
                 <div>
@@ -269,9 +269,9 @@ export default function Footer() {
                     Only valid successfully processed votes count.
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="flex gap-3">
+              {/* <div className="flex gap-3">
                 <Trophy className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
 
                 <div>
@@ -283,7 +283,7 @@ export default function Footer() {
                     Voting positions remain publicly visible.
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Contact */}
               <div className="mt-6 border-t border-white/[0.07] pt-5">

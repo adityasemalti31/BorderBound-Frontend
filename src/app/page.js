@@ -398,7 +398,7 @@ export default function Page() {
                   </div>
 
                   {/* FOOTER */}
-                  <Link
+                  {/* <Link
                     href="/contestant"
                     className="m-4 flex items-center justify-between border border-white/[0.08] bg-white/[0.025] px-4 py-3"
                   >
@@ -415,7 +415,7 @@ export default function Page() {
                     <div className="flex h-7 w-7 items-center justify-center border border-red-500/20 bg-red-500/[0.05]">
                       <ArrowDownRight className="h-3.5 w-3.5 text-red-500" />
                     </div>
-                  </Link>
+                  </Link> */}
                 </div>
               </motion.div>
             </div>
@@ -423,7 +423,7 @@ export default function Page() {
 
           <WhyToRegister />
 
-          <PriceHike />
+          {/* <PriceHike /> */}
 
           <div className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-zinc-400 sm:flex">
             <span className="h-px w-10 bg-zinc-700" />
@@ -655,7 +655,7 @@ export default function Page() {
         {/* =========================================================
           VOTING
       ========================================================= */}
-        <section className="relative border-y border-white/[0.07] bg-[#080809] py-16 sm:py-24 lg:py-32">
+        {/* <section className="relative border-y border-white/[0.07] bg-[#080809] py-16 sm:py-24 lg:py-32">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(245,158,11,0.07),transparent_25%),radial-gradient(circle_at_20%_50%,rgba(220,38,38,0.06),transparent_25%)]" />
 
           <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-8">
@@ -764,7 +764,7 @@ export default function Page() {
               </div>
             </motion.div>
           </div>
-        </section>
+        </section> */}
 
         {/* =========================================================
           SELECTION PROTOCOL
