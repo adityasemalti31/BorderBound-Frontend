@@ -581,14 +581,14 @@ export default function Page() {
                   register or cast a vote.
                 </p>
 
-                <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                {/* <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
                   <Link
                     href="/voting-rules"
                     className="inline-flex min-w-[170px] items-center justify-center border border-red-500/30 bg-red-600 px-6 py-3.5 text-[9px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:bg-red-500 hover:shadow-[0_0_35px_rgba(220,38,38,0.25)]"
                   >
                     Voting Rules
                   </Link>
-                </div>
+                </div> */}
               </div>
             </motion.div>
           </div>
