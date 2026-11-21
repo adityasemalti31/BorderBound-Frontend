@@ -12,9 +12,9 @@ import {
 export default function LiveTicker() {
   const tickerItems = [
     {
-      text: "Public Voting Is LIVE Across India",
-      icon: Radio,
-      accent: "text-red-500",
+      // text: "Public Voting Is LIVE Across India",
+      // icon: Radio,
+      // accent: "text-red-500",
     },
     // {
     //   text: "₹5 = 1 Vote | Voting Options",
@@ -36,11 +36,11 @@ export default function LiveTicker() {
       icon: ShieldCheck,
       accent: "text-emerald-400",
     },
-    {
-      text: "Voting Closes 20 November",
-      icon: Clock3,
-      accent: "text-zinc-300",
-    },
+    // {
+    //   text: "Voting Closes 20 November",
+    //   icon: Clock3,
+    //   accent: "text-zinc-300",
+    // },
   ];
 
   const items = [...tickerItems, ...tickerItems];
